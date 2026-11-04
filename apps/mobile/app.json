@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Pucará Digital",
+    "slug": "pucara-digital",
+    "version": "0.1.0",
+    "scheme": "pucara-digital",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

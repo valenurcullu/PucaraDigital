@@ -1,0 +1,47 @@
+# Dependencies and package-manager caches
+node_modules/
+.pnpm-store/
+.pnp.*
+# Builds and local tool state
+.next/
+.expo/
+.turbo/
+dist/
+build/
+out/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+next-env.d.ts
+expo-env.d.ts
+# Local configuration and secrets (examples contain placeholders only)
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials.json
+service-account*.json
+.aws/
+.supabase/
+supabase/.temp/
+supabase/.branches/
+# Native generated projects; use Expo continuous native generation
+apps/mobile/android/
+apps/mobile/ios/
+# Logs, OS, editor and local automation
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.codex/
+.agents/
+# pnpm 12 keeps project config in YAML; npmrc is reserved for credentials.
+.npmrc

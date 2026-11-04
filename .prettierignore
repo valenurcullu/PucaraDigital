@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+.next
+.expo
+.turbo
+node_modules
+dist
+coverage
+next-env.d.ts
+expo-env.d.ts
