@@ -6,15 +6,15 @@ export const plannedExperience = [
     name: 'Inicio',
     summary: 'Lo que importa hoy.',
     detail:
-      'Tu próximo entrenamiento, las novedades del club y un resumen de tu cuenta.',
+      'Tu próximo entrenamiento o partido, tu rutina, tu cuenta y las novedades del club.',
   },
   {
     key: 'agenda',
     number: '02',
     name: 'Agenda',
-    summary: 'Hacé lugar para tu club.',
+    summary: 'Tu semana en el club.',
     detail:
-      'Entrenamientos, partidos y actividades en un calendario fácil de consultar.',
+      'Entrenamientos, partidos, actividades, eventos y reservas en un calendario fácil de consultar.',
   },
   {
     key: 'membership',
@@ -25,18 +25,19 @@ export const plannedExperience = [
       'Tu identificación de socio, accesible desde la navegación principal.',
   },
   {
-    key: 'activities',
+    key: 'club',
     number: '04',
-    name: 'Actividades',
+    name: 'Club',
     summary: 'Encontrá tu lugar.',
     detail:
-      'Rugby, hockey, gimnasio, yoga y funcional, con la información de cada actividad.',
+      'Rugby, hockey, gimnasio, actividades, reservas, beneficios y la vida del club, organizados por categoría.',
   },
   {
-    key: 'profile',
+    key: 'account',
     number: '05',
-    name: 'Perfil',
+    name: 'Cuenta',
     summary: 'Tu espacio personal.',
-    detail: 'Tus datos y preferencias, organizados en un solo lugar.',
+    detail:
+      'Tu perfil, cuenta corriente, grupo familiar y preferencias, en un solo lugar.',
   },
 ] as const;

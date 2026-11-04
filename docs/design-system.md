@@ -8,6 +8,8 @@ La primera entrada presenta identidad y estado de desarrollo. No constituye toda
 
 ## Tokens
 
+> **Paleta en revisión (ADR-013).** Los valores bordó de esta tabla no coinciden con la identidad del club. En la Etapa 1 se presentará una propuesta en rojo institucional, azul marino, blanco y neutros, con tokens semánticos, tipografía y escala accesible. Hasta su aprobación, el código conserva estos valores.
+
 Fuente única: packages/design-tokens/src/index.ts. La web transforma colores en variables CSS; React Native consume los valores directamente.
 
 | Token     | Valor   | Uso                                  |

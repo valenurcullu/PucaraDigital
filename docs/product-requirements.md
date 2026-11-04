@@ -1,34 +1,48 @@
 # Requerimientos del producto
 
-Fuente: prompt maestro del Sprint 1 proporcionado por el usuario y su instrucción posterior de usar exclusivamente el repositorio oficial. Desarrollo incremental; este bloque entrega las fundaciones.
+Fuentes: prompt maestro del Sprint 1, auditoría integral y decisiones definitivas del 2026-11-04. Desarrollo incremental. La hoja de ruta vigente está en [roadmap.md](roadmap.md) y la navegación aprobada en [navigation.md](navigation.md).
 
-## Implementado en este bloque
+## Dirección vigente
+
+- Plataformas en orden: app nativa iOS/Android → panel web administrativo → portal web del socio (postergado, no eliminado; reutilizará la lógica compartida).
+- UX/UI premium como prioridad máxima. El inicio de un socio autenticado es un dashboard personal, no una landing.
+- Navegación móvil: Inicio, Agenda, Carnet, Club y Cuenta.
+- Identidad provisional en rojo institucional, azul marino, blanco y neutros, hasta recibir recursos oficiales.
+- El desarrollo deportivo (gimnasio, rugby, hockey) avanza desde las primeras etapas con datos ficticios estructurados, sin comprometer autenticación ni seguridad.
+- Primer circuito real: el administrador publica un evento o comunicado en web, se guarda en Supabase y el socio autenticado lo ve en la app, con RLS testeada.
+
+## Implementado en el bloque de fundaciones
 
 - Monorepo pnpm/Turborepo con aplicaciones Next.js y Expo Router.
 - TypeScript estricto, ESLint, Prettier, Vitest y workflow de CI.
 - Entradas iniciales web/nativa, marca textual reemplazable y modo demo visible.
-- Tokens iniciales en bordó, blanco y neutros.
+- Tokens iniciales en bordó, blanco y neutros (a reemplazar en la Etapa 1: no coinciden con la identidad del club).
 - Contrato de club, roles iniciales y adaptador demo de lectura.
 - Documentación de arquitectura, navegación y modelo conceptual.
 - Exclusión de variables, credenciales, cachés y archivos generados.
 
-## Planificado para los siguientes bloques del Sprint 1
+## Objetivo diciembre 2026
 
-- Sistema de diseño completo: componentes, estados, accesibilidad y revisión responsive.
-- Móvil: Inicio, Agenda diaria/semanal/mensual, Carnet demo, Actividades y Perfil.
-- Portal web: inicio, agenda y navegación.
-- Panel administrativo separado: socios totales/activos, reservas, actividades y cuotas pendientes ficticias.
-- Datos ficticios de socios, eventos, partidos, actividades, movimientos y noticias.
-- Migraciones iniciales para clubs, profiles, club_memberships, member_records, user_roles, activities y calendar_events.
-- RLS y pruebas de aislamiento reales en PostgreSQL local.
+- Mínimo: app móvil premium con las cinco pestañas (Carnet demo identificado), panel administrativo inicial, Supabase Auth y datos de demostración reales, circuito admin → socio con RLS testeada.
+- Adicional: rutina semanal y registro de pesos con datos ficticios, fixture de ejemplo y pantallas deportivas destacadas.
+- Sin pagos ni reservas reales.
 
-## Planificado para futuros sprints
+## Módulos deportivos
 
-Socios y familias, becas y descuentos, cuenta corriente, pagos, fixtures/importación Excel, gimnasio, wellness sensible, yoga/funcional con cupos, reservas de pádel/quinchos, comunidad y auditoría. Cada módulo requiere alcance y reglas acordadas antes de implementarse.
+- **Gimnasio:** PF crean rutinas semanales, las asignan a equipos o jugadores, configuran ejercicios, series, repeticiones y descansos, y consultan registros y evolución. Jugadores consultan su rutina, registran pesos por serie, marcan series completadas y ven pesos anteriores y progresión. El registro debe ser muy rápido durante el entrenamiento (referencia funcional: Hevy, sin copiar su diseño).
+- **Rugby y hockey:** fixtures, resultados, posiciones, calendarios, videos de YouTube, convocatorias y confirmación de asistencia. Carga manual o Excel; la obtención automática desde URBA y la asociación de hockey se evaluará más adelante, sin scraping.
+- **Wellness:** formularios diarios (sueño, fatiga, dolor muscular, ánimo) con seguimiento por PF. Sin datos reales hasta resolver privacidad, consentimiento y tratamiento de datos de menores.
+- **Yoga y funcional:** horarios, inscripciones, cupos, cancelaciones, listas de espera y asistencia.
+
+## Planificado para etapas posteriores
+
+Reservas de pádel y quinchos, cuenta corriente, cuotas, becas y descuentos, pagos (proveedor a definir), grupos familiares completos, portal web del socio y evaluación multi-club. Cada módulo requiere alcance y reglas acordadas antes de implementarse.
 
 ## Pendiente de definir
 
-- Escudo y recursos oficiales de marca; tipografía definitiva y sus licencias.
+- Escudo y recursos oficiales de marca (vector), colores institucionales; tipografía definitiva y sus licencias.
+- Quién valida el carnet en el club y con qué dispositivo.
+- Identificadores de app (bundle iOS / package Android) y titular de las cuentas de Apple y Google.
 - Flujos de alta, invitación, recuperación de cuenta y vínculo con el padrón.
 - Reglas de visibilidad de agenda, noticias y perfiles por rol/equipo.
 - Política de reservas, cancelaciones y devoluciones.
@@ -39,7 +53,7 @@ Socios y familias, becas y descuentos, cuenta corriente, pagos, fixtures/importa
 
 ## Descartado o fuera del sprint
 
-Aptos médicos descartados. En Sprint 1 no se implementan pagos/reservas reales, scraping, integraciones federativas, rutinas completas, wellness completo, notificaciones reales, facturación ni publicación en tiendas. Tampoco se construye administración comercial multi-club.
+Aptos médicos descartados. Para diciembre no se implementan pagos/reservas reales, scraping, integraciones federativas, wellness con datos reales, notificaciones reales, facturación ni publicación en tiendas. Tampoco se construye administración comercial multi-club.
 
 El demo no valida acceso al club: cualquier QR futuro de demostración debe estar marcado como tal y carecer de valor real.
 

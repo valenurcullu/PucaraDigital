@@ -4,12 +4,20 @@
 
 Fundaciones del Sprint 1. Un único repositorio y lockfile. Expo y Next.js tienen entradas ejecutables y consumen contratos/tokens compartidos. Todavía no hay login, persistencia, servicios Supabase ni módulos funcionales.
 
+## Prioridad de plataformas
+
+1. apps/mobile — experiencia principal del socio.
+2. apps/web — panel administrativo (Etapa 3).
+3. Portal web del socio — Etapa 6, dentro de apps/web, reutilizando servicios de packages/shared.
+
+Para que el portal posterior no duplique lógica, toda regla de negocio, validación y acceso a datos se escribe en packages/shared desde el principio; las apps contienen solo UI, navegación y estado de pantalla (ADR-012).
+
 ## Límites de responsabilidad
 
 | Ubicación              | Responsabilidad                                                        |
 | ---------------------- | ---------------------------------------------------------------------- |
 | apps/mobile            | Navegación Expo Router, UI nativa, accesibilidad y ciclo de vida móvil |
-| apps/web               | App Router, UI DOM, portal y futuro panel administrativo               |
+| apps/web               | App Router, UI DOM, panel administrativo y futuro portal del socio     |
 | packages/shared        | Contratos Zod, tipos de dominio y puertos de servicios                 |
 | packages/design-tokens | Valores visuales puros, sin dependencias de UI                         |
 | packages/config        | Opciones TypeScript comunes                                            |

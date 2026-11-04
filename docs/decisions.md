@@ -51,3 +51,21 @@ En la carpeta compartida de Windows se usa una unidad temporal de cmd (pushd) y 
 El servidor rechazó junctions de workspace con errores de reparse point. Se configura injectWorkspacePackages=true y dedupeInjectedDeps=false para instalar los paquetes internos mediante archivos. syncInjectedDepsAfterScripts=[typecheck] mantiene actualizados los consumidores después de validar los cambios compartidos. Las modificaciones de configuración requieren reinstalar. pnpm 12.17.0 también corrige enlaces duplicados de instalaciones hoisted.
 
 Se acepta esta sincronización explícita para trabajar directamente sobre la ubicación oficial solicitada, conservando un único checkout y sin cambiar la arquitectura de las aplicaciones. Referencias: https://pnpm.io/workspaces y https://pnpm.io/blog/releases/12.17.0.
+
+Revisión pendiente en ADR-015.
+
+## ADR-012 — Prioridad de plataformas (2026-11-04)
+
+Orden: app nativa iOS/Android, panel web administrativo y, en una etapa posterior, portal web del socio. El portal no se elimina: se posterga porque la mayoría de los socios usará la app. Para no duplicar lógica, contratos, validaciones, reglas de negocio y acceso a datos viven en `packages/shared`; cada app solo aporta su UI. No se desarrollan tres interfaces completas en simultáneo.
+
+## ADR-013 — Identidad visual provisional (2026-11-04)
+
+La paleta bordó inicial no coincide con el club. Se adopta provisionalmente rojo institucional, azul marino, blanco y neutros, derivados del escudo disponible fuera del repositorio (`Escudo restaurado del Club Pucará.png`). Ese archivo no está confirmado como oficial: no se versiona ni se muestra en las apps. Hasta recibir el vector oficial se mantiene el placeholder textual. Colores, tipografía y espaciados se centralizan en tokens con nombres semánticos para ajustar la identidad sin tocar pantallas. La propuesta visual se presenta para aprobación antes del rediseño.
+
+## ADR-014 — Desarrollo deportivo temprano (2026-11-04)
+
+Gimnasio, rugby y hockey son diferenciales y se desarrollan progresivamente desde la Etapa 1, primero con datos ficticios estructurados y luego con persistencia real. No pueden adelantarse a costa de autenticación, RLS ni el circuito admin → socio. Wellness se limita a diseño y datos ficticios hasta resolver consentimiento y tratamiento de datos de menores.
+
+## ADR-015 — Entorno de trabajo y carpeta compartida (propuesta, 2026-11-04)
+
+Estado: propuesta, pendiente de aprobación. Trabajar sobre SMB obliga a paquetes inyectados (ADR-011): los cambios en `packages/*` solo llegan a las apps después de `typecheck` o reinstalar, Vitest no resuelve rutas UNC y cada herramienta requiere una unidad temporal. Propuesta: una vez publicado el historial en GitHub, trabajar en un clon en disco local, retirar la configuración específica de SMB de pnpm-workspace.yaml tras verificarlo y conservar la carpeta compartida solo como respaldo o retirarla, sin mantener dos checkouts activos. Hasta aprobarlo, la carpeta compartida sigue siendo la ubicación oficial y el ejecutor `scripts/windows-network.cmd` se mantiene.

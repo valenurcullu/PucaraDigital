@@ -4,7 +4,9 @@ Plataforma del Club Pucará, desarrollada por Suplio. Monorepo oficial: https://
 
 ## Estado
 
-Sprint 1, bloque de fundaciones: monorepo, entradas web/nativa navegables, contratos y datos demo mínimos, tokens visuales y herramientas de calidad. Las pantallas funcionales del socio, administración y migraciones SQL se desarrollan en los siguientes bloques. No hay autenticación ni conexión productiva.
+Etapa 0 (estabilización técnica) sobre las fundaciones del Sprint 1: monorepo, entradas web/nativa navegables, contratos y datos demo mínimos, tokens visuales y herramientas de calidad. No hay autenticación, persistencia ni módulos funcionales todavía.
+
+Orden de plataformas: 1) app nativa iOS/Android, 2) panel web administrativo, 3) portal web del socio, postergado. La paleta bordó actual es provisional y se reemplaza en la Etapa 1 por la identidad roja, azul marino y blanca del club. Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
 
 ## Requisitos
 
@@ -65,6 +67,6 @@ Los ejemplos son ficticios, de solo lectura y sin persistencia. Seleccionar modo
 
 ## Cambios compartidos
 
-Los paquetes internos se instalan como dependencias inyectadas para evitar junctions incompatibles con SMB. Después de editar contratos o tokens, ejecutar `pnpm typecheck`: pnpm sincroniza sus fuentes y valida a los consumidores. Al modificar la configuración compartida o crear paquetes, ejecutar nuevamente `pnpm install`. Las pantallas de cada app conservan su recarga habitual.
+Los paquetes internos se instalan como dependencias inyectadas para evitar junctions incompatibles con SMB. Después de editar contratos o tokens, ejecutar `pnpm typecheck`: pnpm sincroniza sus fuentes y valida a los consumidores. Al modificar la configuración compartida o crear paquetes, ejecutar nuevamente `pnpm install`. Las pantallas de cada app conservan su recarga habitual. La propuesta de trabajar en un clon local está en [ADR-015](docs/decisions.md).
 
-Ver [arquitectura](docs/architecture.md), [alcance](docs/product-requirements.md) y [roadmap](docs/roadmap.md).
+Ver [arquitectura](docs/architecture.md), [alcance](docs/product-requirements.md), [navegación](docs/navigation.md) y [roadmap](docs/roadmap.md).
