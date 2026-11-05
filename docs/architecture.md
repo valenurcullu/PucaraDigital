@@ -47,3 +47,7 @@ Importes futuros: unidades menores enteras + moneda. Instantes: timestamptz, con
 pnpm 12.17.0, Node 24 LTS y Turbo coordinan tareas. node-linker=hoisted favorece la compatibilidad con las herramientas nativas y rutas Windows; la resolución sigue fijada por pnpm-lock.yaml. No se activa un build nativo durante la instalación.
 
 La CI comprueba formato, lint, tipos, tests, build web, coherencia Expo y exportación nativa. No publica ni despliega. El lockfile debe cambiar junto con sus manifests.
+
+## Entorno local verificado (2026-11-05)
+
+El desarrollo activo usa el clon local existente de Windows (ADR-015/016). Los paquetes internos se enlazan directamente; se retiraron inyección, deduplicación forzada, sincronización por typecheck y hoisting especial de workspaces. Se conservan nodeLinker: hoisted, versiones, override de Expo y build Webpack. Turbo funciona en disco local. El ejecutor SMB queda como referencia histórica.

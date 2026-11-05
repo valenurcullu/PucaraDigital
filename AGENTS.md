@@ -1,6 +1,6 @@
 # Pucará Digital — reglas de trabajo
 
-- Trabajar en esta raíz Git. Remoto oficial: https://github.com/valenurcullu/PucaraDigital.git.
+- Trabajar en esta raíz Git, en el clon de disco local. No usar el checkout SMB anterior. Remoto oficial: https://github.com/valenurcullu/PucaraDigital.git.
 - Revisar estado, rama, remoto y cambios existentes antes de modificar archivos.
 - Nunca hacer push sin autorización explícita del usuario. Hacer commits pequeños luego de verificar cada bloque.
 - Mantener pnpm workspaces + Turborepo, Expo / React Native y Next.js. No crear proyectos o repositorios adicionales.
@@ -20,3 +20,5 @@
 - Verificar pnpm install --frozen-lockfile, pnpm lint, pnpm typecheck, pnpm test, pnpm format:check y pnpm build cuando corresponda.
 - Para cambios nativos verificar expo install --check y exportación Android/iOS. No afirmar prueba en dispositivo si solo se exportó el bundle.
 - Actualizar README y docs con lo implementado, verificaciones realizadas y limitaciones.
+
+- Al retomar, leer docs/current-status.md; al cerrar un bloque, actualizar estado y docs/verification.md con evidencia. CLAUDE.md remite a estas mismas reglas.

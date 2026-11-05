@@ -4,20 +4,22 @@ Plataforma del Club Pucará, desarrollada por Suplio. Monorepo oficial: https://
 
 ## Estado
 
-Etapa 0 (estabilización técnica) sobre las fundaciones del Sprint 1: monorepo, entradas web/nativa navegables, contratos y datos demo mínimos, tokens visuales y herramientas de calidad. No hay autenticación, persistencia ni módulos funcionales todavía.
+Fundaciones verificadas en disco local: aplicaciones Next.js y Expo con entradas demo navegables, contratos mínimos, tokens y herramientas de calidad. Todavía no hay autenticación, persistencia, cinco pestañas funcionales ni módulos deportivos.
 
-Orden de plataformas: 1) app nativa iOS/Android, 2) panel web administrativo, 3) portal web del socio, postergado. La paleta bordó actual es provisional y se reemplaza en la Etapa 1 por la identidad roja, azul marino y blanca del club. Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
+Orden de plataformas: app nativa iOS/Android → panel administrativo web → portal web del socio, postergado. La Etapa 1 comienza con una propuesta visual para aprobación; el código conserva su paleta provisional bordó hasta aprobar el rediseño.
+
+Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
 
 ## Requisitos
 
 - Node.js 24 LTS (mínimo 24.3; desarrollo: 24.16.0).
-- pnpm 12.17.0: instalar con `npm install --global pnpm@12.17.0`.
-- Git; en Windows sobre carpetas de red, Git for Windows con Git Bash.
-- Expo Go compatible con SDK 58 o un development build; Android Studio para emulador y macOS/Xcode para simulador iOS.
+- pnpm 12.17.0. Instalar con `npm install --global pnpm@12.17.0` o usar `npx --yes pnpm@12.17.0 <comando>`.
+- Git y un checkout en disco local. No usar el checkout antiguo de la carpeta de red para desarrollo.
+- Para probar en dispositivo: Expo Go compatible con SDK 58 o development build; Android Studio para emulador y macOS/Xcode para simulador iOS.
 
-## Desarrollo
+## Desarrollo local
 
-Desde la raíz que contiene este archivo y `pnpm-workspace.yaml`, en una carpeta local:
+Desde la raíz que contiene este archivo y `pnpm-workspace.yaml`:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -25,48 +27,42 @@ pnpm dev:web
 pnpm dev:mobile
 ```
 
-En **esta carpeta compartida de Windows**, usar el ejecutor incluido:
+En PowerShell, usar `pnpm.cmd` si la política de ejecución bloquea el lanzador `pnpm.ps1`. No hace falta cambiar esa política ni usar Git Bash.
 
-```bat
-scripts\windows-network.cmd install --frozen-lockfile
-scripts\windows-network.cmd dev:web
-scripts\windows-network.cmd dev:mobile
-```
-
-Ejecutar las dos aplicaciones en terminales separadas. Web: http://localhost:3000. No se necesitan variables de entorno para demo. Los archivos `.env.example` de cada app documentan su selector público.
-
-El ejecutor verifica la raíz, usa una unidad temporal, ejecuta scripts mediante Git Bash y mantiene la caché en `%TEMP%\pucara-pnpm-store`. No mueve ni copia el checkout, no modifica configuración global y conserva un `pnpm_config_store_dir` definido por el usuario. Puede usarse para cualquier comando de pnpm, por ejemplo `scripts\windows-network.cmd lint`.
+Ejecutar las aplicaciones en terminales separadas. Web: http://localhost:3000. El demo no necesita variables de entorno. Los archivos `.env.example` documentan su selector público.
 
 ## Calidad
 
 ```sh
+pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm format:check
 pnpm build
 pnpm --filter @pucara/mobile exec expo install --check
 pnpm --filter @pucara/mobile export
 ```
 
-En esta unidad de red reemplazar `pnpm` por `scripts\windows-network.cmd`.
-
-`build` compila la web. `export` genera bundles Android/iOS; no produce binarios para tiendas ni reemplaza pruebas en dispositivos. Ver [registro de verificaciones](docs/verification.md).
+`pnpm format` aplica Prettier. `build` compila la web; `export` genera bundles Android/iOS, sin producir binarios de tiendas ni sustituir pruebas en dispositivos. El registro de verificaciones diferencia resultados locales de CI remota.
 
 ## Organización
 
-- `apps/web`: Next.js App Router, React, Tailwind.
 - `apps/mobile`: Expo Router, React Native, iOS y Android.
+- `apps/web`: Next.js App Router, React, Tailwind; panel administrativo futuro.
 - `packages/shared`: contratos Zod, roles y servicio demo intercambiable.
 - `packages/design-tokens`: colores, escalas y movimiento compartidos.
 - `packages/config`: configuración TypeScript.
-- `supabase`: ubicación prevista para migraciones y seed versionados.
-- `docs`: arquitectura, producto, navegación, diseño y decisiones.
+- `supabase`: ubicación prevista para migraciones y seed, aún sin backend.
+- `docs`: arquitectura, producto, propuestas, decisiones y evidencias.
 
-Los ejemplos son ficticios, de solo lectura y sin persistencia. Seleccionar modo real produce un error explícito hasta implementar su adaptador. La P tipográfica es un placeholder, no el escudo oficial.
+Los datos demo son ficticios, de lectura y sin persistencia. Seleccionar modo real produce un error explícito hasta implementar su adaptador. La P tipográfica es un placeholder, no el escudo oficial.
 
-## Cambios compartidos
+## Paquetes compartidos y entorno anterior
 
-Los paquetes internos se instalan como dependencias inyectadas para evitar junctions incompatibles con SMB. Después de editar contratos o tokens, ejecutar `pnpm typecheck`: pnpm sincroniza sus fuentes y valida a los consumidores. Al modificar la configuración compartida o crear paquetes, ejecutar nuevamente `pnpm install`. Las pantallas de cada app conservan su recarga habitual. La propuesta de trabajar en un clon local está en [ADR-015](docs/decisions.md).
+Los workspaces locales se enlazan directamente: los cambios en contratos y tokens ya no requieren `typecheck` para copiar fuentes a las apps. Ejecutar los controles de calidad igualmente; reinstalar al cambiar manifests o dependencias.
 
-Ver [arquitectura](docs/architecture.md), [alcance](docs/product-requirements.md), [navegación](docs/navigation.md) y [roadmap](docs/roadmap.md).
+Se mantiene `nodeLinker: hoisted` por compatibilidad con las herramientas nativas. Se retiraron los ajustes exclusivos de SMB, sin actualizar dependencias ([ADR-015 y ADR-016](docs/decisions.md)).
+
+`scripts/windows-network.cmd` se conserva como referencia histórica. No es el ejecutor del clon local ni garantiza compatibilidad con SMB después de retirar la inyección de paquetes. El checkout de red queda fuera de esta sesión.
+
+Ver [arquitectura](docs/architecture.md), [alcance](docs/product-requirements.md), [navegación](docs/navigation.md) y [diseño](docs/design-system.md).
