@@ -66,6 +66,18 @@ La paleta bordó inicial no coincide con el club. Se adopta provisionalmente roj
 
 Gimnasio, rugby y hockey son diferenciales y se desarrollan progresivamente desde la Etapa 1, primero con datos ficticios estructurados y luego con persistencia real. No pueden adelantarse a costa de autenticación, RLS ni el circuito admin → socio. Wellness se limita a diseño y datos ficticios hasta resolver consentimiento y tratamiento de datos de menores.
 
-## ADR-015 — Entorno de trabajo y carpeta compartida (propuesta, 2026-11-04)
+## ADR-015 — Entorno de trabajo y carpeta compartida (2026-11-04; aprobada 2026-11-05)
 
-Estado: propuesta, pendiente de aprobación. Trabajar sobre SMB obliga a paquetes inyectados (ADR-011): los cambios en `packages/*` solo llegan a las apps después de `typecheck` o reinstalar, Vitest no resuelve rutas UNC y cada herramienta requiere una unidad temporal. Propuesta: una vez publicado el historial en GitHub, trabajar en un clon en disco local, retirar la configuración específica de SMB de pnpm-workspace.yaml tras verificarlo y conservar la carpeta compartida solo como respaldo o retirarla, sin mantener dos checkouts activos. Hasta aprobarlo, la carpeta compartida sigue siendo la ubicación oficial y el ejecutor `scripts/windows-network.cmd` se mantiene.
+Estado actual: aprobada por la continuación del usuario del 2026-11-05; aplicada en ADR-016. Se conserva debajo la motivación histórica. Trabajar sobre SMB obliga a paquetes inyectados (ADR-011): los cambios en `packages/*` solo llegan a las apps después de `typecheck` o reinstalar, Vitest no resuelve rutas UNC y cada herramienta requiere una unidad temporal. Propuesta: una vez publicado el historial en GitHub, trabajar en un clon en disco local, retirar la configuración específica de SMB de pnpm-workspace.yaml tras verificarlo y conservar la carpeta compartida solo como respaldo o retirarla, sin mantener dos checkouts activos. La restricción histórica de trabajar en la carpeta compartida queda sustituida por ADR-016; el ejecutor se conserva como referencia.
+
+## ADR-016 — Simplificación para disco local (2026-11-05)
+
+Estado: aplicada y verificada. La instrucción de continuación aprueba el clon local existente como entorno activo, resolviendo ADR-015. Raíz comprobada: `C:\Users\Nobody-GRD\Desktop\PucaraDigital`; main partía de `3014825`, idéntico al main remoto consultado. No se creó otro checkout ni se modificó la carpeta compartida.
+
+Tras verificar la base, se retiraron únicamente `injectWorkspacePackages`, `dedupeInjectedDeps`, `syncInjectedDepsAfterScripts` y `hoistWorkspacePackages`. Los paquetes internos usan enlaces normales de workspace y ya no requieren copiar fuentes después de typecheck. El lockfile cambió de referencias file a link y eliminó snapshots de los tres paquetes internos; las versiones externas no cambiaron.
+
+Se conserva nodeLinker: hoisted por compatibilidad con herramientas nativas, además de Webpack, versiones fijadas, políticas de instalación y override acotado de Expo. El ejecutor SMB queda como referencia histórica, no como ruta de desarrollo soportada en esta configuración. No se mantienen dos checkouts activos desde esta sesión.
+
+Turbo declara `outputs: []` para test: Vitest ejecuta los tests sin generar cobertura. Así se elimina el aviso de un artefacto que no existe; si se agrega cobertura, declarar su tarea y salida entonces.
+
+Verificaciones completas antes y después, exportación Metro limpia y resolución real de paquetes documentadas en [verification.md](verification.md). Referencias: [configuración pnpm](https://pnpm.io/settings) y [monorepos Expo](https://docs.expo.dev/guides/monorepos/).

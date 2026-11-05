@@ -49,10 +49,3 @@ allowBuilds:
   unrs-resolver: true
 overrides:
   '@expo/cli>glob': 14.0.3
-
-injectWorkspacePackages: true
-dedupeInjectedDeps: false
-syncInjectedDepsAfterScripts:
-  - typecheck
-
-hoistWorkspacePackages: false
