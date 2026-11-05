@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Club editorial · Pucará Digital · Revisión UX</title>
+    <link rel="stylesheet" href="review.css" />
+    <script src="review.js" defer></script>
+  </head>
+  <body data-concept="a">
+    <header class="review-header">
+      <a class="review-brand" href="revision-ux.html">PUCARÁ / REVISIÓN UX</a>
+      <nav aria-label="Propuestas visuales">
+        <a href="concepto-a.html" aria-current="page">A · Club editorial</a
+        ><a href="concepto-b.html">B · Pulso deportivo</a
+        ><a href="concepto-c.html">C · Club cotidiano</a>
+      </nav>
+    </header>
+    <main class="review-stage">
+      <section class="device" aria-label="Prototipo móvil Club editorial">
+        <div class="status-bar" aria-hidden="true">
+          <span>9:41</span><span>● ━</span>
+        </div>
+        <div class="brand-bar">
+          <div class="wordmark">
+            PUCARÁ DIGITAL<span class="brand-line"></span>
+          </div>
+          <span class="profile-dot" aria-label="Alex Modelo">AM</span>
+        </div>
+        <div class="demo-strip">
+          PROTOTIPO · DATOS FICTICIOS · SIN OPERACIONES REALES
+        </div>
+        <div class="screen" id="screen"></div>
+        <div class="action-dock" id="action-dock" hidden></div>
+        <nav class="tabs" id="tabs" aria-label="Pestañas del socio"></nav>
+      </section>
+      <aside class="review-sidebar">
+        <div class="review-kicker">DIRECCIÓN A · PENDIENTE DE APROBACIÓN</div>
+        <h2 id="concept-name">Club editorial</h2>
+        <p id="concept-intro"></p>
+        <div class="review-disclaimer">
+          Primero la experiencia. Recorré las acciones como socio y compará
+          después la dirección visual. Los cambios viven solo en esta página y
+          se restablecen al recargar.
+        </div>
+        <h3>Recorridos para revisar</h3>
+        <ol>
+          <li>Inicio → Reservas → Pádel → turno → pago simulado.</li>
+          <li>Mis reservas → modificar → cancelar.</li>
+          <li>Club → Quinchos → solicitud → respuesta de escenario.</li>
+          <li>Yoga / Funcional → inscripción → Agenda → baja.</li>
+          <li>Inicio → Primera de rugby/hockey → fixture.</li>
+        </ol>
+        <div class="review-scenarios">
+          <h3>Controles del revisor</h3>
+          <label class="field" for="persona"
+            >Perfil de escenario<select id="persona" data-field="persona">
+              <option value="social">Socio social</option>
+              <option value="athlete">Deportista</option>
+              <option value="family">Responsable familiar</option>
+            </select></label
+          ><label class="check-field"
+            ><input type="checkbox" data-field="approval" checked /> Quincho
+            requiere aprobación</label
+          ><label class="check-field"
+            ><input type="checkbox" data-field="quincho-pay" /> Quincho requiere
+            pago</label
+          ><label class="check-field"
+            ><input type="checkbox" data-field="full" /> Actividades sin
+            cupo</label
+          ><button type="button" class="secondary" data-action="reset">
+            Reiniciar escenario
+          </button>
+          <p class="fine">
+            No son controles del socio. Orden de aprobación/pago, tarifas y
+            reglas de cupos siguen pendientes.
+          </p>
+        </div>
+        <p class="route-label">
+          Vista del prototipo: <code id="review-route">home</code>
+        </p>
+        <p>
+          <a href="../ux-functional-review.md"
+            >Arquitectura, recorridos y reglas abiertas</a
+          >
+        </p>
+      </aside>
+    </main>
+    <footer class="review-footer">
+      Revisión v2 · 5 de noviembre de 2026 · Escudo oficial pendiente · Ninguna
+      dirección está aprobada. Expo y Next.js permanecen sin cambios.
+    </footer>
+  </body>
+</html>

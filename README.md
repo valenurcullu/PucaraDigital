@@ -8,7 +8,7 @@ Fundaciones verificadas en disco local: aplicaciones Next.js y Expo con entradas
 
 Orden de plataformas: app nativa iOS/Android → panel administrativo web → portal web del socio, postergado. La Etapa 1 comienza con una propuesta visual para aprobación; el código conserva su paleta provisional bordó hasta aprobar el rediseño.
 
-Para revisar la dirección visual: [propuesta UX/UI](docs/ux-ui-proposal.md) y [lámina con seis wireframes](docs/design/etapa-1.html), abrible en navegador sin servidor.
+Revisión vigente: [arquitectura y recorridos funcionales v2](docs/ux-functional-review.md) y [comparador de tres propuestas HTML](docs/design/revision-ux.html), abrible sin servidor. Tanto la arquitectura detallada como la dirección visual requieren aprobación. La v1 se conserva como antecedente no aprobado.
 
 Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
 

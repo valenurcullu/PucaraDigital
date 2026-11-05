@@ -23,13 +23,15 @@ Actualizado: **2026-11-05**. Fuente de verdad para retomar entre Codex, Claude C
 | Calidad  | Instalación congelada, Prettier, lint, tipos, tests, build web, Expo check y export Android/iOS correctos antes y después de simplificar |
 | Límites  | Sin prueba nativa en dispositivo, VoiceOver/TalkBack ni validación de credenciales reales                                                |
 
-Último hito de diseño: propuesta v1 documentada y revisada en navegador, pendiente de aprobación. Las aplicaciones no fueron rediseñadas.
+La revisión funcional v2 partió del commit 8d2e82f, con árbol limpio. Los recorridos A/B/C fueron comprobados en Chrome; ver el detalle y los límites en [verificaciones](verification.md).
+
+Revisión vigente: [UX funcional v2](ux-functional-review.md) y [comparador de tres direcciones](design/revision-ux.html). La v1 no fue aprobada. Las decisiones funcionales del usuario están confirmadas; arquitectura detallada y dirección visual requieren aprobación separada. Los HTML simulan recorridos en memoria; las aplicaciones no fueron rediseñadas.
 
 El estado de aprobación visual y sus criterios se registra en [sistema de diseño](design-system.md); la estructura de cinco pestañas ya está acordada en [navegación](navigation.md). Las carpetas y wireframes no equivalen a módulos funcionales.
 
 ## Próximos pasos, en orden
 
-1. Revisar y aprobar la [propuesta visual v1](ux-ui-proposal.md) y la [lámina con seis wireframes](design/etapa-1.html), ya preparadas: paleta concreta, tipografía, densidad y jerarquía.
+1. Revisar primero arquitectura y recorridos de la v2, luego elegir dirección A/B/C o una combinación explícita. Registrar ambas aprobaciones; no inferir una de la otra.
 2. Tras aprobación, implementar tokens semánticos y componentes nativos base; shell de cinco pestañas e Inicio demo como referencia.
 3. Revisar capturas iOS/Android, tamaños chico/grande, texto 200 %, contraste y lectores de pantalla antes de extender el diseño.
 4. Continuar según [roadmap](roadmap.md). Supabase, autenticación y módulos completos quedan fuera de esta revisión; no adelantarlos por completar los controles técnicos.
@@ -38,11 +40,11 @@ Deportes es prioritario en 2026. Orden de plataformas: móvil, administración w
 
 ## Decisiones pendientes
 
-- Aprobación de la propuesta visual concreta. No reemplazar los tokens actuales ni construir todas las pantallas sin esa aprobación.
+- Aprobación de arquitectura de información y dirección visual v2. No reemplazar tokens ni construir componentes nativos hasta recibir ambas. Políticas de reservas, cancelación, reintegros, aprobación/pago de quinchos, cupos y representación de menores siguen abiertas.
 - Confirmación del escudo y recursos oficiales; el archivo mencionado en la auditoría no fue aprobado como oficial.
 - Política de validación del carnet, funcionamiento sin conexión y dispositivos del club.
 - Pruebas nativas y CI remota verificable.
-- Datos y permisos necesarios para etapas posteriores: padrón, onboarding, visibilidad por roles/equipos, proyecto Supabase, identificadores/cuentas de tiendas y privacidad de menores/wellness. Detalle en [requerimientos](product-requirements.md).
+- Requisitos confirmados para etapas futuras: alrededor de 2.500 socios activos, hasta 300 usuarios concurrentes previstos, acceso Google o email OTP, cuenta separada del registro administrativo y menores con uno o más responsables autorizados. No hay implementación ni prueba de capacidad. Faltan vínculo con padrón, verificación/revocación de responsables, visibilidad, proyecto Supabase, cuentas de tiendas y privacidad de menores/wellness. Detalle en [requerimientos](product-requirements.md).
 
 ## Cómo continuar sin historial de chat
 

@@ -1,5 +1,7 @@
 # Sistema de diseño inicial
 
+> Revisión vigente: [UX funcional v2](ux-functional-review.md) y [tres direcciones visuales](design/revision-ux.html). Ninguna dirección está aprobada. La v1 queda como antecedente; no migrar tokens hasta aprobar arquitectura de información y diseño.
+
 ## Dirección
 
 Una experiencia deportiva sobria, cálida y precisa. Pucará ocupa la marca principal; Suplio aparece únicamente como desarrollador cuando sea pertinente. No se inventa un escudo: una P tipográfica funciona como placeholder reemplazable.
@@ -51,3 +53,15 @@ La aceptación visual del sistema completo requiere revisión en navegador y dis
 La [propuesta UX/UI v1](ux-ui-proposal.md) define paleta semántica roja/marina/blanca, tipografía del sistema, escala, contrastes calculados, navegación y orden de componentes. La [lámina visual](design/etapa-1.html) contiene seis wireframes: Inicio, Agenda, Carnet, Club, Cuenta y gimnasio; se abre localmente en el navegador.
 
 Es un artefacto de revisión, no pantallas implementadas. Los tokens y vistas de las apps conservan el estado descrito arriba hasta que el usuario apruebe la dirección. La navegación de cinco pestañas ya está aprobada; la densidad, paleta concreta y jerarquía propuestas requieren revisión. El escudo oficial sigue pendiente. Las comprobaciones HTML no sustituyen aceptación iOS/Android.
+
+## Referencia visual de las tres direcciones v2
+
+Los tokens de revisión están en docs/design/review.css; no son los tokens aprobados del producto. Tras elegir una dirección, se propondrá su migración semántica a packages/design-tokens.
+
+| Dirección           | Acción primaria | Estructura | Fondo   | Tipografía de títulos        |
+| ------------------- | --------------- | ---------- | ------- | ---------------------------- |
+| A · Club editorial  | #BC2438         | #14263D    | #F6F4EF | Georgia / serif de sistema   |
+| B · Pulso deportivo | #C92436         | #0B1D34    | #F0F2F5 | Impact / Arial Narrow / sans |
+| C · Club cotidiano  | #B9233A         | #19324B    | #F2F6F9 | Sans de sistema, peso 750    |
+
+El cuerpo usa sans de sistema. Las diferencias de estructura, densidad, radios y jerarquía están descritas en [revisión funcional](ux-functional-review.md#tres-direcciones-visuales). La elección requiere revisión con el socio; no se declara una ganadora por intuición. Los pares principales de contraste calculados constan en [verificaciones](verification.md).

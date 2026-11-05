@@ -80,3 +80,26 @@ Artefactos de documentación: `docs/ux-ui-proposal.md` y `docs/design/etapa-1.ht
 - Revisión visual de capturas de la lámina; no se generaron capturas de una app nativa. No hay QR escaneable, datos reales, fuentes externas, API ni operaciones persistentes.
 - Prettier y git diff --check correctos al cerrar. Los enlaces relativos de la documentación agregada se comprobaron.
 - Pendiente: aprobación de dirección visual y aceptación nativa en dispositivos, incluyendo texto ampliado, VoiceOver/TalkBack y estados reales.
+
+## 2026-11-05 — Revisión funcional UX v2 y tres direcciones HTML
+
+**Base:** main, HEAD inicial 8d2e82f, limpio; origin oficial confirmado. Esta ejecución modifica documentación y HTML de revisión. Expo, Next.js, paquetes compartidos, manifests y lockfile no se modifican.
+
+**Recorridos comprobados con Chrome local, en A/B/C:**
+
+- Inicio muestra accesos a Reservas, Gimnasio y Cuenta Corriente y partidos de Primera de rugby/hockey con rival, condición, fecha y hora.
+- Reserva de pádel: disponibilidad → resumen → rechazo de pago (sin confirmación) → aprobación simulada → detalle; modificación preservando el turno anterior hasta confirmar; cancelación con aviso y retiro de Agenda.
+- Sin disponibilidad y conflicto concurrente simulado: mensajes claros y turno bloqueado en el escenario. Volver de una modificación no cambia la reserva original.
+- Quinchos: solicitud pendiente → aprobación → pago cuando corresponde; aprobación directa con/sin pago; rechazo de solicitud. Solo confirmadas aparecen en Agenda.
+- Yoga/Funcional: inscripción recurrente, proyección futura en Agenda y baja; inscripción de adulto y menor, comprobando que la baja del menor conserva la del adulto; cupo completo impide confirmar. No se incluye gimnasio como evento.
+- Agenda diaria, semanal y mensual; escenarios social/deportista/familiar; entrenamiento/convocatoria con horario; combinación de partidos públicos/personales sin duplicar el mismo encuentro.
+- Consulta de ambos partidos → deporte/fixture/resultados; estado vacío sin inventar marcadores.
+- Selección de turno con teclado y conservación del foco al cambiar fecha. No constituye auditoría completa de accesibilidad.
+
+**Presentación:** páginas individuales comprobadas en 1440, 390 y 320 px; sin overflow horizontal en Inicio, Club, Reservas, Actividad y Disponibilidad. Se corrigió un desborde en B. Capturas revisadas de Inicio/Club y del comparador; controles del comparador cambian la vista de los tres prototipos. Sin errores JS ni solicitudes HTTP durante los recorridos file://; no hay API, fuentes remotas, persistencia ni operaciones reales.
+
+Contraste sRGB calculado para pares principales (A/B/C): blanco sobre acción roja 6,09 / 5,54 / 6,24; blanco sobre marino 15,28 / 16,94 / 13,13; texto secundario sobre canvas 5,41 / 5,64 / 5,23. Esto verifica esos pares, no certifica todos los estados ni el sistema completo.
+
+Controles de cierre: sintaxis de review.js con node --check, Prettier, enlaces relativos y git diff --check. No se repiten build web ni export nativo porque no cambiaron sus entradas; se conserva la evidencia técnica anterior. No se probó capacidad para 300 concurrentes, permisos reales, dispositivos nativos, lectores de pantalla ni texto 200 % en esta v2.
+
+Estado: arquitectura detallada y dirección visual pendientes de aprobación. La v1 permanece como antecedente no aprobado, con aviso y enlace a v2.

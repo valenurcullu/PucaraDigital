@@ -1,6 +1,6 @@
-# Etapa 1 — propuesta UX/UI v1
+# Etapa 1 — propuesta UX/UI v1 (antecedente no aprobado)
 
-**Estado: propuesta para aprobación, 2026-11-05.** No reemplaza todavía los tokens ni las pantallas de las apps. [Lámina visual y seis wireframes](design/etapa-1.html): abrir el archivo en un navegador; funciona sin servidor, fuentes externas ni dependencias.
+**Estado: antecedente no aprobado, sustituido como referencia por la [revisión funcional v2](ux-functional-review.md) y las [tres propuestas HTML](design/revision-ux.html).** La v1 incluía decisiones ahora descartadas, como la rutina libre de gimnasio dentro de Agenda. No usarla para implementar. No reemplaza todavía los tokens ni las pantallas de las apps. [Lámina visual y seis wireframes](design/etapa-1.html): abrir el archivo en un navegador; funciona sin servidor, fuentes externas ni dependencias.
 
 ## Diagnóstico del sistema existente
 
