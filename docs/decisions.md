@@ -81,3 +81,15 @@ Se conserva nodeLinker: hoisted por compatibilidad con herramientas nativas, ade
 Turbo declara `outputs: []` para test: Vitest ejecuta los tests sin generar cobertura. Así se elimina el aviso de un artefacto que no existe; si se agrega cobertura, declarar su tarea y salida entonces.
 
 Verificaciones completas antes y después, exportación Metro limpia y resolución real de paquetes documentadas en [verification.md](verification.md). Referencias: [configuración pnpm](https://pnpm.io/settings) y [monorepos Expo](https://docs.expo.dev/guides/monorepos/).
+
+## ADR-017 — Experiencia del socio antes de componentes nativos (2026-11-05)
+
+Estado: decisiones funcionales del usuario confirmadas; arquitectura detallada, recorridos concretos y dirección visual pendientes de aprobación. La propuesta v1 no está aprobada y queda como antecedente. La [revisión funcional v2](ux-functional-review.md) es la referencia actual.
+
+Se mantienen cinco pestañas. Reservas tiene acceso directo desde Inicio y ocupa el primer bloque de Club. Inicio incluye los próximos partidos de Primera de ambos deportes y comunicaciones administrables, además de un resumen personal breve. Agenda excluye gimnasio libre e incluye clases recurrentes solo por inscripción activa; la baja retira eventos futuros personales sin borrar historia ni actividad. Se separa inscripción de asistencia.
+
+Pádel se diseña con pago por turno; quinchos admite aprobación/pago configurables. Las políticas concretas siguen abiertas. Los HTML permiten probar escenarios en memoria, sin cobros, reservas, inscripciones ni persistencia reales. No se modifican Expo, Next, paquetes ni dependencias.
+
+Requisitos futuros confirmados: cerca de 2.500 socios activos, hasta 300 concurrentes previstos, Google o email OTP, cuenta distinta del registro de socio y menores con múltiples responsables autorizados. No equivalen a implementación, permisos definidos ni capacidad medida.
+
+Las dos aprobaciones (arquitectura de información y dirección visual) preceden al desarrollo de componentes nativos. La comparación A/B/C conserva la funcionalidad para evaluar estructura, densidad e identidad, sin decidir una estética por el usuario.

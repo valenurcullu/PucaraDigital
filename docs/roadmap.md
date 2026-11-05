@@ -35,9 +35,9 @@ La Etapa 4 (deportes, con datos ficticios) avanza en paralelo a partir del siste
 
 ### Etapa 1 — Diseño UX/UI premium · P0 · propuesta presentada
 
-- **Estado al 2026-11-05:** [propuesta v1](ux-ui-proposal.md) y [seis wireframes](design/etapa-1.html) preparados; dirección visual pendiente de aprobación. No se implementó el rediseño.
+- **Estado al 2026-11-05:** revisión funcional v2 con [recorridos completos](ux-functional-review.md) y [tres direcciones HTML](design/revision-ux.html). La v1 no fue aprobada. Se requieren aprobación de arquitectura de información y aprobación visual antes de implementar componentes nativos.
 - **Objetivo:** identidad provisional (rojo institucional, azul marino, blanco, neutros) y sistema de diseño propio de cada plataforma.
-- **Alcance:** propuesta visual justificada antes de implementar; tokens de color, tipografía, espaciado y escala accesible; navegación de cinco pestañas; arquitectura de información de Club y Cuenta; wireframes de Inicio, Agenda, Carnet, Club, Cuenta y acceso rápido al gimnasio; componentes base y estados de carga, error y vacío.
+- **Alcance:** recorridos UX de reservas (pádel/quinchos), inscripciones recurrentes y consulta de partidos, con estados de error y reglas pendientes; tres propuestas visuales antes de implementar; tokens de color, tipografía, espaciado y escala accesible; navegación de cinco pestañas; arquitectura de información de Club y Cuenta; wireframes de Inicio, Agenda, Carnet, Club, Cuenta y acceso rápido al gimnasio; componentes base y estados de carga, error y vacío.
 - **Dependencias:** Etapa 0. El escudo vectorial oficial no bloquea: se usa placeholder textual.
 - **Riesgos:** pulido excesivo; colores que luego difieran de los oficiales (mitigado con tokens).
 - **Aceptación:** propuesta aprobada; capturas iOS y Android en tamaños chico y grande; texto ampliado al 200 % sin cortes; VoiceOver/TalkBack básicos; contraste AA verificado.

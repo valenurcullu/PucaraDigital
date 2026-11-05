@@ -22,3 +22,5 @@
 - Actualizar README y docs con lo implementado, verificaciones realizadas y limitaciones.
 
 - Al retomar, leer docs/current-status.md; al cerrar un bloque, actualizar estado y docs/verification.md con evidencia. CLAUDE.md remite a estas mismas reglas.
+
+- Referencia UX vigente: docs/ux-functional-review.md y docs/design/revision-ux.html. La v1 no está aprobada. Se requieren aprobación de arquitectura de información y dirección visual antes de componentes nativos. Conservar reglas confirmadas: Reservas visible, gimnasio libre fuera de Agenda, inscripción recurrente distinta de asistencia y baja que retira solo clases futuras personales.

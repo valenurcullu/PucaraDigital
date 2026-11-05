@@ -51,3 +51,13 @@ La CI comprueba formato, lint, tipos, tests, build web, coherencia Expo y export
 ## Entorno local verificado (2026-11-05)
 
 El desarrollo activo usa el clon local existente de Windows (ADR-015/016). Los paquetes internos se enlazan directamente; se retiraron inyección, deduplicación forzada, sincronización por typecheck y hoisting especial de workspaces. Se conservan nodeLinker: hoisted, versiones, override de Expo y build Webpack. Turbo funciona en disco local. El ejecutor SMB queda como referencia histórica.
+
+## Implicaciones de la revisión funcional v2 (sin implementación)
+
+La [revisión funcional](ux-functional-review.md) confirma Google o email OTP como métodos futuros de acceso. Autenticarse no crea por sí mismo un socio administrativo ni concede autorización. Cuenta, registro de socio y vínculo de responsabilidad sobre menores deben ser conceptos separados; puede haber socios sin login y varios responsables autorizados para un mismo menor. Verificación, alcance de permisos y revocación quedan pendientes.
+
+Agenda personal se derivará de eventos con horario, reservas confirmadas y participación activa en actividades recurrentes; no de rutinas de gimnasio libre. La baja retira proyecciones futuras personales sin eliminar clases globales ni historial de asistencia. La estrategia de generación y horizonte temporal se decidirán al diseñar persistencia.
+
+Las reservas requerirán control atómico de disponibilidad, estados separados de pago/aprobación y operaciones idempotentes en servidor. Son requisitos futuros, no capacidades del HTML. Los 2.500 socios y 300 concurrentes previstos exigen definir mezcla de carga, objetivos de latencia y pruebas antes de afirmar capacidad.
+
+Los prototipos viven únicamente en docs/design, comparten un motor de escenarios en memoria y no importan código ni tokens de las aplicaciones. Se requieren aprobación de arquitectura de información y visual antes de implementar componentes nativos.

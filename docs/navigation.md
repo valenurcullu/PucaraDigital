@@ -1,46 +1,56 @@
 # Navegación
 
-## Disponible ahora
+## Disponible ahora en las aplicaciones
 
-- Web: /, entrada de fundaciones; /experiencia, vista previa informativa de la estructura prevista.
-- Móvil: /, entrada; /experiencia, vista previa mediante stack de Expo Router.
-- Web: página 404 con regreso al inicio y límite de error con reintento.
-- Estas vistas no representan funcionalidades de agenda, cuenta ni carnet. Serán reemplazadas en la Etapa 1: un socio autenticado no debe ver una landing de marketing como inicio.
+Web y móvil conservan / y /experiencia como entradas informativas de fundaciones. La web tiene 404 y error boundary. No hay cinco pestañas funcionales, reservas ni inscripciones reales. Los HTML de revisión están separados en docs/design.
 
-## Móvil aprobado (Etapa 1)
+## Decisiones confirmadas del socio
 
-Cinco pestañas inferiores: **Inicio · Agenda · Carnet · Club · Cuenta**. Cada pestaña conserva su estado; los detalles se abren en stack, respetan volver y el gesto nativo. Convenciones de iOS y Android se respetan cuando difieren.
+Cinco pestañas: **Inicio · Agenda · Carnet · Club · Cuenta**. La propuesta detallada de jerarquía y recorridos requiere aprobación separada de la dirección visual.
 
-- **Inicio:** dashboard personal según roles y equipos del usuario: próximo entrenamiento, próximo partido, rutina de gimnasio, estado de cuenta, próxima reserva, comunicados importantes y accesos rápidos. No todos los usuarios ven lo mismo.
-- **Agenda:** eje de la app. Vista semanal y diaria; mensual secundaria. Entrenamientos, partidos, actividades, eventos, reservas y convocatorias. Inspiración funcional en WebCampus UADE, con diseño original.
-- **Carnet:** carnet digital, QR, datos básicos y estado de habilitación. Demo claramente identificado hasta contar con validación segura; evaluar disponibilidad sin conexión.
-- **Club:** agrupado por categorías, no una lista plana. Propuesta inicial a validar en wireframes:
-  - _Mis deportes_ (contextual al usuario): rugby, hockey, gimnasio — fixture, resultados, posiciones, videos y convocatorias de su equipo.
-  - _Actividades_: yoga y funcional.
-  - _Reservas_: pádel y quinchos.
-  - _Vida en el club_: noticias y eventos, beneficios, carta del buffet.
-- **Cuenta:** perfil, cuenta corriente, cuotas, historial de pagos, becas y descuentos, grupo familiar, configuración, preferencias, ayuda y soporte. El estado administrativo se muestra separado de la situación económica: un socio becado puede estar al día sin abonar cuota.
+- **Inicio:** saludo; accesos directos a Reservas, Gimnasio y Cuenta Corriente; próximos partidos de Primera de rugby y hockey (rival, local/visitante, día y horario); Novedades y Comunicaciones administrables desde web; eventos y reservas personales relevantes, con resumen breve. Útil para deportistas, socios sociales y familias.
+- **Agenda:** día y semana, mes secundario. Partidos, convocatorias y entrenamientos con horario; reservas confirmadas de pádel/quinchos; clases de yoga/funcional solo para participantes inscriptos. Gimnasio libre no genera eventos automáticos. Las inscripciones recurrentes incorporan clases futuras; la baja retira sus eventos futuros personales.
+- **Carnet:** identificación QR, inicialmente demo sin valor de ingreso.
+- **Club:** primero **Reservas** (pádel, quinchos y acceso a Mis reservas); **Deportes** (rugby, hockey, gimnasio, fixture, resultados y videos); **Actividades** (yoga y funcional); **Vida en el club** (buffet, beneficios, novedades y eventos).
+- **Cuenta:** cuenta corriente, situación económica, becas, familia, perfil, preferencias y soporte. Separar estado administrativo y situación económica.
 
-## Acciones frecuentes (objetivo de toques desde la app abierta)
+## Jerarquía y recorridos propuestos, pendientes de aprobación
 
-| Tarea                    | Objetivo                                         |
-| ------------------------ | ------------------------------------------------ |
-| Próximo entrenamiento    | 0 (visible en Inicio)                            |
-| Estado de cuenta / deuda | 0 para el estado, 1 para el detalle              |
-| Rutina de hoy            | 1 desde Inicio                                   |
-| Registrar una serie      | ≤ 2 dentro de la rutina                          |
-| Próxima reserva          | 0 en Inicio, 1 desde Agenda                      |
-| Carnet                   | 1 (pestaña)                                      |
-| Beneficios               | 2 (Club → Beneficios), o acceso rápido en Inicio |
+[Revisión funcional v2](ux-functional-review.md) contiene escenarios normales, vacíos, conflictos, pago rechazado, cambios y cancelaciones. [Comparador HTML](design/revision-ux.html) ofrece tres direcciones sobre estos mismos recorridos. La v1 queda como antecedente no aprobado.
 
-## Administración (Etapa 3)
+```text
+Inicio ─ Reservas ─ Pádel / Quinchos ─ Disponibilidad ─ Revisión ─ Resultado
+       ├ Gimnasio (sin evento automático)
+       ├ Cuenta Corriente
+       ├ Primera Rugby / Hockey ─ Partido ─ Fixture / Resultados
+       ├ Para vos ─ Detalle de evento o reserva
+       └ Novedades y Comunicaciones
+Club ─ Reservas (primer bloque) ─ Pádel / Quinchos / Mis reservas
+     ├ Deportes ─ Rugby / Hockey / Gimnasio / Fixture / Resultados / Videos
+     ├ Actividades ─ Yoga / Funcional ─ Inscripción recurrente
+     └ Vida en el club ─ Buffet / Beneficios / Novedades / Eventos
+Mis reservas ─ Detalle ─ Modificar ─ Revisar cambio
+                      └ Cancelar ─ Confirmar consecuencias
+Actividad ─ Participante autorizado ─ Inscripción / Baja ─ Agenda personal
+```
 
-Área web propia con navegación lateral: Resumen, Comunicados, Eventos y, más adelante, Socios, Actividades y Operaciones. Mostrar accesos por rol mejora la UX, pero el control definitivo está en servidor/RLS.
+Conservar selección al volver, contexto por pestaña y detalle único accesible desde distintos puntos. Para familia, mostrar el participante en revisión, confirmación y detalle; no inferir autorización por compartir apellido o cuenta. Agenda pública y personal son filtros propuestos, no permisos implementados.
 
-## Portal web del socio (Etapa 6)
+## Objetivos de acceso a validar
 
-Postergado, no eliminado. Reutilizará contratos y servicios compartidos. Sidebar en escritorio y navegación compacta en pantallas pequeñas; enlaces profundos para compartir rutas.
+| Tarea                             | Objetivo desde Inicio                                                |
+| --------------------------------- | -------------------------------------------------------------------- |
+| Abrir Reservas o Mis reservas     | 1 toque al centro de reservas                                        |
+| Consultar disponibilidad de pádel | 2 toques, sin submenús adicionales                                   |
+| Abrir gimnasio o cuenta corriente | 1 toque                                                              |
+| Ver próximos partidos de Primera  | Visibles en Inicio; detalle a 1 toque                                |
+| Consultar carnet                  | 1 toque en pestaña                                                   |
+| Abrir una actividad               | Club → Yoga/Funcional                                                |
+| Inscribirse                       | Detalle → revisión de recurrencia/participante → confirmar           |
+| Cancelar                          | Detalle → advertencia → confirmar, sin acción irreversible inmediata |
 
-## Detalle propuesto para revisión (2026-11-05)
+Los objetivos no incluyen elegir datos ni lectura de condiciones. No sacrificar una confirmación necesaria para reducir toques.
 
-La [propuesta de Etapa 1](ux-ui-proposal.md#arquitectura-de-navegación) describe rutas conceptuales, detalle compartido de eventos, entrada a gimnasio desde Inicio/Club, conservación de contexto y salida de sesión. Ver los [seis wireframes](design/etapa-1.html). Especifican comportamiento futuro; las rutas disponibles siguen siendo solo las indicadas en “Disponible ahora”.
+## Plataformas posteriores
+
+Administración web: Resumen, Comunicados y Eventos primero; gestión de recursos, reservas y actividades al implementar cada módulo. La edición web de Novedades y Comunicaciones es fuente del contenido de Inicio. Portal web del socio postergado, no eliminado. Se reutiliza lógica compartida, no componentes nativos.
