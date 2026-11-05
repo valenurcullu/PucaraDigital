@@ -24,16 +24,18 @@ La Etapa 4 (deportes, con datos ficticios) avanza en paralelo a partir del siste
 
 ## Etapas
 
-### Etapa 0 — Estabilización técnica · P0 · en curso
+### Etapa 0 — Estabilización técnica · P0 · verificada localmente
 
+- **Estado al 2026-11-05:** controles locales completos en verde tras migrar el trabajo al clon de disco local (ADR-016). CI remota no consultada; push sigue sujeto a autorización. Ver docs/current-status.md.
 - **Objetivo:** base confiable para desarrollar.
 - **Alcance:** correcciones de la auditoría (.gitattributes, Prettier, ESLint), registro de verificaciones, primer commit, revisión del entorno en la carpeta compartida, documentación alineada con estas decisiones.
 - **Dependencias:** ninguna.
 - **Riesgos:** perder cambios al mover el checkout; publicar archivos sensibles.
 - **Aceptación:** historial local con commits verificados, sin secretos; lint, typecheck, tests, formato, build web, expo check y export en verde; push solo con autorización. Estado detallado en [verification.md](verification.md).
 
-### Etapa 1 — Diseño UX/UI premium · P0
+### Etapa 1 — Diseño UX/UI premium · P0 · propuesta presentada
 
+- **Estado al 2026-11-05:** [propuesta v1](ux-ui-proposal.md) y [seis wireframes](design/etapa-1.html) preparados; dirección visual pendiente de aprobación. No se implementó el rediseño.
 - **Objetivo:** identidad provisional (rojo institucional, azul marino, blanco, neutros) y sistema de diseño propio de cada plataforma.
 - **Alcance:** propuesta visual justificada antes de implementar; tokens de color, tipografía, espaciado y escala accesible; navegación de cinco pestañas; arquitectura de información de Club y Cuenta; wireframes de Inicio, Agenda, Carnet, Club, Cuenta y acceso rápido al gimnasio; componentes base y estados de carga, error y vacío.
 - **Dependencias:** Etapa 0. El escudo vectorial oficial no bloquea: se usa placeholder textual.

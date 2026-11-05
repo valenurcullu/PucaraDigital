@@ -23,11 +23,13 @@ Actualizado: **2026-11-05**. Fuente de verdad para retomar entre Codex, Claude C
 | Calidad  | Instalación congelada, Prettier, lint, tipos, tests, build web, Expo check y export Android/iOS correctos antes y después de simplificar |
 | Límites  | Sin prueba nativa en dispositivo, VoiceOver/TalkBack ni validación de credenciales reales                                                |
 
+Último hito de diseño: propuesta v1 documentada y revisada en navegador, pendiente de aprobación. Las aplicaciones no fueron rediseñadas.
+
 El estado de aprobación visual y sus criterios se registra en [sistema de diseño](design-system.md); la estructura de cinco pestañas ya está acordada en [navegación](navigation.md). Las carpetas y wireframes no equivalen a módulos funcionales.
 
 ## Próximos pasos, en orden
 
-1. Presentar y aprobar la dirección visual de Etapa 1: paleta concreta, tipografía, densidad y wireframes.
+1. Revisar y aprobar la [propuesta visual v1](ux-ui-proposal.md) y la [lámina con seis wireframes](design/etapa-1.html), ya preparadas: paleta concreta, tipografía, densidad y jerarquía.
 2. Tras aprobación, implementar tokens semánticos y componentes nativos base; shell de cinco pestañas e Inicio demo como referencia.
 3. Revisar capturas iOS/Android, tamaños chico/grande, texto 200 %, contraste y lectores de pantalla antes de extender el diseño.
 4. Continuar según [roadmap](roadmap.md). Supabase, autenticación y módulos completos quedan fuera de esta revisión; no adelantarlos por completar los controles técnicos.

@@ -40,3 +40,7 @@ Cinco pestañas inferiores: **Inicio · Agenda · Carnet · Club · Cuenta**. Ca
 ## Portal web del socio (Etapa 6)
 
 Postergado, no eliminado. Reutilizará contratos y servicios compartidos. Sidebar en escritorio y navegación compacta en pantallas pequeñas; enlaces profundos para compartir rutas.
+
+## Detalle propuesto para revisión (2026-11-05)
+
+La [propuesta de Etapa 1](ux-ui-proposal.md#arquitectura-de-navegación) describe rutas conceptuales, detalle compartido de eventos, entrada a gimnasio desde Inicio/Club, conservación de contexto y salida de sesión. Ver los [seis wireframes](design/etapa-1.html). Especifican comportamiento futuro; las rutas disponibles siguen siendo solo las indicadas en “Disponible ahora”.

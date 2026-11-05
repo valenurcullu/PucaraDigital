@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pucará Digital · Dirección visual v1</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --red: #c52235;
+        --navy: #10213a;
+        --canvas: #f4f6f9;
+        --surface: #fff;
+        --ink: #14233b;
+        --muted: #536176;
+        --line: #dee4ec;
+        --subtle: #eaf0f6;
+        --success: #176447;
+        --success-bg: #eaf5ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
+        line-height: 1.5;
+      }
+      a {
+        color: inherit;
+        text-underline-offset: 4px;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: 3px solid var(--red);
+        outline-offset: 4px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: clamp(38px, 5vw, 68px);
+        line-height: 1.06;
+        letter-spacing: -2px;
+        max-width: 720px;
+      }
+      h2 {
+        font-size: 1.75em;
+        line-height: 1.2;
+        letter-spacing: -0.8px;
+        margin: 10px 0 6px;
+      }
+      h3 {
+        font-size: 1.25em;
+        line-height: 1.3;
+      }
+      small {
+        font-size: 0.75em;
+        display: block;
+        color: var(--muted);
+      }
+      strong {
+        display: block;
+      }
+      p {
+        margin: 8px 0 16px;
+      }
+      .wrap {
+        max-width: 1440px;
+        margin: auto;
+        padding: 36px 40px;
+      }
+      .masthead {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 24px;
+      }
+      .wordmark {
+        letter-spacing: 2px;
+        font-weight: 800;
+      }
+      .version {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .intro {
+        padding: 56px 0 32px;
+      }
+      .eyebrow {
+        color: var(--red);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+      }
+      .intro p {
+        max-width: 710px;
+        color: var(--muted);
+        font-size: 18px;
+        margin-top: 24px;
+      }
+      .intro em {
+        font-style: normal;
+        color: var(--red);
+      }
+      .review-nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 24px 0;
+      }
+      .review-nav a,
+      .tools button {
+        padding: 12px 16px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font-size: 14px;
+        text-decoration: none;
+        min-height: 48px;
+      }
+      .review-nav a:hover {
+        border-color: var(--red);
+      }
+      .review-panel {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 32px;
+        background: var(--surface);
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+      }
+      .palette {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+      .swatch {
+        font-size: 12px;
+        min-width: 82px;
+      }
+      .swatch i {
+        display: block;
+        height: 42px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        border: 1px solid var(--line);
+      }
+      .type-demo strong {
+        font-size: 28px;
+        letter-spacing: -0.6px;
+      }
+      .type-demo p {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin: 32px 0 12px;
+      }
+      .tools button[aria-pressed='true'] {
+        background: var(--navy);
+        color: #fff;
+      }
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 40px 28px;
+        margin-top: 32px;
+      }
+      .frame {
+        scroll-margin-top: 24px;
+        min-width: 0;
+      }
+      .frame:target .phone {
+        outline: 3px solid var(--red);
+        outline-offset: 5px;
+      }
+      .frame > h2 {
+        font-size: 18px;
+        letter-spacing: 0;
+      }
+      .annotation {
+        font-size: 14px;
+        color: var(--muted);
+        margin: 8px 0 20px;
+        min-height: 42px;
+      }
+      .phone {
+        border: 1px solid #bcc5d2;
+        border-radius: 24px;
+        background: var(--surface);
+        box-shadow: 0 8px 24px #10213a08;
+        overflow: hidden;
+      }
+      .phone-status {
+        padding: 14px 22px 6px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .screen {
+        font-size: 16px;
+        padding: 20px;
+        min-height: 790px;
+      }
+      .app-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 24px;
+        font-size: 0.875em;
+      }
+      .app-top b {
+        letter-spacing: 1px;
+      }
+      .app-top a {
+        text-decoration: none;
+      }
+      .pill {
+        font-size: 0.75em;
+        padding: 5px 10px;
+        border-radius: 99px;
+        background: var(--subtle);
+        color: var(--navy);
+        display: inline-block;
+        font-weight: 600;
+      }
+      .muted,
+      .caption {
+        color: var(--muted);
+      }
+      .caption {
+        font-size: 0.75em;
+        line-height: 1.6;
+      }
+      .highlight {
+        background: var(--navy);
+        color: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        margin-top: 24px;
+      }
+      .highlight small,
+      .member-card small {
+        color: #fff;
+      }
+      .highlight h3 {
+        font-size: 1.5em;
+        margin-top: 10px;
+      }
+      .highlight p {
+        font-size: 0.875em;
+        line-height: 1.6;
+      }
+      .button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: var(--red);
+        color: #fff;
+        padding: 15px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        min-height: 52px;
+      }
+      .inverse {
+        background: #fff;
+        color: var(--navy);
+      }
+      .section-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        margin: 26px 0 12px;
+      }
+      .section-label h3 {
+        font-size: 1.125em;
+      }
+      .section-label a,
+      .section-label > span {
+        font-size: 0.75em;
+        color: var(--muted);
+      }
+      .routine {
+        display: block;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--red);
+        padding: 16px;
+        border-radius: 8px;
+      }
+      .routine small {
+        color: var(--red);
+        font-weight: 600;
+      }
+      .routine strong {
+        font-size: 1.125em;
+        margin: 6px 0;
+      }
+      .routine > span {
+        color: var(--muted);
+        font-size: 0.875em;
+        display: flex;
+        justify-content: space-between;
+      }
+      .status {
+        color: var(--success);
+        background: var(--success-bg);
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 0.875em;
+      }
+      .news strong {
+        font-size: 1em;
+        margin: 6px 0;
+      }
+      .news > span {
+        font-size: 0.875em;
+        color: var(--muted);
+      }
+      .tabs {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        border-top: 1px solid var(--line);
+        padding: 12px 6px 18px;
+        gap: 2px;
+      }
+      .tabs a {
+        font-size: 0.75em;
+        text-align: center;
+        text-decoration: none;
+        color: var(--muted);
+        padding: 6px 0;
+        min-height: 48px;
+        overflow-wrap: anywhere;
+      }
+      .tabs span {
+        display: block;
+        font-size: 22px;
+        line-height: 24px;
+        margin-bottom: 4px;
+      }
+      .tabs a[aria-current] {
+        color: var(--red);
+        font-weight: 700;
+        background: #fff0f1;
+        border-radius: 8px;
+      }
+      .week {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin: 24px 0;
+      }
+      .week > span {
+        text-align: center;
+        font-size: 0.75em;
+        color: var(--muted);
+        padding: 8px 0;
+        border-radius: 8px;
+      }
+      .week em {
+        font-size: 1.5em;
+        font-style: normal;
+        display: block;
+        font-weight: 600;
+      }
+      .week .selected {
+        background: var(--red);
+        color: #fff;
+      }
+      .filters {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .pill.active {
+        background: var(--navy);
+        color: #fff;
+      }
+      .event {
+        display: flex;
+        gap: 16px;
+        border-top: 1px solid var(--line);
+        padding: 20px 0;
+      }
+      .event > b {
+        font-size: 0.875em;
+        min-width: 44px;
+      }
+      .event > div {
+        border-left: 2px solid var(--red);
+        padding-left: 14px;
+        min-width: 0;
+      }
+      .event p {
+        font-size: 0.875em;
+        color: var(--muted);
+        margin-bottom: 0;
+      }
+      .event strong {
+        margin-top: 4px;
+      }
+      .quiet {
+        padding: 16px;
+        background: var(--canvas);
+        border-radius: 8px;
+        margin-top: 22px;
+        font-size: 0.875em;
+      }
+      .quiet p {
+        color: var(--muted);
+        margin-bottom: 0;
+      }
+      .member-card {
+        background: var(--navy);
+        color: #fff;
+        padding: 24px 20px;
+        border-radius: 16px;
+        margin-top: 24px;
+        border-top: 5px solid var(--red);
+      }
+      .member-card h3 {
+        margin-top: 14px;
+      }
+      .member-card p {
+        font-size: 0.875em;
+      }
+      .member-card .pill {
+        background: #fff;
+        color: var(--navy);
+        font-size: 0.75em;
+      }
+      .avatar {
+        width: 56px;
+        height: 56px;
+        border: 1px solid #ffffff80;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        font-weight: 600;
+      }
+      .code-placeholder {
+        background: #fff;
+        color: var(--muted);
+        border: 2px dashed #7b8799;
+        padding: 32px 12px;
+        text-align: center;
+        margin: 24px auto 16px;
+        font-size: 0.75em;
+        max-width: 216px;
+      }
+      .code-placeholder strong {
+        margin-top: 10px;
+      }
+      .invalid {
+        font-size: 0.75em !important;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0;
+      }
+      .catalog {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .catalog > * {
+        border: 1px solid var(--line);
+        padding: 14px 12px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        font-size: 0.875em;
+        text-decoration: none;
+      }
+      .catalog b {
+        color: var(--red);
+      }
+      .catalog-line {
+        font-size: 0.875em;
+      }
+      .catalog-line span {
+        color: var(--muted);
+        margin: 0 12px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid var(--line);
+        padding: 14px 0;
+      }
+      .row strong {
+        font-size: 0.875em;
+        font-weight: 500;
+        margin-top: 4px;
+      }
+      .row small {
+        font-size: 0.75em;
+      }
+      .profile {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin: 24px 0;
+      }
+      .light {
+        background: var(--subtle);
+        color: var(--navy);
+        flex-shrink: 0;
+      }
+      .profile strong {
+        font-size: 1em;
+      }
+      .account {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
+      }
+      .account h3 {
+        color: var(--success);
+        margin-top: 6px;
+      }
+      .account p {
+        font-size: 0.875em;
+        color: var(--muted);
+      }
+      .text-action {
+        font-size: 0.875em;
+        font-weight: 600;
+      }
+      .workout {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .previous {
+        padding: 12px 16px;
+        background: var(--subtle);
+        border-radius: 8px;
+      }
+      .previous strong {
+        font-size: 0.875em;
+        margin-top: 4px;
+      }
+      .sets {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 22px 0;
+        font-size: 0.8125em;
+        font-variant-numeric: tabular-nums;
+      }
+      .sets caption {
+        font-size: 0.875em;
+        color: var(--muted);
+        text-align: left;
+        padding-bottom: 8px;
+      }
+      .sets th,
+      .sets td {
+        padding: 14px 4px;
+        text-align: center;
+        border-bottom: 1px solid var(--line);
+      }
+      .sets th {
+        font-weight: 600;
+      }
+      .sets .current {
+        background: var(--subtle);
+      }
+      .illustration {
+        font-size: 0.875em;
+      }
+      .session-footer {
+        text-align: center;
+        border-top: 1px solid var(--line);
+        font-size: 12px;
+        padding: 18px;
+        color: var(--muted);
+      }
+      .footer {
+        margin-top: 48px;
+        border-top: 1px solid var(--line);
+        padding: 24px 0;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .wireframe .phone {
+        filter: grayscale(1);
+      }
+      .large-text .screen,
+      .large-text .tabs {
+        font-size: 32px;
+      }
+      .large-text .screen {
+        min-height: 0;
+      }
+      .large-text .event {
+        flex-direction: column;
+      }
+      .large-text .catalog {
+        grid-template-columns: 1fr;
+      }
+      .large-text .week {
+        gap: 0;
+      }
+      .large-text .member-card {
+        padding: 16px;
+      }
+      .large-text .sets {
+        table-layout: fixed;
+      }
+      .large-text .screen {
+        overflow-wrap: anywhere;
+      }
+      .large-text .section-label,
+      .large-text .app-top,
+      .large-text .profile {
+        flex-wrap: wrap;
+      }
+      .large-text .button {
+        flex-wrap: wrap;
+      }
+      .large-text .section-label > * {
+        min-width: 0;
+      }
+      @media (max-width: 1150px) {
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 740px) {
+        .wrap {
+          padding: 24px 16px;
+        }
+        .masthead {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .intro {
+          padding-top: 36px;
+        }
+        .board {
+          grid-template-columns: minmax(0, 1fr);
+          max-width: 420px;
+          margin-inline: auto;
+        }
+        .review-panel {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+        .screen {
+          min-height: 0;
+        }
+        .annotation {
+          min-height: 0;
+        }
+        .tools {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .intro p {
+          font-size: 16px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+      @media print {
+        .tools {
+          display: none;
+        }
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .frame {
+          break-inside: avoid;
+        }
+        .phone {
+          box-shadow: none;
+        }
+        .wrap {
+          padding: 0;
+        }
+        .screen {
+          min-height: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="masthead">
+        <div class="wordmark">
+          PUCARÁ <span style="color: var(--red)">/</span> DIGITAL
+        </div>
+        <div class="version">ETAPA 1 · PROPUESTA V1 · 05.11.2026</div>
+      </header>
+      <section class="intro">
+        <div class="eyebrow">DIRECCIÓN VISUAL PARA APROBACIÓN</div>
+        <h1>La vida del club.<br /><em>En tu mano.</em></h1>
+        <p>
+          Una app deportiva clara, cercana y precisa. Blanco para dar aire, azul
+          marino para ordenar y rojo para señalar lo que importa.
+        </p>
+        <p class="caption">
+          Lámina de diseño, sin conexión con las apps. Contenido ficticio. Los
+          enlaces recorren los wireframes; las operaciones son ilustrativas.
+          Marca textual hasta confirmar el escudo oficial.
+        </p>
+      </section>
+      <section class="review-panel" aria-label="Paleta y tipografía">
+        <div>
+          <h3>01 · Identidad provisional</h3>
+          <div class="palette">
+            <div class="swatch">
+              <i style="background: #c52235"></i><b>Rojo</b><br />#C52235
+            </div>
+            <div class="swatch">
+              <i style="background: #10213a"></i><b>Marino</b><br />#10213A
+            </div>
+            <div class="swatch">
+              <i style="background: #ffffff"></i><b>Blanco</b><br />#FFFFFF
+            </div>
+            <div class="swatch">
+              <i style="background: #f4f6f9"></i><b>Canvas</b><br />#F4F6F9
+            </div>
+            <div class="swatch">
+              <i style="background: #536176"></i><b>Secundario</b><br />#536176
+            </div>
+          </div>
+        </div>
+        <div class="type-demo">
+          <h3>02 · Tipografía del sistema</h3>
+          <strong>Entrená. Jugá. Pertenecé.</strong>
+          <p>
+            Jerarquía 32 / 28 / 20 / 16 / 14 / 12.<br />Pesos 400, 600 y 700.
+            Cifras tabulares para registrar rápido.
+          </p>
+          <small
+            >La lámina usa la fuente del navegador. iOS y Android conservarán
+            sus fuentes nativas.</small
+          >
+        </div>
+      </section>
+      <nav class="review-nav" aria-label="Ir a un wireframe">
+        <a href="#inicio">Inicio</a><a href="#agenda">Agenda</a
+        ><a href="#carnet">Carnet</a><a href="#club">Club</a
+        ><a href="#cuenta">Cuenta</a><a href="#gimnasio">Gimnasio</a>
+      </nav>
+      <div class="tools">
+        <button id="mode" type="button" aria-pressed="false">
+          Ver estructura en gris</button
+        ><button id="scale" type="button" aria-pressed="false">
+          Texto de muestra al 200 %</button
+        ><span class="caption"
+          >Exploración de la propuesta. No sustituye pruebas nativas de
+          accesibilidad.</span
+        >
+      </div>
+      <div class="board">
+        <article class="frame" id="inicio">
+          <h2>01 / Inicio</h2>
+          <p class="annotation">Lo próximo, primero.</p>
+          <div class="phone">
+            <div class="phone-status" aria-hidden="true">
+              <span>9:41</span><span>● ━</span>
+            </div>
+            <div class="screen">
+              <div class="app-top">
+                <b>PUCARÁ</b><span class="pill">DEMO</span>
+              </div>
+              <small>JUEVES 5 DE NOVIEMBRE</small>
+              <h2>Hola, Alex.</h2>
+              <p class="muted">Tu día en el club.</p>
+              <section class="highlight">
+                <small>HOY · RUGBY</small>
+                <h3>Entrenamiento</h3>
+                <p>19:30 · Cancha 2<br />Plantel de ejemplo</p>
+                <a class="button inverse" href="#agenda"
+                  >Ver en agenda <span>↗</span></a
+                >
+              </section>
+              <div class="section-label">
+                <h3>Tu entrenamiento</h3>
+                <span>01</span>
+              </div>
+              <a class="routine" href="#gimnasio"
+                ><small>GIMNASIO · DÍA A</small
+                ><strong>Fuerza y potencia</strong
+                ><span>5 ejercicios · 45 min <b>→</b></span></a
+              >
+              <div class="section-label">
+                <h3>Tu cuenta</h3>
+                <a href="#cuenta">Ver detalle</a>
+              </div>
+              <p class="status">Al día · ejemplo ficticio</p>
+              <div class="section-label"><h3>En el club</h3></div>
+              <p class="news">
+                <small>COMUNICADO DE EJEMPLO</small
+                ><strong>Nos encontramos el sábado</strong
+                ><span>Información de la jornada deportiva.</span>
+              </p>
+            </div>
+            <nav class="tabs" aria-label="Navegación ilustrada de inicio">
+              <a href="#inicio" aria-current="page"
+                ><span aria-hidden="true">⌂</span>Inicio</a
+              ><a href="#agenda"><span aria-hidden="true">▦</span>Agenda</a
+              ><a href="#carnet"><span aria-hidden="true">▤</span>Carnet</a
+              ><a href="#club"><span aria-hidden="true">◈</span>Club</a
+              ><a href="#cuenta"><span aria-hidden="true">○</span>Cuenta</a>
+            </nav>
+          </div>
+        </article>
+        <article class="frame" id="agenda">
+          <h2>02 / Agenda</h2>
+          <p class="annotation">Tu semana, sin perder contexto.</p>
+          <div class="phone">
+            <div class="phone-status" aria-hidden="true">
+              <span>9:41</span><span>● ━</span>
+            </div>
+            <div class="screen">
+              <div class="app-top">
+                <b>PUCARÁ</b><span class="pill">DEMO</span>
+              </div>
+              <h2>Agenda</h2>
+              <p class="muted">Noviembre 2026 · Semana de ejemplo</p>
+              <div class="week" aria-label="Semana ilustrativa">
+                <span>L<em>2</em></span
+                ><span>M<em>3</em></span
+                ><span>M<em>4</em></span
+                ><span class="selected">J<em>5</em></span
+                ><span>V<em>6</em></span
+                ><span>S<em>7</em></span
+                ><span>D<em>8</em></span>
+              </div>
+              <div class="filters">
+                <span class="pill active">Mi agenda</span
+                ><span class="pill">Todo el club</span>
+              </div>
+              <div class="section-label">
+                <h3>Jueves 5</h3>
+                <small>2 eventos</small>
+              </div>
+              <div class="event">
+                <b>18:00</b>
+                <div>
+                  <small>GIMNASIO</small
+                  ><a href="#gimnasio"><strong>Rutina · Día A</strong></a>
+                  <p>Fuerza y potencia<br />Sala de musculación</p>
+                </div>
+              </div>
+              <div class="event">
+                <b>19:30</b>
+                <div>
+                  <small>RUGBY</small><strong>Entrenamiento</strong>
+                  <p>Plantel de ejemplo<br />Cancha 2 · hasta las 21:00</p>
+                </div>
+              </div>
+              <div class="quiet">
+                <strong>Tu próximo partido</strong>
+                <p>
+                  Sábado 7 · 15:30<br />Fixture ficticio para revisar la
+                  jerarquía.
+                </p>
+              </div>
+              <p class="caption">
+                Los filtros y fechas ilustran el diseño. No consultan un
+                calendario real.
+              </p>
+            </div>
+            <nav class="tabs" aria-label="Navegación ilustrada de agenda">
+              <a href="#inicio"><span aria-hidden="true">⌂</span>Inicio</a
+              ><a href="#agenda" aria-current="page"
+                ><span aria-hidden="true">▦</span>Agenda</a
+              ><a href="#carnet"><span aria-hidden="true">▤</span>Carnet</a
+              ><a href="#club"><span aria-hidden="true">◈</span>Club</a
+              ><a href="#cuenta"><span aria-hidden="true">○</span>Cuenta</a>
+            </nav>
+          </div>
+        </article>
+        <article class="frame" id="carnet">
+          <h2>03 / Carnet</h2>
+          <p class="annotation">Identificación clara, sin prometer acceso.</p>
+          <div class="phone">
+            <div class="phone-status" aria-hidden="true">
+              <span>9:41</span><span>● ━</span>
+            </div>
+            <div class="screen">
+              <div class="app-top">
+                <b>PUCARÁ</b><span class="pill">DEMO</span>
+              </div>
+              <h2>Tu carnet</h2>
+              <p class="muted">Siempre a mano.</p>
+              <section class="member-card">
+                <div class="app-top">
+                  <b>PUCARÁ<br /><small>DIGITAL</small></b
+                  ><span>2026</span>
+                </div>
+                <div class="avatar" aria-hidden="true">AM</div>
+                <h3>Alex Modelo</h3>
+                <p>Socio ficticio · N.º 0000</p>
+                <span class="pill">Estado administrativo de ejemplo</span>
+                <div class="code-placeholder">
+                  ZONA DE CÓDIGO<br /><strong>Sin QR escaneable</strong>
+                </div>
+                <p class="invalid">DEMO · NO VÁLIDO PARA INGRESAR</p>
+              </section>
+              <div class="quiet">
+                <strong>Estamos diseñando tu identificación</strong>
+                <p>
+                  La validación de ingreso y el uso sin conexión se definirán
+                  con el club.
+                </p>
+              </div>
+              <p class="caption">
+                El estado administrativo y la situación económica se presentan
+                por separado.
+              </p>
+            </div>
+            <nav class="tabs" aria-label="Navegación ilustrada de carnet">
+              <a href="#inicio"><span aria-hidden="true">⌂</span>Inicio</a
+              ><a href="#agenda"><span aria-hidden="true">▦</span>Agenda</a
+              ><a href="#carnet" aria-current="page"
+                ><span aria-hidden="true">▤</span>Carnet</a
+              ><a href="#club"><span aria-hidden="true">◈</span>Club</a
+              ><a href="#cuenta"><span aria-hidden="true">○</span>Cuenta</a>
+            </nav>
+          </div>
+        </article>
+        <article class="frame" id="club">
+          <h2>04 / Club</h2>
+          <p class="annotation">Un lugar para cada actividad.</p>
+          <div class="phone">
+            <div class="phone-status" aria-hidden="true">
+              <span>9:41</span><span>● ━</span>
+            </div>
+            <div class="screen">
+              <div class="app-top">
+                <b>PUCARÁ</b><span class="pill">DEMO</span>
+              </div>
+              <h2>El club</h2>
+              <p class="muted">Tu deporte. Tu comunidad.</p>
+              <a class="routine" href="#gimnasio"
+                ><small>ACCESO DESTACADO</small><strong>Tu gimnasio</strong
+                ><span>La rutina de hoy <b>→</b></span></a
+              >
+              <div class="section-label"><h3>Deportes</h3></div>
+              <div class="catalog">
+                <span>Rugby <b>↗</b></span
+                ><span>Hockey <b>↗</b></span
+                ><a href="#gimnasio">Gimnasio <b>↗</b></a
+                ><span>Resultados <b>↗</b></span>
+              </div>
+              <div class="section-label"><h3>Actividades</h3></div>
+              <p class="catalog-line">Yoga <span>·</span> Funcional</p>
+              <div class="section-label"><h3>Espacios</h3></div>
+              <div class="row">
+                <div>
+                  <small>RESERVAS · ETAPA POSTERIOR</small
+                  ><strong>Pádel y quinchos</strong>
+                </div>
+                <span aria-hidden="true">›</span>
+              </div>
+              <div class="section-label"><h3>Vida en el club</h3></div>
+              <p class="catalog-line">Buffet <span>·</span> Beneficios</p>
+              <div class="row">
+                <div>
+                  <small>NOVEDADES</small><strong>Noticias y eventos</strong>
+                </div>
+                <span aria-hidden="true">›</span>
+              </div>
+              <p class="caption">
+                Catálogo de estructura propuesta. Los módulos todavía no están
+                implementados.
+              </p>
+            </div>
+            <nav class="tabs" aria-label="Navegación ilustrada de club">
+              <a href="#inicio"><span aria-hidden="true">⌂</span>Inicio</a
+              ><a href="#agenda"><span aria-hidden="true">▦</span>Agenda</a
+              ><a href="#carnet"><span aria-hidden="true">▤</span>Carnet</a
+              ><a href="#club" aria-current="page"
+                ><span aria-hidden="true">◈</span>Club</a
+              ><a href="#cuenta"><span aria-hidden="true">○</span>Cuenta</a>
+            </nav>
+          </div>
+        </article>
+        <article class="frame" id="cuenta">
+          <h2>05 / Cuenta</h2>
+          <p class="annotation">Información personal, bien separada.</p>
+          <div class="phone">
+            <div class="phone-status" aria-hidden="true">
+              <span>9:41</span><span>● ━</span>
+            </div>
+            <div class="screen">
+              <div class="app-top">
+                <b>PUCARÁ</b><span class="pill">DEMO</span>
+              </div>
+              <h2>Tu cuenta</h2>
+              <div class="profile">
+                <div class="avatar light" aria-hidden="true">AM</div>
+                <div>
+                  <strong>Alex Modelo</strong
+                  ><small>Socio ficticio · N.º 0000</small>
+                </div>
+              </div>
+              <div class="quiet">
+                <small>ESTADO ADMINISTRATIVO</small
+                ><strong>Activo · ejemplo</strong>
+                <p>Independiente de tu situación económica.</p>
+              </div>
+              <section class="account">
+                <small>SITUACIÓN ECONÓMICA</small>
+                <h3>Al día</h3>
+                <p>Beca 100 % · cuota exenta<br />Saldo de ejemplo: $0</p>
+                <span class="text-action">Ver movimientos · futuro →</span>
+              </section>
+              <div class="section-label">
+                <h3>Información y preferencias</h3>
+              </div>
+              <div class="row">
+                <div><small>TUS DATOS</small><strong>Perfil</strong></div>
+                <span aria-hidden="true">›</span>
+              </div>
+              <div class="row">
+                <div>
+                  <small>VÍNCULOS</small><strong>Grupo familiar</strong>
+                </div>
+                <span aria-hidden="true">›</span>
+              </div>
+              <div class="row">
+                <div>
+                  <small>PREFERENCIAS</small
+                  ><strong>Configuración y accesibilidad</strong>
+                </div>
+                <span aria-hidden="true">›</span>
+              </div>
+              <div class="row">
+                <div>
+                  <small>ACOMPAÑAMIENTO</small><strong>Ayuda y soporte</strong>
+                </div>
+                <span aria-hidden="true">›</span>
+              </div>
+            </div>
+            <nav class="tabs" aria-label="Navegación ilustrada de cuenta">
+              <a href="#inicio"><span aria-hidden="true">⌂</span>Inicio</a
+              ><a href="#agenda"><span aria-hidden="true">▦</span>Agenda</a
+              ><a href="#carnet"><span aria-hidden="true">▤</span>Carnet</a
+              ><a href="#club"><span aria-hidden="true">◈</span>Club</a
+              ><a href="#cuenta" aria-current="page"
+                ><span aria-hidden="true">○</span>Cuenta</a
+              >
+            </nav>
+          </div>
+        </article>
+        <article class="frame" id="gimnasio">
+          <h2>06 / Gimnasio</h2>
+          <p class="annotation">Registrar sin cortar el entrenamiento.</p>
+          <div class="phone">
+            <div class="phone-status" aria-hidden="true">
+              <span>9:41</span><span>● ━</span>
+            </div>
+            <div class="screen">
+              <div class="app-top">
+                <a href="#inicio">← Inicio</a><span class="pill">DEMO</span>
+              </div>
+              <small>GIMNASIO · JUEVES 5</small>
+              <h2>Fuerza y potencia</h2>
+              <p class="muted">Día A · Rutina ficticia · 45 min</p>
+              <div class="week workout">
+                <span>L<em>A</em></span
+                ><span>M<em>–</em></span
+                ><span>M<em>B</em></span
+                ><span class="selected">J<em>A</em></span
+                ><span>V<em>–</em></span>
+              </div>
+              <div class="section-label">
+                <h3>Sentadilla</h3>
+                <small>1 de 5</small>
+              </div>
+              <p>
+                3 series × 8 repeticiones<br /><span class="muted"
+                  >Descanso: 90 segundos</span
+                >
+              </p>
+              <div class="previous">
+                <small>ÚLTIMA SESIÓN · EJEMPLO</small
+                ><strong>50 kg × 8 repeticiones</strong>
+              </div>
+              <table class="sets">
+                <caption>
+                  Registro ilustrativo de series
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Serie</th>
+                    <th>kg</th>
+                    <th>Reps</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>1</th>
+                    <td>50</td>
+                    <td>8</td>
+                    <td>Hecha ✓</td>
+                  </tr>
+                  <tr class="current">
+                    <th>2</th>
+                    <td>50</td>
+                    <td>8</td>
+                    <td>Actual</td>
+                  </tr>
+                  <tr>
+                    <th>3</th>
+                    <td>50</td>
+                    <td>8</td>
+                    <td>Pendiente</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="button illustration">
+                Completar serie 2 <span>✓</span>
+              </div>
+              <p class="caption">
+                Acción ilustrativa, sin guardado. Peso anterior precargado;
+                editar con teclado numérico y opción de deshacer al implementar.
+              </p>
+              <div class="section-label">
+                <h3>Después</h3>
+                <small>2 de 5</small>
+              </div>
+              <p>Press de banca · 3 × 10</p>
+            </div>
+            <div class="session-footer">Sesión de ejemplo · 1 de 15 series</div>
+          </div>
+        </article>
+      </div>
+      <footer class="footer">
+        <p>
+          <strong
+            >Próximo paso: aprobar la dirección y construir la base
+            nativa.</strong
+          >Tokens semánticos, tipografía, botones, filas, estados y navegación.
+          Después, Inicio demo como pantalla de referencia.
+        </p>
+        <p>
+          <a href="../ux-ui-proposal.md"
+            >Especificación, contrastes y decisiones pendientes</a
+          >
+          · Sin Supabase, autenticación ni módulos completos en esta revisión.
+        </p>
+      </footer>
+    </main>
+    <script>
+      for (const [id, className] of [
+        ['mode', 'wireframe'],
+        ['scale', 'large-text'],
+      ]) {
+        document.getElementById(id).addEventListener('click', function () {
+          const active = document.body.classList.toggle(className);
+          this.setAttribute('aria-pressed', String(active));
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -69,3 +69,14 @@ El build conservó su caché interna de Next en la segunda ejecución; Turbo se 
 Avisos observados: ESLint 9 deprecado (deuda conocida ADR-008), conflicto NO_COLOR/FORCE_COLOR del entorno de ejecución y aviso de caché vacía al usar --clear. No bloquearon verificaciones. El aviso de Turbo por coverage inexistente se corrigió con outputs vacío (ADR-016). No se actualizó ESLint ni se ignoraron errores de compilación.
 
 Se retiraron los cuatro ajustes exclusivos de SMB y se revisó el diff del lockfile: ninguna versión externa cambió. Las limitaciones UNC del registro anterior son históricas; no aplican a este clon. El diseño de producto y los archivos de apps/packages permanecen intactos.
+
+## 2026-11-05 — Propuesta visual de Etapa 1
+
+Artefactos de documentación: `docs/ux-ui-proposal.md` y `docs/design/etapa-1.html`. No se modificaron pantallas ni tokens de las aplicaciones.
+
+- Paleta: cálculo de luminancia sRGB de diez pares documentados; texto principal, secundario, inverso y estados por encima de 4,5:1; borde de control sobre blanco 3,64:1.
+- Chrome local: lámina en 1440, 390 y 320 px; seis wireframes presentes, enlaces de navegación y acceso Inicio → gimnasio correctos; controles de escala y gris actualizan su estado.
+- Muestra de texto al 200 %: sin overflow horizontal de página ni de los seis contenedores tras corregir el reflujo de Inicio. Inspección automatizada de dimensiones; no equivale a una auditoría completa de accesibilidad.
+- Revisión visual de capturas de la lámina; no se generaron capturas de una app nativa. No hay QR escaneable, datos reales, fuentes externas, API ni operaciones persistentes.
+- Prettier y git diff --check correctos al cerrar. Los enlaces relativos de la documentación agregada se comprobaron.
+- Pendiente: aprobación de dirección visual y aceptación nativa en dispositivos, incluyendo texto ampliado, VoiceOver/TalkBack y estados reales.

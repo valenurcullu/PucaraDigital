@@ -45,3 +45,9 @@ Jerarquía editorial, márgenes generosos, una acción principal por contexto y 
 Botón, campo, encabezado de sección, fila de evento, resumen de cuenta, estado vacío, feedback y estructura de navegación. Cada implementación será propia de su plataforma, con el mismo lenguaje visual.
 
 La aceptación visual del sistema completo requiere revisión en navegador y dispositivos. Un build exitoso no sustituye esa evaluación.
+
+## Revisión de Etapa 1 — pendiente de aprobación (2026-11-05)
+
+La [propuesta UX/UI v1](ux-ui-proposal.md) define paleta semántica roja/marina/blanca, tipografía del sistema, escala, contrastes calculados, navegación y orden de componentes. La [lámina visual](design/etapa-1.html) contiene seis wireframes: Inicio, Agenda, Carnet, Club, Cuenta y gimnasio; se abre localmente en el navegador.
+
+Es un artefacto de revisión, no pantallas implementadas. Los tokens y vistas de las apps conservan el estado descrito arriba hasta que el usuario apruebe la dirección. La navegación de cinco pestañas ya está aprobada; la densidad, paleta concreta y jerarquía propuestas requieren revisión. El escudo oficial sigue pendiente. Las comprobaciones HTML no sustituyen aceptación iOS/Android.
