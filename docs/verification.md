@@ -103,3 +103,33 @@ Contraste sRGB calculado para pares principales (A/B/C): blanco sobre acción ro
 Controles de cierre: sintaxis de review.js con node --check, Prettier, enlaces relativos y git diff --check. No se repiten build web ni export nativo porque no cambiaron sus entradas; se conserva la evidencia técnica anterior. No se probó capacidad para 300 concurrentes, permisos reales, dispositivos nativos, lectores de pantalla ni texto 200 % en esta v2.
 
 Estado: arquitectura detallada y dirección visual pendientes de aprobación. La v1 permanece como antecedente no aprobado, con aviso y enlace a v2.
+
+## 2026-11-12 — Auditoría y primer bloque nativo
+
+**Entorno:** clon local Windows, main, base 94818b5 limpia; origin oficial confirmado. Sin fetch ni push. Node 24.16.0 y pnpm 12.17.0 mediante el lanzador temporal ya disponible; sin cambios globales, nuevas dependencias ni cambios de lockfile.
+
+| Control                                         | Resultado real                                                                                                       |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| pnpm install --frozen-lockfile                  | Correcto; lockfile sin cambios                                                                                       |
+| Prettier / format:check                         | Aplicado y comprobado al cerrar                                                                                      |
+| pnpm exec turbo run lint typecheck test --force | 9 tareas correctas, sin caché Turbo; 9 tests en 2 archivos                                                           |
+| pnpm build --force                              | Correcto: Next/Webpack, /, /experiencia y 404; repetido tras la separación final de fixtures                         |
+| pnpm --filter @pucara/mobile export --clear     | Android/iOS exportados con Metro limpio                                                                              |
+| pnpm --filter @pucara/mobile export             | Exportación final correcta tras ajustes de provider/fixtures; 33 assets y bundles Hermes Android 3,2 MB / iOS 3,3 MB |
+| Expo dev --port 8081 --lan                      | Metro arrancado; manifiestos Android e iOS devuelven HTTP 200, SDK 58 y launchAsset                                  |
+| Rutas generadas                                 | Cinco pestañas, módulos, reservas, partidos, novedades, redirect legado y not-found presentes                        |
+| Dispositivos / emulador / rendimiento           | No probados; adb no disponible, ruta habitual de Android SDK ausente; Windows sin simulador iOS                      |
+| Supabase / PostgreSQL / RLS                     | Diseño documentado, no ejecutado. CLI Supabase y Docker no encontrados en PATH; no se instalaron                     |
+| CI remota / capacidad para 300 concurrentes     | No comprobadas                                                                                                       |
+
+**Compatibilidad Expo:** el chequeo online devuelve “Found outdated dependencies”: recomienda expo 58.0.25, expo-router 58.0.31, expo-constants 58.0.16, expo-linking 58.0.17 y expo-status-bar 58.0.5. Se mantuvieron las versiones fijadas; no se declara ese chequeo aprobado. Una comprobación adicional offline indicó “Dependencies are up to date” junto con “Dependency validation is unreliable in offline-mode”: es información del SDK local, no reemplaza el resultado online ni prueba compatibilidad en dispositivo. Revisar esos cinco parches como mantenimiento acotado antes de la aceptación móvil.
+
+**Cobertura real de tests:** cuatro tests previos y cinco nuevos que verifican fechas del club/fechas inválidas, inclusión de reservas confirmadas y participantes inscriptos en Agenda, baja de proyección sin datos inventados, próximos partidos de Primera, integridad de destinos de fixtures, duración demo de 90 minutos/precio en unidades menores y frontera demo con cancelación/lecturas independientes. No prueban transacciones, RLS ni interacción/renderizado nativo.
+
+Se corrigió el setState síncrono redundante del efecto de carga señalado por ESLint: el reintento cambia a loading desde la acción. Limpieza del efecto cancela la lectura y evita publicar resultados obsoletos. Sin desactivar reglas. Se verifican tipos con las rutas generadas por Metro al cierre.
+
+**Aceptación pendiente:** dispositivo Android e iOS, tamaños pequeños/grandes, orientación, texto 200 %, safe areas, retorno físico/gesto, enlaces profundos, VoiceOver/TalkBack, escenarios de error/reintento en pantalla y perfiles de rendimiento. La navegación está implementada y compilada; no se afirma interacción probada en hardware.
+
+Los avisos NO_COLOR/FORCE_COLOR no impidieron la exportación. Artefactos dist/.expo/.next permanecen ignorados. Sin pagos, reservas persistidas, autenticación ni operaciones de créditos. Modificar/Cancelar e Inscribirme/Cancelar inscripción aparecen separados y deshabilitados, con explicación.
+
+Cierre: format:check correcto; typecheck móvil volvió a ejecutarse después de generar las rutas. Manifiesto Android por IP LAN también HTTP 200 desde esta PC; no se comprobó firewall/conectividad desde un teléfono. Expo generó apps/mobile/.gitignore para excluir expo-env.d.ts; se conserva junto con las exclusiones de raíz. Lockfile y apps/web sin diff.

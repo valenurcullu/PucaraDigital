@@ -1,56 +1,32 @@
-# Navegación
+# Navegación nativa
 
-## Disponible ahora en las aplicaciones
+Actualizado 2026-11-12. Primer bloque implementado con Expo Router: pestañas nativas y stack nativo de detalles. Concepto A provisional; no HTML dentro de Expo.
 
-Web y móvil conservan / y /experiencia como entradas informativas de fundaciones. La web tiene 404 y error boundary. No hay cinco pestañas funcionales, reservas ni inscripciones reales. Los HTML de revisión están separados en docs/design.
+## Rutas implementadas
 
-## Decisiones confirmadas del socio
+| Ruta            | Contenido                                                                                                   |
+| --------------- | ----------------------------------------------------------------------------------------------------------- |
+| /               | Inicio: saludo, Reservas/Gimnasio/Cuenta corriente, Primera rugby/hockey, resumen personal y comunicaciones |
+| /agenda         | Hoy o próximos siete días, lista inicial derivada de reservas confirmadas e inscripciones activas demo      |
+| /carnet         | Datos ficticios; espacio para QR, sin código validable ni ingreso                                           |
+| /club           | Reservas primero, Deportes, Actividades y Vida en el club                                                   |
+| /cuenta         | Datos del socio, cuenta corriente, familia, perfil, preferencias y soporte                                  |
+| /modulos/[id]   | Entrada de cada módulo con contenido de lectura o vacío explicativo                                         |
+| /partidos/[id]  | Rival, deporte/división, local/visitante, fecha/hora/sede y acceso al fixture                               |
+| /novedades/[id] | Comunicación completa de demostración                                                                       |
+| /reservas/[id]  | Detalle demo, estados y acciones separadas Modificar/Cancelar todavía deshabilitadas                        |
+| /experiencia    | Redirección del enlace histórico a Club                                                                     |
 
-Cinco pestañas: **Inicio · Agenda · Carnet · Club · Cuenta**. La propuesta detallada de jerarquía y recorridos requiere aprobación separada de la dirección visual.
+Las cinco pestañas son Inicio, Agenda, Carnet, Club y Cuenta. Los detalles se apilan encima; el botón y gesto nativos vuelven al origen. Android conserva historial entre pestañas. La ruta inicial del stack ancla las pestañas en enlaces profundos; enlaces desconocidos tienen recuperación hacia Inicio/Club. No se implementa un historial paralelo en JavaScript.
 
-- **Inicio:** saludo; accesos directos a Reservas, Gimnasio y Cuenta Corriente; próximos partidos de Primera de rugby y hockey (rival, local/visitante, día y horario); Novedades y Comunicaciones administrables desde web; eventos y reservas personales relevantes, con resumen breve. Útil para deportistas, socios sociales y familias.
-- **Agenda:** día y semana, mes secundario. Partidos, convocatorias y entrenamientos con horario; reservas confirmadas de pádel/quinchos; clases de yoga/funcional solo para participantes inscriptos. Gimnasio libre no genera eventos automáticos. Las inscripciones recurrentes incorporan clases futuras; la baja retira sus eventos futuros personales.
-- **Carnet:** identificación QR, inicialmente demo sin valor de ingreso.
-- **Club:** primero **Reservas** (pádel, quinchos y acceso a Mis reservas); **Deportes** (rugby, hockey, gimnasio, fixture, resultados y videos); **Actividades** (yoga y funcional); **Vida en el club** (buffet, beneficios, novedades y eventos).
-- **Cuenta:** cuenta corriente, situación económica, becas, familia, perfil, preferencias y soporte. Separar estado administrativo y situación económica.
+## Jerarquía y límites
 
-## Jerarquía y recorridos propuestos, pendientes de aprobación
+Reservas accesible a un toque desde Inicio; pádel/quinchos visibles al entrar a Club. Un detalle único de reserva se alcanza desde Inicio, Agenda o Mis reservas. Partidos públicos no se agregan automáticamente a Agenda personal.
 
-[Revisión funcional v2](ux-functional-review.md) contiene escenarios normales, vacíos, conflictos, pago rechazado, cambios y cancelaciones. [Comparador HTML](design/revision-ux.html) ofrece tres direcciones sobre estos mismos recorridos. La v1 queda como antecedente no aprobado.
+Gimnasio libre no genera eventos. La fuente demo incluye Funcional inscripto y Yoga sin inscripción; Agenda refleja esa diferencia sin guardar cambios. Inscribirme/Cancelar inscripción y Modificar/Cancelar están identificados, deshabilitados y explicados: la transacción se implementará en PostgreSQL, sin motor falso.
 
-```text
-Inicio ─ Reservas ─ Pádel / Quinchos ─ Disponibilidad ─ Revisión ─ Resultado
-       ├ Gimnasio (sin evento automático)
-       ├ Cuenta Corriente
-       ├ Primera Rugby / Hockey ─ Partido ─ Fixture / Resultados
-       ├ Para vos ─ Detalle de evento o reserva
-       └ Novedades y Comunicaciones
-Club ─ Reservas (primer bloque) ─ Pádel / Quinchos / Mis reservas
-     ├ Deportes ─ Rugby / Hockey / Gimnasio / Fixture / Resultados / Videos
-     ├ Actividades ─ Yoga / Funcional ─ Inscripción recurrente
-     └ Vida en el club ─ Buffet / Beneficios / Novedades / Eventos
-Mis reservas ─ Detalle ─ Modificar ─ Revisar cambio
-                      └ Cancelar ─ Confirmar consecuencias
-Actividad ─ Participante autorizado ─ Inscripción / Baja ─ Agenda personal
-```
+El calendario diario/semanal completo y vista mensual secundaria siguen pendientes; este bloque ofrece lista de Hoy/próximos siete días. Los campos de familia no acreditan permisos. Cuenta, Carnet y módulos secundarios son demo, no funcionalidades terminadas.
 
-Conservar selección al volver, contexto por pestaña y detalle único accesible desde distintos puntos. Para familia, mostrar el participante en revisión, confirmación y detalle; no inferir autorización por compartir apellido o cuenta. Agenda pública y personal son filtros propuestos, no permisos implementados.
+## Validación móvil pendiente
 
-## Objetivos de acceso a validar
-
-| Tarea                             | Objetivo desde Inicio                                                |
-| --------------------------------- | -------------------------------------------------------------------- |
-| Abrir Reservas o Mis reservas     | 1 toque al centro de reservas                                        |
-| Consultar disponibilidad de pádel | 2 toques, sin submenús adicionales                                   |
-| Abrir gimnasio o cuenta corriente | 1 toque                                                              |
-| Ver próximos partidos de Primera  | Visibles en Inicio; detalle a 1 toque                                |
-| Consultar carnet                  | 1 toque en pestaña                                                   |
-| Abrir una actividad               | Club → Yoga/Funcional                                                |
-| Inscribirse                       | Detalle → revisión de recurrencia/participante → confirmar           |
-| Cancelar                          | Detalle → advertencia → confirmar, sin acción irreversible inmediata |
-
-Los objetivos no incluyen elegir datos ni lectura de condiciones. No sacrificar una confirmación necesaria para reducir toques.
-
-## Plataformas posteriores
-
-Administración web: Resumen, Comunicados y Eventos primero; gestión de recursos, reservas y actividades al implementar cada módulo. La edición web de Novedades y Comunicaciones es fuente del contenido de Inicio. Portal web del socio postergado, no eliminado. Se reutiliza lógica compartida, no componentes nativos.
+Comprobar Inicio → Reservas → detalle → atrás, Club → Yoga → Agenda, Inicio → partido → fixture y detalles por enlace profundo. Revisar regreso Android/iOS, conservación del scroll, 320/390/430 puntos y tablet, orientación, tamaño de texto 200 %, VoiceOver/TalkBack y safe areas. Exportar bundles valida compilación, no estos recorridos en dispositivo.

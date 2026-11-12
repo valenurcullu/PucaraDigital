@@ -4,11 +4,9 @@ Plataforma del Club Pucará, desarrollada por Suplio. Monorepo oficial: https://
 
 ## Estado
 
-Fundaciones verificadas en disco local: aplicaciones Next.js y Expo con entradas demo navegables, contratos mínimos, tokens y herramientas de calidad. Todavía no hay autenticación, persistencia, cinco pestañas funcionales ni módulos deportivos.
+Primer bloque nativo: cinco pestañas del sistema, Inicio y Club demo, Agenda inicial, Carnet/Cuenta de demostración y navegación a módulos/detalles. Datos centralizados de lectura; sin autenticación, persistencia ni operaciones de reservas/pagos/inscripción.
 
-Orden de plataformas: app nativa iOS/Android → panel administrativo web → portal web del socio, postergado. La Etapa 1 comienza con una propuesta visual para aprobación; el código conserva su paleta provisional bordó hasta aprobar el rediseño.
-
-Revisión vigente: [arquitectura y recorridos funcionales v2](docs/ux-functional-review.md) y [comparador de tres propuestas HTML](docs/design/revision-ux.html), abrible sin servidor. Tanto la arquitectura detallada como la dirección visual requieren aprobación. La v1 se conserva como antecedente no aprobado.
+A · Club editorial seleccionado provisionalmente, con estética definitiva pendiente sin bloquear desarrollo. App móvil primero; panel administrativo web después; portal del socio posterior. Reglas vigentes en [pádel](docs/padel-rules.md) y [diseño transaccional](docs/database.md). Los HTML son antecedentes históricos, no el entregable actual.
 
 Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
 
@@ -17,7 +15,7 @@ Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE
 - Node.js 24 LTS (mínimo 24.3; desarrollo: 24.16.0).
 - pnpm 12.17.0. Instalar con `npm install --global pnpm@12.17.0` o usar `npx --yes pnpm@12.17.0 <comando>`.
 - Git y un checkout en disco local. No usar el checkout antiguo de la carpeta de red para desarrollo.
-- Para probar en dispositivo: Expo Go compatible con SDK 58 o development build; Android Studio para emulador y macOS/Xcode para simulador iOS.
+- Para probar en dispositivo: Expo Go compatible con el SDK 58 fijado o development build; Android Studio para emulador y macOS/Xcode para simulador iOS.
 
 ## Desarrollo local
 
@@ -30,6 +28,8 @@ pnpm dev:mobile
 ```
 
 En PowerShell, usar `pnpm.cmd` si la política de ejecución bloquea el lanzador `pnpm.ps1`. No hace falta cambiar esa política ni usar Git Bash.
+
+Al ejecutar pnpm dev:mobile, escanear el QR de Metro desde Expo Go compatible, con teléfono y PC en la misma red. La app abre Inicio; probar las cinco pestañas y los detalles. Para Android emulado usar a; para simulador iOS usar i desde macOS. Windows no ejecuta el simulador iOS. No se necesita Supabase para esta demostración. Si el cliente instalado no soporta el SDK fijado, preparar un development build compatible en un bloque específico.
 
 Ejecutar las aplicaciones en terminales separadas. Web: http://localhost:3000. El demo no necesita variables de entorno. Los archivos `.env.example` documentan su selector público.
 
@@ -51,13 +51,13 @@ pnpm --filter @pucara/mobile export
 
 - `apps/mobile`: Expo Router, React Native, iOS y Android.
 - `apps/web`: Next.js App Router, React, Tailwind; panel administrativo futuro.
-- `packages/shared`: contratos Zod, roles y servicio demo intercambiable.
+- `packages/shared`: contratos, roles, selectores, fixtures tipados y lectores demo; integridad crítica futura en PostgreSQL.
 - `packages/design-tokens`: colores, escalas y movimiento compartidos.
 - `packages/config`: configuración TypeScript.
 - `supabase`: ubicación prevista para migraciones y seed, aún sin backend.
 - `docs`: arquitectura, producto, propuestas, decisiones y evidencias.
 
-Los datos demo son ficticios, de lectura y sin persistencia. Seleccionar modo real produce un error explícito hasta implementar su adaptador. La P tipográfica es un placeholder, no el escudo oficial.
+Los datos demo son ficticios, de lectura y sin persistencia; fechas relativas al día del club al abrir la sesión. Modificar/Cancelar e Inscribirme/Cancelar inscripción están deshabilitados con explicación; el Carnet contiene un espacio QR textual no escaneable. Seleccionar modo real produce un error explícito hasta implementar su adaptador. La P tipográfica es un placeholder, no el escudo oficial.
 
 ## Paquetes compartidos y entorno anterior
 

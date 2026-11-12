@@ -13,7 +13,7 @@
 - Datos demo ficticios y explícitos, sin presentar persistencia ni autorización simulada como real.
 - Datos por club y roles por membresía. La seguridad futura debe imponerse en PostgreSQL/RLS, nunca solo en filtros de UI.
 - Nunca versionar secretos, claves privadas o archivos .env. Los .env.example solo contienen valores públicos o placeholders.
-- No implementar pagos reales, reservas reales, scraping, push, wellness completo ni integraciones de sprints futuros.
+- En el bloque nativo actual no implementar pagos ni reservas operativas, scraping, push, wellness completo ni integraciones futuras. El siguiente bloque transaccional local sigue docs/roadmap.md y docs/database.md.
 - Aptos médicos descartados. Suplio es desarrollador; Pucará es la marca principal.
 - No inventar ni redibujar el escudo. Usar un placeholder textual hasta recibir el archivo oficial. La imagen del escudo fuera del repositorio no está confirmada como oficial: no versionarla ni mostrarla.
 - Identidad provisional: rojo institucional, azul marino, blanco y neutros, siempre mediante tokens.

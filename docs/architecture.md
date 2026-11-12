@@ -2,7 +2,7 @@
 
 ## Alcance actual
 
-Fundaciones del Sprint 1. Un único repositorio y lockfile. Expo y Next.js tienen entradas ejecutables y consumen contratos/tokens compartidos. Todavía no hay login, persistencia, servicios Supabase ni módulos funcionales.
+Primer bloque nativo con cinco pestañas, Inicio/Club/Agenda inicial y destinos demo. Un repositorio y lockfile. Next conserva sus fundaciones. Sin login, persistencia, Supabase ni operaciones transaccionales implementadas.
 
 ## Prioridad de plataformas
 
@@ -32,7 +32,7 @@ No se crea packages/ui: DOM y React Native tienen convenciones distintas. Se com
 
 ClubService define el puerto inicial. createDemoClubService implementa lectura ficticia y valida la identidad del club solicitado. La factoría de modo acepta demo (también por defecto) y rechaza cualquier selección no implementada. No hay fallback productivo silencioso ni escritura aparente.
 
-El ejemplo web consume el servicio; la entrada móvil usa exclusivamente la identidad demo estática. Las futuras pantallas consumirán servicios por feature y estados explícitos de carga, error y vacío. Evitar un servicio universal con decenas de responsabilidades.
+El ejemplo web conserva ClubService. Móvil consume MemberExperienceReader: lectura única compartida de fixtures tipados, con cancelación al desmontar/reintentar y estados explícitos de carga/error/ready. Los selectores derivan Agenda y próximos partidos. No existen métodos de escritura; separar contratos y fixtures. Los futuros adaptadores reales serán por feature, no un servicio universal.
 
 Esta separación facilita incorporar un adaptador Supabase sin cambiar los componentes presentacionales. La autorización real debe ejecutarse con la sesión del usuario y RLS; ni este puerto ni el selector de modo autorizan operaciones.
 
@@ -65,3 +65,9 @@ Los prototipos viven únicamente en docs/design, comparten un motor de escenario
 ## Auditoría — 2026-11-12
 
 Se conserva Expo/React Native, Next.js y Supabase/PostgreSQL. [database.md](database.md) define identidad separada, RLS por club, exclusiones, comandos atómicos/idempotentes e historial de créditos. El siguiente bloque usa Supabase local con datos ficticios, sin infraestructura adicional anticipada. El demo actual sólo proporciona lectura; no es un backend transaccional ni simula autorización real.
+
+## Navegación del primer bloque
+
+Expo Router NativeTabs (SDK 58) para cinco pestañas; Stack nativo para módulos, partido, comunicación y reserva. Un provider encima mantiene la lectura demo entre pestañas; no hay store ni biblioteca de consultas adicional. Tokens nativos separados de los heredados web; componentes por plataforma. Las fechas se presentan en la zona del club, no en la del host.
+
+Referencia: [Native tabs de Expo](https://docs.expo.dev/router/advanced/native-tabs/). Los recorridos y límites de validación constan en [navegación](navigation.md).
