@@ -16,3 +16,5 @@ export const tokens = {
   type: { caption: 12, body: 16, title: 28, display: 48 },
   motion: { fast: 150, normal: 220 },
 } as const;
+
+export { memberTheme } from './member-theme';
