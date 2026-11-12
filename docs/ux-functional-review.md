@@ -1,6 +1,6 @@
 # Revisión funcional UX — v2
 
-**Estado:** decisiones funcionales del usuario confirmadas; organización detallada, recorridos y tres direcciones visuales **pendientes de aprobación**. Sustituye la propuesta v1 como referencia para continuar. No habilita implementación de componentes nativos.
+**Estado vigente (2026-11-12):** A seleccionado provisionalmente; primer bloque nativo autorizado. Estética definitiva pendiente. Los HTML son históricos: prevalecen [reglas de pádel](padel-rules.md) y [diseño transaccional](database.md).
 
 [Abrir comparador HTML](design/revision-ux.html). Los prototipos son simulaciones en memoria con datos ficticios: no reservan, cobran ni inscriben. Recargar restablece el escenario. No se modifican Expo, Next, contratos ni dependencias.
 
@@ -37,11 +37,11 @@
 1. Inicio → Reservas, o Club → Pádel / Quinchos. Mis reservas está visible desde el primer nivel.
 2. Elegir espacio, fecha y franja; mostrar inicio/fin, duración, disponibilidad y precio por turno o condición configurable.
 3. Sin disponibilidad: explicar el resultado y permitir otra fecha/espacio; preservar selección al volver.
-4. Revisar espacio, fecha, horario, titular, precio total, pago y política aplicable antes de confirmar. Tarifas, duración y condiciones en los prototipos son ejemplos, nunca reglas institucionales.
+4. Revisar espacio, fecha, horario, titular, precio total, pago y política aplicable antes de confirmar. Para pádel rigen 90 minutos y ARS 40.000 configurable. Quinchos tiene reglas pendientes; los importes antiguos del HTML son históricos.
 
-### Pádel: pago por turno
+### Pádel: pago por turno o crédito
 
-Disponibilidad → resumen → paso de pago → resultado → detalle en Mis reservas. En HTML solo se elige **simular pago aprobado o rechazado**; no se piden tarjetas ni se conecta un proveedor. Rechazo: conservar selección y permitir reintentar/volver; no mostrar reserva confirmada. En producción debe revalidarse disponibilidad de forma atómica y tratar idempotencia, retención temporal y confirmación de pago en servidor. Nada de eso se implementa aquí.
+Disponibilidad → resumen → consumir 1 crédito disponible o pagar sin créditos → resultado → Mis reservas. No existe saldo monetario interno. En HTML solo se elige **simular pago aprobado o rechazado**; no se piden tarjetas ni se conecta un proveedor. Rechazo: conservar selección y permitir reintentar/volver; no mostrar reserva confirmada. En producción debe revalidarse disponibilidad de forma atómica y tratar idempotencia, retención temporal y confirmación de pago en servidor. Nada de eso se implementa aquí.
 
 Escenario alternativo: el turno se ocupa mientras se revisa; volver a disponibilidad con una explicación y sin cobrar ni crear reserva en la simulación.
 
@@ -55,8 +55,8 @@ Si exige aprobación, mostrar “Pendiente de aprobación”; no confundir solic
 
 - Mis reservas agrupa activas, pendientes e históricas; estados explícitos, con detalle de pago separado.
 - Modificar → nueva disponibilidad → comparar turno anterior/nuevo y diferencias → confirmar cambio simulado. No liberar ni sobrescribir el turno original al explorar o volver. Conflicto conserva la reserva original.
-- Cambio con diferencias de importe: resolver cotización, cobro/reintegro y condiciones antes de permitirlo en producción. El ejemplo conserva el mismo precio; no presupone cambios gratuitos.
-- Cancelar → resumen y consecuencias → confirmación explícita → estado Cancelada. Se elimina de futuros compromisos personales pero conserva historial. Reembolso/cargo: “Según política pendiente de definir”, sin afirmar devolución.
+- Pádel: Modificar → nueva fecha/hora disponible → Confirmar modificación. Actualizar la misma reserva sin cobrar ni generar créditos; ante error conservar la original. Quinchos conserva reglas propias pendientes.
+- Cancelar → resumen y consecuencias → confirmación explícita → estado Cancelada. Se elimina de futuros compromisos personales pero conserva historial. En pádel, cancelación elegible genera exactamente 1 crédito de turno sin duplicados. Elegibilidad y reintegros monetarios pendientes.
 - Error o acción no permitida: conservar datos y mostrar motivo/recuperación; no ofrecer un botón destructivo sin explicación.
 
 ## Recorrido de actividades
@@ -79,7 +79,7 @@ Deportes → Rugby/Hockey → fixture/resultados/videos ofrece la misma informac
 
 | Decisión pendiente                                                      | Por qué importa                                        |
 | ----------------------------------------------------------------------- | ------------------------------------------------------ |
-| Precios/duración, anticipación y límites de reservas                    | Cotización, selección de turnos y elegibilidad         |
+| Anticipación/límites y precio/duración de quinchos                      | Cotización, selección de turnos y elegibilidad         |
 | Retención del turno durante pago, vencimiento, cancelación y reintegros | Evitar sobreventa, doble cobro y falsas confirmaciones |
 | Aprobación/pago de quinchos, depósitos y condiciones                    | Orden y estados del recorrido                          |
 | Quién puede reservar o inscribir por un menor                           | No inferir permisos desde la pantalla de familia       |
@@ -110,4 +110,4 @@ Revisar por separado: (1) arquitectura de información, prioridades y recorridos
 
 Pruebas de recorrido: hallar Reservas desde Inicio/Club; ver y modificar una existente; simular rechazo de pago sin confirmación; probar solicitud de quincho; inscribir y dar de baja yoga/funcional verificando Agenda; consultar ambos partidos de Primera; entender para quién se actúa. Evaluar lectura en 320–430 px, teclado, contraste, foco y texto ampliado. Las pruebas HTML no sustituyen VoiceOver/TalkBack ni interacción nativa.
 
-Tras ambas aprobaciones, definir el primer bloque de componentes nativos. No iniciar implementación por seleccionar una estética mientras siga abierta la arquitectura de información.
+Actualización 2026-11-12: el usuario autoriza el primer bloque nativo con A provisional. No se requieren nuevas alternativas ni aprobación estética definitiva para avanzar. Los criterios anteriores son guía de revisión, no bloqueo.

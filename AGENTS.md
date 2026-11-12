@@ -23,4 +23,5 @@
 
 - Al retomar, leer docs/current-status.md; al cerrar un bloque, actualizar estado y docs/verification.md con evidencia. CLAUDE.md remite a estas mismas reglas.
 
-- Referencia UX vigente: docs/ux-functional-review.md y docs/design/revision-ux.html. La v1 no está aprobada. Se requieren aprobación de arquitectura de información y dirección visual antes de componentes nativos. Conservar reglas confirmadas: Reservas visible, gimnasio libre fuera de Agenda, inscripción recurrente distinta de asistencia y baja que retira solo clases futuras personales.
+- Dirección vigente: concepto A · Club editorial seleccionado provisionalmente (ADR-018). Primer bloque nativo autorizado; estética definitiva pendiente, sin bloqueo. Referencias: docs/current-status.md, docs/roadmap.md y docs/padel-rules.md. HTML sólo como antecedente. Reservas visible, gimnasio fuera de Agenda e inscripción distinta de asistencia.
+- Reglas críticas de reservas, créditos y permisos en PostgreSQL: RLS, exclusión de solapamientos y operaciones atómicas/idempotentes. Probar en Supabase local con datos ficticios; no construir un backend simulado de escrituras. Este bloque sólo implementa navegación y lectura demo.

@@ -1,6 +1,6 @@
 # Sistema de diseño inicial
 
-> Revisión vigente: [UX funcional v2](ux-functional-review.md) y [tres direcciones visuales](design/revision-ux.html). Ninguna dirección está aprobada. La v1 queda como antecedente; no migrar tokens hasta aprobar arquitectura de información y diseño.
+> Vigente 2026-11-12: A · Club editorial seleccionado provisionalmente. Primer bloque nativo autorizado; tipografía, colores y branding definitivos se revisarán después. HTML v1/v2 son antecedentes.
 
 ## Dirección
 
@@ -10,7 +10,7 @@ La primera entrada presenta identidad y estado de desarrollo. No constituye toda
 
 ## Tokens
 
-> **Paleta en revisión (ADR-013).** Los valores bordó de esta tabla no coinciden con la identidad del club. En la Etapa 1 se presentará una propuesta en rojo institucional, azul marino, blanco y neutros, con tokens semánticos, tipografía y escala accesible. Hasta su aprobación, el código conserva estos valores.
+> **Paleta en revisión (ADR-013).** Los valores bordó de esta tabla no coinciden con la identidad del club. En la Etapa 1 se presentará una propuesta en rojo institucional, azul marino, blanco y neutros, con tokens semánticos, tipografía y escala accesible. La web conserva estos valores heredados; la base nativa adopta tokens semánticos provisionales de A.
 
 Fuente única: packages/design-tokens/src/index.ts. La web transforma colores en variables CSS; React Native consume los valores directamente.
 
@@ -52,11 +52,11 @@ La aceptación visual del sistema completo requiere revisión en navegador y dis
 
 La [propuesta UX/UI v1](ux-ui-proposal.md) define paleta semántica roja/marina/blanca, tipografía del sistema, escala, contrastes calculados, navegación y orden de componentes. La [lámina visual](design/etapa-1.html) contiene seis wireframes: Inicio, Agenda, Carnet, Club, Cuenta y gimnasio; se abre localmente en el navegador.
 
-Es un artefacto de revisión, no pantallas implementadas. Los tokens y vistas de las apps conservan el estado descrito arriba hasta que el usuario apruebe la dirección. La navegación de cinco pestañas ya está aprobada; la densidad, paleta concreta y jerarquía propuestas requieren revisión. El escudo oficial sigue pendiente. Las comprobaciones HTML no sustituyen aceptación iOS/Android.
+Es un artefacto de revisión, no pantallas implementadas. Este apartado describe la revisión histórica; ADR-018 autoriza ahora la base nativa. La navegación de cinco pestañas ya está aprobada; la densidad, paleta concreta y jerarquía propuestas requieren revisión. El escudo oficial sigue pendiente. Las comprobaciones HTML no sustituyen aceptación iOS/Android.
 
 ## Referencia visual de las tres direcciones v2
 
-Los tokens de revisión están en docs/design/review.css; no son los tokens aprobados del producto. Tras elegir una dirección, se propondrá su migración semántica a packages/design-tokens.
+Los tokens de revisión están en docs/design/review.css; no son los tokens aprobados del producto. A se traslada a tokens semánticos nativos, sin alterar la UI web.
 
 | Dirección           | Acción primaria | Estructura | Fondo   | Tipografía de títulos        |
 | ------------------- | --------------- | ---------- | ------- | ---------------------------- |
@@ -64,4 +64,4 @@ Los tokens de revisión están en docs/design/review.css; no son los tokens apro
 | B · Pulso deportivo | #C92436         | #0B1D34    | #F0F2F5 | Impact / Arial Narrow / sans |
 | C · Club cotidiano  | #B9233A         | #19324B    | #F2F6F9 | Sans de sistema, peso 750    |
 
-El cuerpo usa sans de sistema. Las diferencias de estructura, densidad, radios y jerarquía están descritas en [revisión funcional](ux-functional-review.md#tres-direcciones-visuales). La elección requiere revisión con el socio; no se declara una ganadora por intuición. Los pares principales de contraste calculados constan en [verificaciones](verification.md).
+El cuerpo usa sans de sistema. Las diferencias de estructura, densidad, radios y jerarquía están descritas en [revisión funcional](ux-functional-review.md#tres-direcciones-visuales). El usuario seleccionó A provisionalmente el 2026-11-12; no se busca otra alternativa en este bloque. Los pares principales de contraste calculados constan en [verificaciones](verification.md).

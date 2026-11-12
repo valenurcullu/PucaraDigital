@@ -1,5 +1,7 @@
 # Decisiones técnicas
 
+Las entradas históricas conservan contexto. ADR-018/019 prevalecen sobre bloqueos visuales y planificación anteriores.
+
 ## ADR-001 — Repositorio único y ubicación existente
 
 Usar el checkout oficial cuya raíz Git ya existía en PucaraDigital/PucaraDigital dentro del workspace. La carpeta exterior no es un repositorio. No se creó un checkout adicional ni se movió .git. Rama inicial main, sin commits; origin coincide con el repositorio indicado. Sin push autorizado.
@@ -93,3 +95,13 @@ Pádel se diseña con pago por turno; quinchos admite aprobación/pago configura
 Requisitos futuros confirmados: cerca de 2.500 socios activos, hasta 300 concurrentes previstos, Google o email OTP, cuenta distinta del registro de socio y menores con múltiples responsables autorizados. No equivalen a implementación, permisos definidos ni capacidad medida.
 
 Las dos aprobaciones (arquitectura de información y dirección visual) preceden al desarrollo de componentes nativos. La comparación A/B/C conserva la funcionalidad para evaluar estructura, densidad e identidad, sin decidir una estética por el usuario.
+
+## ADR-018 — A provisional y base nativa autorizada (2026-11-12)
+
+A · Club editorial es referencia provisional, sin aprobar estética definitiva. Se levanta el bloqueo de ADR-017; no generar otras alternativas. Bloque autorizado: componentes nativos, cinco pestañas, Inicio/Club/Agenda inicial, Carnet/Cuenta demo, destinos de módulos y lectura centralizada. Sin operaciones persistidas; web conserva alcance.
+
+Expo/React Native/Next.js/Supabase/PostgreSQL permanecen. Se precisa ADR-012: shared comparte contratos, validaciones y adaptadores; integridad de reservas/créditos y permisos se imponen en PostgreSQL. Demo sólo de lectura, sin backend simulado de escrituras.
+
+## ADR-019 — Pádel temprano y créditos (2026-11-12)
+
+Se elimina la postergación de pádel a 2027. Próximo bloque: identidad/RLS/transacciones en Supabase local. Gimnasio con asignaciones y cargas sigue temprano. [Reglas](padel-rules.md) y [diseño](database.md) son referencias vigentes. Sin saldo monetario interno; cancelación elegible emite 1 turno; modificación sin cobro/crédito. Políticas y proveedor pendientes; ninguna escritura real se autoriza sólo en el cliente.

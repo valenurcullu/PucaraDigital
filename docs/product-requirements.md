@@ -1,6 +1,6 @@
 # Requerimientos del producto
 
-Fuentes: prompt maestro del Sprint 1, auditoría integral, decisiones del 2026-11-04 y revisión funcional del usuario del 2026-11-05. Las decisiones funcionales confirmadas y las reglas pendientes se distinguen en [ux-functional-review.md](ux-functional-review.md). Desarrollo incremental. La hoja de ruta vigente está en [roadmap.md](roadmap.md) y la navegación aprobada en [navigation.md](navigation.md).
+Fuentes: prompt maestro, auditorías y decisiones hasta 2026-11-12; prevalecen el roadmap y las reglas de pádel vigentes. Las decisiones funcionales confirmadas y las reglas pendientes se distinguen en [ux-functional-review.md](ux-functional-review.md). Desarrollo incremental. La hoja de ruta vigente está en [roadmap.md](roadmap.md) y la navegación aprobada en [navigation.md](navigation.md).
 
 ## Dirección vigente
 
@@ -25,7 +25,7 @@ Fuentes: prompt maestro del Sprint 1, auditoría integral, decisiones del 2026-1
 
 - Mínimo: app móvil premium con las cinco pestañas (Carnet demo identificado), panel administrativo inicial, Supabase Auth y datos de demostración reales, circuito admin → socio con RLS testeada.
 - Adicional: rutina semanal y registro de pesos con datos ficticios, fixture de ejemplo y pantallas deportivas destacadas.
-- Sin pagos ni reservas reales.
+- Sin pagos operativos en este bloque. Reservas transaccionales en Supabase local pasan a prioridad temprana.
 
 ## Módulos deportivos
 
@@ -36,7 +36,7 @@ Fuentes: prompt maestro del Sprint 1, auditoría integral, decisiones del 2026-1
 
 ## Planificado para etapas posteriores
 
-La implementación real de reservas de pádel/quinchos, inscripciones, cuenta corriente, cuotas, becas, pagos, grupos familiares y portal del socio sigue en etapas posteriores. Su experiencia de consulta, reserva, pago por turno, modificación/cancelación e inscripción/baja recurrente se diseña ahora, sin operaciones reales. Aprobar un flujo no adelanta automáticamente su backend ni define las políticas abiertas.
+Pádel y gimnasio pasan a los próximos bloques tempranos; quinchos y actividades siguen incrementalmente. Cuenta corriente, cuotas, becas, pagos operativos y portal del socio permanecen posteriores. Su experiencia de consulta, reserva, pago por turno, modificación/cancelación e inscripción/baja recurrente se diseña ahora, sin operaciones reales. Aprobar un flujo no adelanta automáticamente su backend ni define las políticas abiertas.
 
 ## Pendiente de definir
 
@@ -53,7 +53,7 @@ La implementación real de reservas de pádel/quinchos, inscripciones, cuenta co
 
 ## Descartado o fuera del sprint
 
-Aptos médicos descartados. Para diciembre no se implementan pagos/reservas reales, scraping, integraciones federativas, wellness con datos reales, notificaciones reales, facturación ni publicación en tiendas. Tampoco se construye administración comercial multi-club.
+Aptos médicos descartados. En el bloque actual no se implementan pagos/reservas operativas, scraping, integraciones federativas, wellness con datos reales, notificaciones reales, facturación ni publicación en tiendas. Tampoco se construye administración comercial multi-club.
 
 El demo no valida acceso al club: cualquier QR futuro de demostración debe estar marcado como tal y carecer de valor real.
 
@@ -76,4 +76,8 @@ Pádel incluye consulta, reserva, pago por turno, cambio y cancelación; pago re
 
 **Usuarios:** aproximadamente 2.500 socios activos y hasta 300 usuarios concurrentes previstos. Son requisitos, no métricas de capacidad verificada. Login futuro por Google o email OTP. El registro de usuario se separa del registro administrativo de socio; un menor puede tener uno o más responsables autorizados.
 
-Ver [revisión funcional v2](ux-functional-review.md) para recorridos propuestos, reglas abiertas y comparación visual. Las decisiones de este apartado están confirmadas; arquitectura detallada y dirección visual todavía requieren aprobación. Las políticas pendientes no se deducen de las tarifas ni escenarios ficticios del HTML.
+Ver [revisión funcional v2](ux-functional-review.md) para recorridos propuestos, reglas abiertas y comparación visual. A seleccionado provisionalmente y primer bloque nativo autorizado; estética definitiva posterior. Las políticas pendientes no se deducen de las tarifas ni escenarios ficticios del HTML.
+
+## Pádel vigente
+
+90 minutos, ARS 40.000 configurable, 1 crédito por turno sin saldo monetario. Modificar sin cobro ni crédito; cancelar elegiblemente emite exactamente uno. Reservar con crédito no requiere nuevo pago. [Reglas y pendientes](padel-rules.md). PostgreSQL impone integridad/permisos. El roadmap actual reemplaza la postergación histórica a 2027.

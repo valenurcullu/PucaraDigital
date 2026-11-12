@@ -10,7 +10,7 @@ Fundaciones del Sprint 1. Un único repositorio y lockfile. Expo y Next.js tiene
 2. apps/web — panel administrativo (Etapa 3).
 3. Portal web del socio — Etapa 6, dentro de apps/web, reutilizando servicios de packages/shared.
 
-Para que el portal posterior no duplique lógica, toda regla de negocio, validación y acceso a datos se escribe en packages/shared desde el principio; las apps contienen solo UI, navegación y estado de pantalla (ADR-012).
+Para que el portal posterior no duplique lógica, contratos, validaciones de entrada, selectores y adaptadores se comparten en packages/shared. La integridad de reservas/créditos y los permisos se ejecutan en PostgreSQL, no sólo en TypeScript (ADR-018 precisa ADR-012).
 
 ## Límites de responsabilidad
 
@@ -60,4 +60,8 @@ Agenda personal se derivará de eventos con horario, reservas confirmadas y part
 
 Las reservas requerirán control atómico de disponibilidad, estados separados de pago/aprobación y operaciones idempotentes en servidor. Son requisitos futuros, no capacidades del HTML. Los 2.500 socios y 300 concurrentes previstos exigen definir mezcla de carga, objetivos de latencia y pruebas antes de afirmar capacidad.
 
-Los prototipos viven únicamente en docs/design, comparten un motor de escenarios en memoria y no importan código ni tokens de las aplicaciones. Se requieren aprobación de arquitectura de información y visual antes de implementar componentes nativos.
+Los prototipos viven únicamente en docs/design, comparten un motor de escenarios en memoria y no importan código ni tokens de las aplicaciones. ADR-018 levanta el bloqueo histórico: A es la referencia provisional del primer bloque nativo.
+
+## Auditoría — 2026-11-12
+
+Se conserva Expo/React Native, Next.js y Supabase/PostgreSQL. [database.md](database.md) define identidad separada, RLS por club, exclusiones, comandos atómicos/idempotentes e historial de créditos. El siguiente bloque usa Supabase local con datos ficticios, sin infraestructura adicional anticipada. El demo actual sólo proporciona lectura; no es un backend transaccional ni simula autorización real.
