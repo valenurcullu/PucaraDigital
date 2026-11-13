@@ -4,8 +4,11 @@ import type {
   ModuleId,
   PersonalEvent,
 } from '@pucara/shared';
-import { NavRow, StateView } from '../../components/member-ui';
-import { formatDate, moduleHref, targetHref } from './navigation';
+import { NavRow, StateView, TileGrid } from '../../components/member-ui';
+import { AgendaCard, MatchCard, NoticeCard } from './dashboard-cards';
+import { moduleHref } from './navigation';
+import { modulePresentation } from './module-presentation';
+
 export function ModuleLink({
   data,
   id,
@@ -21,6 +24,7 @@ export function ModuleLink({
       title={module.title}
       detail={module.summary}
       href={moduleHref(id)}
+      icon={modulePresentation[id].icon}
       prominent={prominent}
     />
   ) : null;
@@ -29,71 +33,54 @@ export function MatchRows({ matches }: { matches: readonly ClubMatch[] }) {
   if (!matches.length)
     return (
       <StateView
-        title="Todavía no hay partidos"
-        description="Acá aparecerán los próximos encuentros publicados por el club."
+        title="Próximamente, más partidos"
+        description="Los próximos encuentros de Primera aparecerán acá cuando el club los publique."
       />
     );
   return (
-    <>
+    <TileGrid minColumnWidth={280}>
       {matches.map((match) => (
-        <NavRow
-          key={match.id}
-          title={
-            (match.sport === 'rugby' ? 'Rugby' : 'Hockey') +
-            ' · ' +
-            match.division +
-            ' vs. ' +
-            match.opponent
-          }
-          detail={
-            (match.venue === 'home' ? 'Local' : 'Visitante') +
-            ' · ' +
-            formatDate(match.startsAt)
-          }
-          href={targetHref({ kind: 'match', id: match.id })}
-        />
+        <MatchCard key={match.id} match={match} />
       ))}
-    </>
+    </TileGrid>
   );
 }
 export function EventRows({ events }: { events: readonly PersonalEvent[] }) {
   if (!events.length)
     return (
       <StateView
-        title="Tu agenda está libre"
-        description="Las reservas confirmadas y las clases en las que estés inscripto aparecerán acá."
+        title="Un poco de tiempo libre"
+        description="Tus reservas confirmadas y clases con inscripción aparecerán acá."
       />
     );
   return (
     <>
       {events.map((event) => (
-        <NavRow
-          key={event.id}
-          title={event.title}
-          detail={formatDate(event.startsAt) + ' · ' + event.location}
-          href={targetHref(event.target)}
-        />
+        <AgendaCard key={event.id} event={event} />
       ))}
     </>
   );
 }
-export function NoticeRows({ data }: { data: MemberExperience }) {
-  if (!data.notices.length)
+export function NoticeRows({
+  data,
+  limit,
+}: {
+  data: MemberExperience;
+  limit?: number;
+}) {
+  const notices =
+    limit === undefined ? data.notices : data.notices.slice(0, limit);
+  if (!notices.length)
     return (
       <StateView
-        title="Sin novedades publicadas"
-        description="Las próximas comunicaciones del club aparecerán acá."
+        title="Estamos preparando novedades"
+        description="Los próximos avisos del club aparecerán acá."
       />
     );
   return (
     <>
-      {data.notices.map((notice) => (
-        <NavRow
-          key={notice.id}
-          title={notice.title}
-          detail={notice.category + ' · ' + notice.summary}
-          href={targetHref({ kind: 'notice', id: notice.id })}
-        />
+      {notices.map((notice, index) => (
+        <NoticeCard key={notice.id} notice={notice} featured={index === 0} />
       ))}
     </>
   );
