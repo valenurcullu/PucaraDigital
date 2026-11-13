@@ -30,3 +30,7 @@ El calendario diario/semanal completo y vista mensual secundaria siguen pendient
 ## Validación móvil pendiente
 
 Comprobar Inicio → Reservas → detalle → atrás, Club → Yoga → Agenda, Inicio → partido → fixture y detalles por enlace profundo. Revisar regreso Android/iOS, conservación del scroll, 320/390/430 puntos y tablet, orientación, tamaño de texto 200 %, VoiceOver/TalkBack y safe areas. Exportar bundles valida compilación, no estos recorridos en dispositivo.
+
+## Revisión UX/UI — 2026-11-13
+
+Las rutas y el stack no cambian. Inicio/Club exponen Reservar pádel, Reservar quincho, Mis reservas, rutina, cuenta y fixture mediante botones/tarjetas. Esos accesos abren los módulos demo ya existentes; no ejecutan reservas. NativeTabs mantiene cinco destinos con variantes de icono y estados activos/inactivos más claros. Los componentes compartidos mejoran también listas y estados en pantallas secundarias, sin ampliar sus funciones.

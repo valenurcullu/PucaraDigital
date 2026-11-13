@@ -1,14 +1,16 @@
 # Estado actual de Pucará Digital
 
-Actualizado: **2026-11-12**. Fuente de verdad para retomar junto con AGENTS.md y CLAUDE.md.
+Actualizado: **2026-11-13**. Fuente de verdad para retomar junto con AGENTS.md y CLAUDE.md.
 
 ## Repositorio e hito
 
-Clon activo C:/Users/Nobody-GRD/Desktop/PucaraDigital, rama main. Base inspeccionada 94818b5, árbol limpio y cinco commits sobre origin/main local. Origin oficial confirmado. No se hizo fetch ni push; no se afirma conocer cambios remotos posteriores.
+Clon activo C:/Users/Nobody-GRD/Desktop/PucaraDigital, rama main. Base de esta revisión: 62857e7, árbol limpio y sincronizado con la referencia local de origin/main. El push anterior fue autorizado y completado; este rediseño queda en commits locales, sin nuevo push. No se hizo fetch en esta revisión.
 
-Bloque documental registrado en 7dd9fd1: A provisional, bloqueo nativo levantado, pádel temprano y gimnasio prioritario. [Roadmap](roadmap.md), [pádel](padel-rules.md) y [modelo transaccional](database.md) prevalecen sobre los prototipos históricos.
+El usuario probó el primer bloque en iPhone/Expo Go y confirmó funcionamiento y navegación, pero no aprobó la UX/UI. El hito actual es el rediseño táctil de Inicio, Club, barra inferior y componentes comunes: ver [sistema visual](design-system.md) y ADR-020.
 
-Últimos bloques de código: c346d19 (datos/tokens), f2fc1ad (componentes/carga) y c09e602 (pestañas/recorridos). Metro se dejó activo en puerto 8081; el manifiesto respondió por loopback y por la dirección LAN del equipo. Esto no demuestra conectividad desde otro dispositivo.
+Se conservan el roadmap temprano de pádel/gimnasio, [reglas de créditos](padel-rules.md) y [diseño PostgreSQL](database.md). No hay nueva lógica transaccional ni cambios en los datos demo.
+
+Últimos commits de código: b4d21bb (componentes/iconos) y 1c75128 (Inicio/Club/pestañas). Metro quedó activo en 8081, autenticado como suplio. El bundle de desarrollo iOS del rediseño respondió HTTP 200; para revisar en el teléfono, recargar el proyecto en Expo Go.
 
 ## Implementado
 
@@ -16,7 +18,7 @@ Bloque documental registrado en 7dd9fd1: A provisional, bloqueo nativo levantado
 - Inicio demo con saludo, accesos, Primera rugby/hockey, próximos compromisos y comunicaciones; Club agrupado con Reservas primero.
 - Agenda inicial Hoy/próximos siete días, derivada de reservas confirmadas y clases con inscripción activa. Gimnasio no crea eventos.
 - Carnet y Cuenta demo; detalles de partidos, novedades, reservas y entradas a módulos. QR textual sin código escaneable.
-- Componentes React Native y tokens semánticos provisionales A. Datos ficticios tipados/centralizados y lectura compartida cancelable, carga, error/reintento y vacíos.
+- Componentes React Native renovados: cabeceras, botones, tarjetas de acción/módulos, reservas destacadas, partidos, agenda, noticias, badges, grillas adaptables y estados. Tokens A modernizados; iconos nativos con expo-symbols. Datos y lectura compartida cancelable conservados.
 - Acciones de reservar, modificar/cancelar e inscribir no realizan escrituras. Las operaciones con reglas pendientes aparecen explicadas o deshabilitadas.
 - Next.js conserva sus entradas informativas; no hay panel administrativo ni rediseño web.
 
@@ -26,13 +28,13 @@ Supabase local, migraciones, Auth, RLS, transacciones, pagos, reservas persistid
 
 ## Verificación y riesgos
 
-Instalación congelada, formato, lint/tipos, nueve tests y build web; export Android/iOS. Ver comandos y resultados finales en [verification.md](verification.md). No se probaron dispositivos, rendimiento, lectores de pantalla ni capacidad para 300 concurrentes.
+Instalación congelada, formato, lint/tipos, nueve tests y build web; export Android/iOS. Ver comandos y resultados finales en [verification.md](verification.md). El usuario probó la versión anterior en iPhone. El agente no ejecutó este rediseño en dispositivos; rendimiento, lectores de pantalla y capacidad para 300 concurrentes siguen sin medir.
 
-Expo recomienda remotamente cinco parches posteriores a las versiones fijadas; revisar como mantenimiento acotado. No se añadieron dependencias ni se cambió el lockfile. Las pruebas de exportación no garantizan compatibilidad en dispositivo.
+Expo recomienda remotamente cinco parches posteriores a las versiones fijadas; revisar como mantenimiento acotado. Este rediseño agrega expo-symbols 58.0.5 y actualiza el lockfile; no actualiza el stack existente. Las pruebas de exportación no garantizan compatibilidad en dispositivo.
 
 ## Próximo bloque
 
-1. Aceptación de este recorrido en Android/iOS y tamaños de texto/pantalla; corregir hallazgos.
+1. Revisar este rediseño en iPhone/Expo Go, luego Android, texto ampliado y pantallas pequeñas/grandes; corregir hallazgos.
 2. Supabase local con datos ficticios: identidad separada, vínculos, RLS, exclusión de solapamientos y comandos idempotentes de reservas/créditos, con pruebas concurrentes.
 3. Conectar una sección vertical de pádel; gimnasio con asignación de rutinas y registro de cargas conserva prioridad deportiva temprana.
 

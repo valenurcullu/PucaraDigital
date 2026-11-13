@@ -105,3 +105,13 @@ Expo/React Native/Next.js/Supabase/PostgreSQL permanecen. Se precisa ADR-012: sh
 ## ADR-019 — Pádel temprano y créditos (2026-11-12)
 
 Se elimina la postergación de pádel a 2027. Próximo bloque: identidad/RLS/transacciones en Supabase local. Gimnasio con asignaciones y cargas sigue temprano. [Reglas](padel-rules.md) y [diseño](database.md) son referencias vigentes. Sin saldo monetario interno; cancelación elegible emite 1 turno; modificación sin cobro/crédito. Políticas y proveedor pendientes; ninguna escritura real se autoriza sólo en el cliente.
+
+## ADR-020 — Rediseño táctil del bloque nativo (2026-11-13)
+
+El usuario confirmó que la app funciona y navega en iPhone/Expo Go, pero rechazó su presentación textual. Se rediseñan directamente Inicio, Club, barra nativa y componentes comunes; no se vuelve a HTML ni se cambia navegación, stack o datos demo.
+
+Reservas tiene CTAs explícitos; rutina/cuenta y catálogo usan tarjetas/grillas; partidos, agenda y comunicaciones tienen presentaciones diferentes. Se conserva NativeTabs y el comportamiento de vuelta atrás. El sistema gestiona el espaciado y altura de la barra, especialmente su apariencia nativa en iOS 26.
+
+Se incorpora únicamente expo-symbols 58.0.5 (rango local SDK ~58.0.4 y peer Router ^58.0.4), más su dependencia transitiva Material Symbols, sin cambiar versiones previas del stack. SF Symbols en iOS y símbolos empaquetados en Android. La necesidad concreta es iconografía consistente en acciones y módulos; no se agrega un kit UI.
+
+Los CTAs navegan a módulos demo existentes, sin reservas, pagos o inscripciones reales. La selección A sigue provisional; la nueva UX debe validarse en el teléfono. No se afirma rendimiento ni accesibilidad nativa probados por exportar bundles.

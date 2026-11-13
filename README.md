@@ -6,7 +6,7 @@ Plataforma del Club Pucará, desarrollada por Suplio. Monorepo oficial: https://
 
 Primer bloque nativo: cinco pestañas del sistema, Inicio y Club demo, Agenda inicial, Carnet/Cuenta de demostración y navegación a módulos/detalles. Datos centralizados de lectura; sin autenticación, persistencia ni operaciones de reservas/pagos/inscripción.
 
-A · Club editorial seleccionado provisionalmente, con estética definitiva pendiente sin bloquear desarrollo. App móvil primero; panel administrativo web después; portal del socio posterior. Reglas vigentes en [pádel](docs/padel-rules.md) y [diseño transaccional](docs/database.md). Los HTML son antecedentes históricos, no el entregable actual.
+Inicio y Club ahora usan reservas destacadas, botones, tarjetas de módulos/partidos y estados visuales coherentes; la barra sigue siendo nativa. A · Club editorial modernizado provisionalmente, con estética definitiva pendiente sin bloquear desarrollo. App móvil primero; panel administrativo web después; portal del socio posterior. Reglas vigentes en [pádel](docs/padel-rules.md) y [diseño transaccional](docs/database.md). Los HTML son antecedentes históricos, no el entregable actual.
 
 Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
 

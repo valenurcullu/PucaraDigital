@@ -133,3 +133,32 @@ Se corrigió el setState síncrono redundante del efecto de carga señalado por 
 Los avisos NO_COLOR/FORCE_COLOR no impidieron la exportación. Artefactos dist/.expo/.next permanecen ignorados. Sin pagos, reservas persistidas, autenticación ni operaciones de créditos. Modificar/Cancelar e Inscribirme/Cancelar inscripción aparecen separados y deshabilitados, con explicación.
 
 Cierre: format:check correcto; typecheck móvil volvió a ejecutarse después de generar las rutas. Manifiesto Android por IP LAN también HTTP 200 desde esta PC; no se comprobó firewall/conectividad desde un teléfono. Expo generó apps/mobile/.gitignore para excluir expo-env.d.ts; se conserva junto con las exclusiones de raíz. Lockfile y apps/web sin diff.
+
+## 2026-11-13 — Rediseño táctil del primer bloque nativo
+
+**Base:** main, 62857e7 limpio y sincronizado con la referencia local de origin/main. El usuario confirmó funcionamiento/navegación de la versión anterior en iPhone/Expo Go, pero no aprobó su UX/UI. Esta revisión implementa Inicio, Club, estilo de NativeTabs y componentes comunes en React Native; no crea HTML.
+
+| Control                  | Resultado                                                                                                                      |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Instalación congelada    | pnpm install --frozen-lockfile correcto después de fijar expo-symbols 58.0.5                                                   |
+| Lint, TypeScript y tests | pnpm exec turbo run lint typecheck test --force: 9 tareas correctas; 9 tests existentes en 2 archivos                          |
+| Build web                | pnpm build --force correcto; Next/Webpack mantiene /, /experiencia y 404                                                       |
+| Export nativo            | pnpm --filter @pucara/mobile export --clear correcto para Android e iOS                                                        |
+| Artefactos exportados    | 34 assets; bundles Hermes Android 3,4 MB e iOS 3,3 MB; MaterialSymbols_400Regular.ttf empaquetada (974 KB)                     |
+| Expo CLI / Metro         | whoami devuelve suplio; Metro activo en 8081; manifiestos iOS/Android por LAN HTTP 200, username suplio y launchAsset presente |
+| Formato / diff / enlaces | Prettier y verificaciones de cierre registrados al finalizar                                                                   |
+| Datos y web              | packages/shared y apps/web sin modificaciones                                                                                  |
+
+El lockfile agrega sólo expo-symbols 58.0.5 y @expo-google-fonts/material-symbols 0.4.53; no elimina ni actualiza versiones de paquetes anteriores. La instalación inicial encontró un bloqueo de archivos de Windows con Metro activo: se detuvo sólo ese servidor, se completó la instalación y se volvió a iniciar. No se modificaron credenciales.
+
+**Expo install --check online:** conserva la advertencia preexistente de cinco parches recomendados: expo 58.0.25, expo-router 58.0.31, expo-constants 58.0.16, expo-linking 58.0.17 y expo-status-bar 58.0.5. No se declara este control aprobado ni se actualiza todo el stack. expo-symbols 58.0.5 satisface la recomendación online y el rango del SDK instalado.
+
+**Contraste sRGB calculado:** texto/superficie 14,94; secundario/fondo 5,40; blanco/acción 6,09; blanco/acción presionada 8,31; secundario sobre marino 11,30; acción/superficie roja suave 5,32; texto de control deshabilitado 5,09; éxito/blanco 7,25; borde de control/blanco 3,24. Estos pares no equivalen a auditoría integral de accesibilidad.
+
+**Alcance de las pruebas:** tests de contratos, modo demo, fechas y selectores existentes; no son tests de interacción visual. Exportar valida compilación e inclusión de símbolos, no renderizado nativo. No se agregaron tests que sólo repliquen estilos.
+
+**Pendiente en hardware:** revisar nuevo Inicio/Club en iPhone y Android; CTAs, navegación y retorno; tamaños 320/390/430 puntos y tablet; texto ampliado 200 %, safe areas, orientación y VoiceOver/TalkBack. Las grillas tienen adaptación implementada por ancho/fontScale, pero no se afirma que esas combinaciones hayan sido probadas en dispositivos. No se midió rendimiento ni se declara una mejora de FPS.
+
+Sin backend, pagos, autenticación productiva ni escrituras de reservas/créditos. Los CTAs abren módulos demo existentes. Este rediseño se guarda localmente, sin push autorizado.
+
+Cierre: format:check y git diff --check correctos; enlaces relativos de la documentación comprobados. El bundle de desarrollo iOS servido por Metro devolvió HTTP 200 e incluye AppHeader y ReservationHub; esto valida entrega/compilación, no ejecución visual en el iPhone. Cambios de código guardados en b4d21bb y 1c75128. No se hizo push.
