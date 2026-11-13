@@ -162,3 +162,12 @@ El lockfile agrega sólo expo-symbols 58.0.5 y @expo-google-fonts/material-symbo
 Sin backend, pagos, autenticación productiva ni escrituras de reservas/créditos. Los CTAs abren módulos demo existentes. Este rediseño se guarda localmente, sin push autorizado.
 
 Cierre: format:check y git diff --check correctos; enlaces relativos de la documentación comprobados. El bundle de desarrollo iOS servido por Metro devolvió HTTP 200 e incluye AppHeader y ReservationHub; esto valida entrega/compilación, no ejecución visual en el iPhone. Cambios de código guardados en b4d21bb y 1c75128. No se hizo push.
+
+## 2026-11-13 — Cierre y respaldo autorizado en GitHub
+
+- Rama main, árbol limpio al iniciar; tres commits pendientes (b4d21bb, 1c75128, e9aa184). Origin oficial confirmado. git fetch origin y conteo remoto/local: 0/3; sin divergencia.
+- Revisión de los 18 archivos/versiones de esos commits: cambios del rediseño, manifiesto/lockfile y documentación. Búsqueda de patrones de claves privadas, tokens, JWT y credenciales literales sin hallazgos; sin rutas locales sensibles o artefactos generados en los commits. Se comprobaron exclusiones de .env, .expo, dist y .next. Es una revisión acotada, no una certificación de ausencia absoluta de secretos.
+- Ejecutados de nuevo: pnpm install --frozen-lockfile, pnpm format:check y pnpm exec turbo run lint typecheck test --force. Todos correctos: 9 tareas, 9 tests en 2 archivos, sin caché Turbo.
+- Build web y export Android/iOS ya estaban correctos sobre el mismo código del rediseño (entrada anterior). No se repitieron en este cierre: no cambió código ni dependencias. Sigue pendiente el aviso conocido de cinco parches Expo.
+- Push normal origin main realizado hasta e9aa184 y SHA remoto comprobado; sin sobrescribir trabajo ajeno. Actualización documental de cierre enviada en un commit posterior del mismo respaldo autorizado.
+- Metro del proyecto detenido; no se cerraron otras aplicaciones ni se borraron credenciales. Instrucciones para retomar en current-status.md.
