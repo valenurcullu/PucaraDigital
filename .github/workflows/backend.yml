@@ -1,0 +1,39 @@
+name: Backend SQL
+on:
+  push:
+    paths:
+      - 'supabase/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    paths:
+      - 'supabase/**'
+      - '.github/workflows/backend.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Test concurrent transactions on disposable PostgreSQL
+        run: PG_BIN="$(pg_config --bindir)" python3 supabase/tests/isolated_postgres.py
+      - name: Start local Supabase
+        run: npx --yes supabase@3.2.0 start > /dev/null
+      - name: Rebuild disposable local database
+        run: npx --yes supabase@3.2.0 db reset
+      - name: Run authorization and reservation tests against Supabase
+        shell: bash
+        run: |
+          set -euo pipefail
+          db_url="$(npx --yes supabase@3.2.0 status -o env | sed -n 's/^DB_URL="\(.*\)"$/\1/p')"
+          test -n "$db_url"
+          psql -X -w -v ON_ERROR_STOP=1 --dbname="$db_url" -f supabase/tests/foundations.sql
+      - name: Stop local services
+        if: always()
+        run: npx --yes supabase@3.2.0 stop
