@@ -6,7 +6,15 @@ Actualizado el 20 de noviembre de 2026. El Hito 2 partió de `af9f5b7`, sincroni
 
 El usuario probó en iPhone la navegación de cinco pestañas y la aceptó como base. Inicio, Club, Agenda, Carnet y Cuenta usan datos ficticios. El rediseño táctil y la dirección A · Club editorial siguen siendo provisorios. Expo y Next conservan sus lectores existentes.
 
-## Último bloque móvil — disponibilidad de pádel
+## Último bloque móvil — revisión táctil y Agenda semanal
+
+Inicio y Club exponen **Ver turnos de pádel** en el primer bloque de Reservas. En Mis reservas, **Ver disponibilidad de pádel** abre la misma pantalla. Una selección muestra el resumen del horario y vuelve a la fecha elegida al cerrarlo. El directorio de Club mantiene sus cuatro grupos.
+
+Se corrigió la pérdida de estilos de Pressable al componer enlaces con Expo Router. Fondo, borde y respuesta al toque se aplican en la superficie nativa. Las cinco pestañas usan insets nativos explícitos. Mi agenda presenta una semana de lunes a domingo, días marcados y los compromisos del día seleccionado. Hoy y los controles de semana actúan sobre el calendario del club. Los datos del socio y las operaciones permitidas conservan el alcance demo.
+
+Las pruebas automatizadas cubren los recorridos, estados y contraste. La aceptación en iPhone de esta revisión está pendiente. [Navegación](navigation.md) · [Sistema visual](design-system.md) · [Verificaciones](verification.md).
+
+## Bloque anterior — disponibilidad de pádel
 
 A partir de `605b0c1`, Inicio y Club abren el mismo módulo de consulta. El demo ofrece cuatro fechas desde mañana en el calendario del club. La segunda permite revisar el estado vacío. Al tocar un horario se abre un resumen descartable con cancha, fecha, inicio, fin, duración y precio del turno. La selección no escribe en Agenda, reservas ni créditos.
 
@@ -20,7 +28,7 @@ En Windows se aplicaron migraciones y seed y se probaron autorización, integrid
 
 ## Para retomar
 
-1. Revisar en iPhone la selección de fecha y horario, el resumen y su cierre con texto ampliado y VoiceOver. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
+1. Revisar en iPhone los tres accesos a Pádel, el regreso desde el resumen, la semana de Agenda y el último control de cada pestaña con texto ampliado y VoiceOver. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
 2. Validar la API con sesiones Auth reales de ambos clubes, incluidos vínculos revocados. Implementar el lector autenticado de disponibilidad para esta pantalla y verificar los rangos de fechas con turnos publicados en esa base.
 3. Acordar con el club verificación del padrón, permisos de menores, cancelación y reintegros. El pago real requiere además proveedor, retención y conciliación. Gimnasio con asignación de rutinas y registro de cargas sigue entre las prioridades deportivas tempranas.
 

@@ -192,3 +192,11 @@ Prettier aprobó el formato del repositorio. El workflow Backend SQL queda prepa
 - Los tests móviles ejecutan el modelo de presentación en Vitest. Quedan pendientes la interacción en iPhone, VoiceOver, tamaños de texto y la integración Auth/PostgREST en el equipo con contenedores. Este bloque utilizó exclusivamente el lector de ejemplo y no ejecutó operaciones sobre PostgreSQL.
 
 Para revisar en Expo Go, entrar por Inicio o Club, tocar **Ver turnos de pádel**, abrir un horario y cerrar su resumen. La segunda fecha de la demo permite revisar la pantalla vacía.
+
+## Revisión táctil y regresiones nativas — 2026-11-20
+
+- Punto de partida local 54aea3e. Se reprodujo con la versión instalada de Slot la pérdida del callback de estilo del Pressable al pasar por Link asChild. El resultado era un objeto vacío. La ruta de Pádel ya existía. RoutePressable preserva la composición de navegación y aplica fondo, borde y estado de presión sobre el control nativo.
+- Instalación con lockfile congelado, Prettier, ESLint, TypeScript y build Next.js. Vitest pasó 38 casos (13 compartidos y 25 móviles). Las pruebas de interfaz renderizan componentes React con primitivas nativas y navegación sustituidas para observar acciones, y ejercitan la composición real de Radix Slot. Comprueban tres accesos a Pádel, selección/resumen/regreso, destinos secundarios, calendario, carga, error, reintento y controles ocupados o deshabilitados.
+- Se calculó contraste con luminancia relativa para texto normal y presionado, estados y etiquetas. Blanco sobre rojo primario da 6,09:1. Texto secundario sobre el fondo deshabilitado da 5,09:1. Las pruebas exigen al menos 4,5:1 para los pares de texto cubiertos y 3:1 para el borde de control sobre blanco.
+- Expo generó los bundles iOS y Android. Expo install --check en línea sigue devolviendo código 1 por cinco parches recomendados en el stack fijado. Metro sirvió el manifiesto del proyecto y el bundle iOS con HTTP 200 en la LAN.
+- La revisión física queda pendiente. Probar en iPhone el último control de las cinco pestañas, volver con gesto y botón, cerrar el resumen con la misma fecha seleccionada y recorrer Agenda con VoiceOver y texto al 200 %. En Android comprobar el regreso del sistema y TalkBack. No se midieron FPS ni latencia.
