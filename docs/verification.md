@@ -183,3 +183,12 @@ Cierre: format:check y git diff --check correctos; enlaces relativos de la docum
 Comandos y requisitos del backend en la [guía de desarrollo local](../supabase/README.md).
 
 Prettier aprobó el formato del repositorio. El workflow Backend SQL queda preparado para repetir la batería aislada y ejecutar la suite SQL tras un reset de Supabase local en GitHub Actions. La ejecución remota está pendiente.
+
+## Consulta nativa de pádel — 2026-11-20
+
+- Clon local sobre main desde 605b0c1. Instalación verificada con pnpm 12.17.0 y lockfile congelado.
+- ESLint, TypeScript, Vitest y build Next.js correctos con Turbo sin caché. Pasaron 19 pruebas unitarias, incluidas 4 nuevas del lector y 6 del modelo de presentación móvil. Se comprobaron el rango de fechas del club, campos de la RPC, duración y precio con centavos, agrupación, carga, vacío, reintento y descarte de respuestas obsoletas.
+- Expo exportó bundles Hermes para iOS y Android. El chequeo de compatibilidad en línea de Expo devolvió código 1 porque recomienda cinco parches de paquetes ya fijados (expo, expo-constants, expo-linking, expo-router y expo-status-bar). Se conservó el lockfile.
+- Los tests móviles ejecutan el modelo de presentación en Vitest. Quedan pendientes la interacción en iPhone, VoiceOver, tamaños de texto y la integración Auth/PostgREST en el equipo con contenedores. Este bloque utilizó exclusivamente el lector de ejemplo y no ejecutó operaciones sobre PostgreSQL.
+
+Para revisar en Expo Go, entrar por Inicio o Club, tocar **Ver turnos de pádel**, abrir un horario y cerrar su resumen. La segunda fecha de la demo permite revisar la pantalla vacía.

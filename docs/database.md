@@ -25,6 +25,12 @@ El cliente carece de permisos para crear vínculos, otorgar roles, modificar bec
 - `padel_availability` devuelve cancha, horario y precio, omite bloqueos incluso parciales y protege la identidad de otros socios. La exclusión en la escritura resuelve las carreras posteriores a la consulta.
 - `padel_credits` cuenta turnos enteros y actúa como fila de bloqueo. Debe provisionarse una cuenta por titular antes de operar. Cada alta o consumo en `padel_movements` modifica el contador en la misma transacción. El historial queda protegido frente a escrituras de los clientes.
 
+## Contrato de consulta móvil
+
+`padel_availability(p_club, p_from, p_until)` devuelve filas con `court_id` (UUID), `starts_at` y `ends_at` (timestamptz) y `price_minor` (centavos de ARS). El límite superior de la consulta es exclusivo. La pantalla agrupa estas filas por cancha, presenta los instantes en la hora de Buenos Aires y obtiene los minutos de su diferencia. Cada precio corresponde a la fila elegida.
+
+`PadelAvailabilityReader` recibe los tres parámetros y una señal de cancelación. Además de las filas, entrega los nombres mediante un catálogo independiente. Al conectar Supabase, invocar la RPC con la sesión del socio y leer `id, name` de `padel_courts` para el mismo `club_id`, bajo RLS. Resolver el club desde la sesión activa. Las fechas relativas de la demo del teléfono y las fechas fijas del seed SQL son independientes. Para probar la integración, elegir días con franjas publicadas en el entorno de prueba.
+
 ## Comandos disponibles en PostgreSQL
 
 `public.padel_command(p_club, p_member, p_request, p_action, p_reservation, p_version, p_court, p_start)` devuelve el UUID de la reserva. El cliente genera un UUID por intención y lo conserva al reintentar. La auditoría registra actor, titular, clave, argumentos y versión resultante. Reusar una clave con otros argumentos produce conflicto.
