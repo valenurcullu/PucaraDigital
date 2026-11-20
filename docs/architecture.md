@@ -2,7 +2,7 @@
 
 ## Alcance actual
 
-Primer bloque nativo con cinco pestañas, Inicio/Club/Agenda inicial y destinos demo. Un repositorio y lockfile. Next conserva sus fundaciones. Sin login, persistencia, Supabase ni operaciones transaccionales implementadas.
+Primer bloque nativo con cinco pestañas, Inicio/Club/Agenda inicial y destinos demo. Un repositorio y lockfile. Next conserva sus fundaciones. El backend local de desarrollo cuenta con migraciones, RLS y transacciones de pádel. Su integración con las apps queda pendiente.
 
 ## Prioridad de plataformas
 
@@ -21,7 +21,7 @@ Para que el portal posterior no duplique lógica, contratos, validaciones de ent
 | packages/shared        | Contratos Zod, tipos de dominio y puertos de servicios                 |
 | packages/design-tokens | Valores visuales puros, sin dependencias de UI                         |
 | packages/config        | Opciones TypeScript comunes                                            |
-| supabase               | Futuras migraciones, RLS y seed local                                  |
+| supabase               | Migraciones PostgreSQL, RLS, RPC, pruebas y seed local                 |
 | docs                   | Decisiones, alcance y comprobaciones                                   |
 
 Las aplicaciones pueden importar paquetes; los paquetes no importan aplicaciones. Los tokens no dependen del dominio. Se consumen fuentes TypeScript directamente; Next transpila los paquetes de workspace y Metro resuelve el monorepo.
@@ -36,9 +36,9 @@ El ejemplo web conserva ClubService. Móvil consume MemberExperienceReader: lect
 
 Esta separación facilita incorporar un adaptador Supabase sin cambiar los componentes presentacionales. La autorización real debe ejecutarse con la sesión del usuario y RLS; ni este puerto ni el selector de modo autorizan operaciones.
 
-## Backend previsto
+## Backend
 
-Supabase Auth identifica personas. PostgreSQL almacena clubes, membresías, roles y datos por club. El cliente recibe únicamente la clave pública cuando corresponda; service_role nunca se expone a aplicaciones. Las operaciones privilegiadas se diseñarán y auditarán en servidor.
+Supabase Auth identifica personas. PostgreSQL almacena clubes, membresías, roles y datos por club. El cliente recibe únicamente la clave pública cuando corresponda; service_role nunca se expone a aplicaciones. Los comandos SQL de pádel verifican el actor autenticado y registran cada operación confirmada en la misma transacción. Ver [modelo y permisos](database.md).
 
 Importes futuros: unidades menores enteras + moneda. Instantes: timestamptz, con presentación en la zona del club. Estado administrativo y situación económica son dimensiones separadas.
 

@@ -4,7 +4,7 @@ Plataforma del Club Pucará, desarrollada por Suplio. Monorepo oficial: https://
 
 ## Estado
 
-Primer bloque nativo: cinco pestañas del sistema, Inicio y Club demo, Agenda inicial, Carnet/Cuenta de demostración y navegación a módulos/detalles. Datos centralizados de lectura; sin autenticación, persistencia ni operaciones de reservas/pagos/inscripción.
+Primer bloque nativo: cinco pestañas del sistema, Inicio y Club demo, Agenda inicial, Carnet/Cuenta de demostración y navegación a módulos/detalles. La app consume datos demo de lectura. El backend de desarrollo ya implementa identidad, autorización y comandos de pádel en PostgreSQL. Ver la [guía local](supabase/README.md).
 
 Inicio y Club ahora usan reservas destacadas, botones, tarjetas de módulos/partidos y estados visuales coherentes; la barra sigue siendo nativa. A · Club editorial modernizado provisionalmente, con estética definitiva pendiente sin bloquear desarrollo. App móvil primero; panel administrativo web después; portal del socio posterior. Reglas vigentes en [pádel](docs/padel-rules.md) y [diseño transaccional](docs/database.md). Los HTML son antecedentes históricos, no el entregable actual.
 
@@ -51,10 +51,10 @@ pnpm --filter @pucara/mobile export
 
 - `apps/mobile`: Expo Router, React Native, iOS y Android.
 - `apps/web`: Next.js App Router, React, Tailwind; panel administrativo futuro.
-- `packages/shared`: contratos, roles, selectores, fixtures tipados y lectores demo; integridad crítica futura en PostgreSQL.
+- `packages/shared`: contratos, roles, selectores, fixtures tipados y lectores demo; integridad de pádel en PostgreSQL.
 - `packages/design-tokens`: colores, escalas y movimiento compartidos.
 - `packages/config`: configuración TypeScript.
-- `supabase`: ubicación prevista para migraciones y seed, aún sin backend.
+- `supabase`: configuración del CLI, migraciones, seed sintético y pruebas SQL y concurrentes.
 - `docs`: arquitectura, producto, propuestas, decisiones y evidencias.
 
 Los datos demo son ficticios, de lectura y sin persistencia; fechas relativas al día del club al abrir la sesión. Modificar/Cancelar e Inscribirme/Cancelar inscripción están deshabilitados con explicación; el Carnet contiene un espacio QR textual no escaneable. Seleccionar modo real produce un error explícito hasta implementar su adaptador. La P tipográfica es un placeholder, no el escudo oficial.

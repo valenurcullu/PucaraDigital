@@ -14,7 +14,7 @@ Aceptación técnica: lint, tipos, tests, build web sin regresiones, compatibili
 
 Supabase local/PostgreSQL con datos ficticios, migraciones, seeds y tests transaccionales. Separar cuenta, socio y responsables. Implementar aislamiento por club, restricciones de solapamiento, idempotencia, crédito de turno e historial; pagos como entidad separada. [Diseño y aceptación](database.md), [reglas confirmadas](padel-rules.md).
 
-Primero demostrar transacciones con pruebas; luego conectar una sección vertical de la app. No construir un backend simulado completo. No requieren proveedor de pagos las pruebas de reservas con créditos ficticios. Para flujo sin créditos, mostrar pago pendiente hasta contar con proveedor y reglas, sin fabricar confirmaciones.
+Al 20 de noviembre de 2026, el esquema y los comandos con crédito pasaron pruebas en PostgreSQL nativo. Falta probar Supabase con contenedores y sesiones Auth antes de conectar disponibilidad en Expo. No construir un backend simulado completo. No requieren proveedor de pagos las pruebas de reservas con créditos ficticios. Para flujo sin créditos, mostrar pago pendiente hasta contar con proveedor y reglas, sin fabricar confirmaciones.
 
 Pendientes del club: cancelación/reintegros, alcance familiar, horarios y límites. No habilitar reservas operativas antes de cerrar esos puntos y verificar autorización.
 

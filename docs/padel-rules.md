@@ -22,4 +22,4 @@ El proveedor de pagos, retención de disponibilidad durante el pago, expiración
 
 El primer bloque nativo presenta información y reservas ficticias de lectura. No simula un motor transaccional ni cobra, acredita o confirma operaciones. Las acciones de escritura permanecen explícitamente no disponibles.
 
-El siguiente bloque prueba identidad, RLS y transacciones en Supabase local/PostgreSQL con datos ficticios. Antes de permitir operaciones reales, cumplir el diseño y las pruebas de [base de datos](database.md). El cliente presenta resultados, pero nunca decide permisos, disponibilidad definitiva o emisión de créditos.
+El Hito 2 incorpora identidad, RLS y comandos transaccionales con créditos. Se probaron en PostgreSQL nativo con datos ficticios. Falta verificar el stack de Supabase con Auth y PostgREST. Antes de permitir operaciones reales, cumplir el diseño y las pruebas de [base de datos](database.md). El cliente presenta resultados, pero nunca decide permisos, disponibilidad definitiva o emisión de créditos.

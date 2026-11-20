@@ -1,3 +1,3 @@
 # Migraciones
 
-Reservado para el bloque E del Sprint 1. Todavía no existen tablas ni políticas RLS desplegables. Ver ../../docs/database.md. Las futuras migraciones SQL serán incrementales y versionadas; no se usarán credenciales productivas para desarrollo.
+Se aplican en orden de versión. La primera migración crea las identidades y las políticas del padrón, la segunda implementa ocupación, créditos y comandos de pádel y la tercera expone la consulta de turnos libres. Para reproducir la base y verificarla, seguir la [guía local](../README.md).

@@ -24,4 +24,4 @@
 - Al retomar, leer docs/current-status.md; al cerrar un bloque, actualizar estado y docs/verification.md con evidencia. CLAUDE.md remite a estas mismas reglas.
 
 - Dirección vigente: concepto A · Club editorial seleccionado provisionalmente (ADR-018). Primer bloque nativo autorizado; estética definitiva pendiente, sin bloqueo. Referencias: docs/current-status.md, docs/roadmap.md y docs/padel-rules.md. HTML sólo como antecedente. Reservas visible, gimnasio fuera de Agenda e inscripción distinta de asistencia.
-- Reglas críticas de reservas, créditos y permisos en PostgreSQL: RLS, exclusión de solapamientos y operaciones atómicas/idempotentes. Probar en Supabase local con datos ficticios; no construir un backend simulado de escrituras. Este bloque sólo implementa navegación y lectura demo.
+- Reglas críticas de reservas, créditos y permisos en PostgreSQL: RLS, exclusión de solapamientos y operaciones atómicas/idempotentes. Probar en Supabase local con datos ficticios; no construir un backend simulado de escrituras. Las apps siguen en lectura demo. Para el backend local y los avances posteriores, consultar docs/current-status.md y supabase/README.md.

@@ -171,3 +171,15 @@ Cierre: format:check y git diff --check correctos; enlaces relativos de la docum
 - Build web y export Android/iOS ya estaban correctos sobre el mismo código del rediseño (entrada anterior). No se repitieron en este cierre: no cambió código ni dependencias. Sigue pendiente el aviso conocido de cinco parches Expo.
 - Push normal origin main realizado hasta e9aa184 y SHA remoto comprobado; sin sobrescribir trabajo ajeno. Actualización documental de cierre enviada en un commit posterior del mismo respaldo autorizado.
 - Metro del proyecto detenido; no se cerraron otras aplicaciones ni se borraron credenciales. Instrucciones para retomar en current-status.md.
+
+## Hito 2 — 2026-11-20
+
+- Base de partida comprobada en el clon de escritorio, rama main limpia, en af9f5b7 al igual que main en el remoto oficial.
+- npx con Supabase CLI 3.2.0 respondió a la consulta de versión. El comando start se detuvo al buscar Docker o Podman. Quedan pendientes inicio, reset, Auth, JWT, PostgREST y pruebas contra PostgreSQL 17 en contenedor.
+- La prueba aislada usó PostgreSQL 16.14 local con btree_gist. Ejecutó tres migraciones y seed desde cero, 40 comprobaciones SQL y tres ensayos con dos conexiones y contención observada. Pasaron los 43. Incluye permisos anónimos, usuarios de dos clubes, responsables, revocación, suspensión, alcances administrativos, reservas y créditos, exclusiones, atomicidad e idempotencia. Los ensayos concurrentes cubren una cancha disputada, dos solicitudes sobre el último crédito y reintentos de una cancelación. El clúster se detuvo y eliminó al finalizar.
+- El entorno aislado proporciona la clave de auth.users, los roles y el contrato de auth.uid(). Las comprobaciones de privilegios cambian al rol de cliente en PostgreSQL. Este recorrido deja pendiente la verificación de tokens reales en la API. Tampoco mide capacidad para 300 usuarios.
+- Instalación pnpm 12.17.0 con lockfile congelado completada. Turbo ejecutó lint, typecheck, nueve tests Vitest y build web con caché desactivada. Las diez tareas finalizaron correctamente. El hito no introduce cambios nativos ni dependencias de aplicación.
+
+Comandos y requisitos del backend en la [guía de desarrollo local](../supabase/README.md).
+
+Prettier aprobó el formato del repositorio. El workflow Backend SQL queda preparado para repetir la batería aislada y ejecutar la suite SQL tras un reset de Supabase local en GitHub Actions. La ejecución remota está pendiente.

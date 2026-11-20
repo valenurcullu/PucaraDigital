@@ -115,3 +115,9 @@ Reservas tiene CTAs explícitos; rutina/cuenta y catálogo usan tarjetas/grillas
 Se incorpora únicamente expo-symbols 58.0.5 (rango local SDK ~58.0.4 y peer Router ^58.0.4), más su dependencia transitiva Material Symbols, sin cambiar versiones previas del stack. SF Symbols en iOS y símbolos empaquetados en Android. La necesidad concreta es iconografía consistente en acciones y módulos; no se agrega un kit UI.
 
 Los CTAs navegan a módulos demo existentes, sin reservas, pagos o inscripciones reales. La selección A sigue provisional; la nueva UX debe validarse en el teléfono. No se afirma rendimiento ni accesibilidad nativa probados por exportar bundles.
+
+## ADR-021 — Autorización y créditos en PostgreSQL (2026-11-20)
+
+Las membresías, vínculos, roles por ámbito, becas, decisiones de elegibilidad y auditoría se guardan en un esquema privado. El cliente solo recibe lectura filtrada por RLS y los comandos autorizados. Una misma restricción de exclusión cubre bloqueos y reservas de cancha. Una segunda protege al titular. Cada movimiento de un turno actualiza el contador en su transacción. Los reintentos usan una clave por club y actor.
+
+Hasta validar la política comercial, una aprobación administrativa privada habilita la cancelación de una versión concreta. Los responsables pueden consultar los registros y reservas del menor vinculado. Los créditos y sus operaciones quedan reservados al titular. El siguiente bloque debe validar estas decisiones con Auth y PostgREST antes de conectar Expo. [Detalle técnico](database.md).
