@@ -54,7 +54,8 @@ export function createDemoExperience(
       {
         id: 'padel',
         title: 'Pádel',
-        summary: 'Tu próximo partido empieza acá.',
+        summary:
+          'Horarios de ejemplo. La disponibilidad real todavía no está conectada.',
       },
       {
         id: 'quinchos',

@@ -7,7 +7,7 @@ export const modulePresentation: Record<
   { icon: AppIconName; action: string }
 > = {
   reservas: { icon: 'reservations', action: 'Ver mis reservas' },
-  padel: { icon: 'padel', action: 'Reservar pádel' },
+  padel: { icon: 'padel', action: 'Ver turnos de pádel' },
   quinchos: { icon: 'quincho', action: 'Reservar quincho' },
   rugby: { icon: 'rugby', action: 'Ver fixture' },
   hockey: { icon: 'hockey', action: 'Ver fixture' },

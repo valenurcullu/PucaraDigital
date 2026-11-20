@@ -54,7 +54,7 @@ export function ReservationHub({ data }: { data: MemberExperience }) {
       </Text>
       <TileGrid>
         <ButtonLink
-          title="Reservar pádel"
+          title="Ver turnos de pádel"
           href={moduleHref('padel')}
           icon="padel"
         />

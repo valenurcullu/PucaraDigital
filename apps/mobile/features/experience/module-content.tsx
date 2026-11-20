@@ -1,3 +1,11 @@
+import { useMemo } from 'react';
+import {
+  clubDay,
+  createDemoPadelReader,
+  demoClub,
+  offsetClubDay,
+} from '@pucara/shared';
+import { PadelAvailabilityScreen } from '../padel/availability-screen';
 import type {
   MemberActivity,
   MemberExperience,
@@ -57,6 +65,25 @@ function ReservationList({
         />
       )}
     </Section>
+  );
+}
+function DemoPadel({ data }: { data: MemberExperience }) {
+  const firstDay = offsetClubDay(clubDay(new Date(data.referenceInstant)), 1);
+  const reader = useMemo(
+    () =>
+      createDemoPadelReader(
+        firstDay,
+        data.padel.priceMinor,
+        process.env.EXPO_PUBLIC_DATA_MODE,
+      ),
+    [firstDay, data.padel.priceMinor],
+  );
+  return (
+    <PadelAvailabilityScreen
+      firstDay={firstDay}
+      clubId={demoClub.id}
+      reader={reader}
+    />
   );
 }
 function ActivityContent({ activity }: { activity: MemberActivity }) {
@@ -124,27 +151,7 @@ export function ModuleContent({
         </>
       );
     case 'padel':
-      return (
-        <>
-          <Card>
-            <Badge>PÁDEL</Badge>
-            <Copy>
-              {data.padel.durationMinutes} minutos por turno ·{' '}
-              {formatMoney(data.padel.priceMinor)}
-            </Copy>
-            <Copy>{data.padel.availableCredits} crédito disponible · demo</Copy>
-            <Copy muted>
-              Con un crédito, confirmás sin pagar de nuevo. Sin créditos, el
-              turno requiere pago. Precio configurable por el club.
-            </Copy>
-          </Card>
-          <ReservationList data={data} resource="padel" />
-          <StateView
-            title="Disponibilidad en el próximo bloque"
-            description="Todavía no se pueden reservar turnos. Primero se probarán disponibilidad, cancelaciones y créditos en el servidor."
-          />
-        </>
-      );
+      return <DemoPadel data={data} />;
     case 'quinchos':
       return (
         <>

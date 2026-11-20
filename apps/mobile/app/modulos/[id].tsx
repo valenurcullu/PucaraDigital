@@ -9,7 +9,7 @@ import { ModuleContent } from '../../features/experience/module-content';
 export default function ModuleScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   return (
-    <ExperienceScreen>
+    <ExperienceScreen showDemoNotice={id !== 'padel'}>
       {(data) => {
         const module = data.modules.find((item) => item.id === id);
         if (!module)

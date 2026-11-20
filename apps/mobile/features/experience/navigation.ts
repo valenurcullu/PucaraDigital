@@ -39,6 +39,12 @@ const currency = new Intl.NumberFormat('es-AR', {
   currency: 'ARS',
   maximumFractionDigits: 0,
 });
+const currencyWithCentavos = new Intl.NumberFormat('es-AR', {
+  style: 'currency',
+  currency: 'ARS',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 export function formatDate(value: string) {
   return dateTime.format(new Date(value));
 }
@@ -46,5 +52,7 @@ export function formatTime(value: string) {
   return timeOnly.format(new Date(value));
 }
 export function formatMoney(minor: number) {
-  return currency.format(minor / 100);
+  return (minor % 100 === 0 ? currency : currencyWithCentavos).format(
+    minor / 100,
+  );
 }
