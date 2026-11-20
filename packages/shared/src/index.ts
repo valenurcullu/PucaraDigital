@@ -11,3 +11,5 @@ export {
   createDemoExperience,
   createDemoExperienceReader,
 } from './demo-member-experience';
+export * from './padel-availability';
+export { createDemoPadelReader } from './demo-padel-availability';
