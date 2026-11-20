@@ -16,7 +16,7 @@ export const memberTheme = {
     navyPressed: '#223C59',
     navySoft: '#EAF0F6',
     border: '#DEE2E5',
-    controlBorder: '#8490A0',
+    controlBorder: '#768494',
     success: '#226243',
     successBackground: '#E8F3ED',
     error: '#9F2030',

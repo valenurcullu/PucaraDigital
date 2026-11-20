@@ -14,10 +14,7 @@ export default function Club() {
     <ExperienceScreen tab showDemoNotice={false}>
       {(data) => (
         <>
-          <AppHeader
-            title="Tu club, a mano."
-            subtitle="Entrená, encontrate, disfrutá."
-          />
+          <AppHeader title="Club" />
           <ReservationHub data={data} />
           {data.groups
             .filter((group) => !group.modules.includes('padel'))

@@ -22,14 +22,20 @@ export function ModuleLink({
   return module ? (
     <NavRow
       title={module.title}
-      detail={module.summary}
+
       href={moduleHref(id)}
       icon={modulePresentation[id].icon}
       prominent={prominent}
     />
   ) : null;
 }
-export function MatchRows({ matches }: { matches: readonly ClubMatch[] }) {
+export function MatchRows({
+  matches,
+  showFixture = true,
+}: {
+  matches: readonly ClubMatch[];
+  showFixture?: boolean;
+}) {
   if (!matches.length)
     return (
       <StateView
@@ -40,23 +46,29 @@ export function MatchRows({ matches }: { matches: readonly ClubMatch[] }) {
   return (
     <TileGrid minColumnWidth={280}>
       {matches.map((match) => (
-        <MatchCard key={match.id} match={match} />
+        <MatchCard key={match.id} match={match} showFixture={showFixture} />
       ))}
     </TileGrid>
   );
 }
-export function EventRows({ events }: { events: readonly PersonalEvent[] }) {
+export function EventRows({
+  events,
+  showDate = true,
+}: {
+  events: readonly PersonalEvent[];
+  showDate?: boolean;
+}) {
   if (!events.length)
     return (
       <StateView
-        title="Un poco de tiempo libre"
+        title="Sin compromisos"
         description="Tus reservas confirmadas y clases con inscripción aparecerán acá."
       />
     );
   return (
     <>
       {events.map((event) => (
-        <AgendaCard key={event.id} event={event} />
+        <AgendaCard key={event.id} event={event} showDate={showDate} />
       ))}
     </>
   );

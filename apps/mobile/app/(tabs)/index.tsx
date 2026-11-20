@@ -19,10 +19,7 @@ export default function Home() {
     <ExperienceScreen tab showDemoNotice={false}>
       {(data) => (
         <>
-          <AppHeader
-            title={'Hola, ' + data.member.firstName}
-            subtitle="Tu próximo plan empieza en el club."
-          />
+          <AppHeader title={'Hola, ' + data.member.firstName} />
           <ReservationHub data={data} />
           <TileGrid>
             <ActionCard
@@ -49,8 +46,8 @@ export default function Home() {
             <EventRows events={selectPersonalEvents(data).slice(0, 2)} />
           </Section>
           <Section
-            title="La vida del club"
-            action={{ title: 'Ver todas', href: moduleHref('novedades') }}
+            title="Novedades y comunicaciones"
+            action={{ title: 'Ver novedades', href: moduleHref('novedades') }}
           >
             <NoticeRows data={data} limit={2} />
           </Section>

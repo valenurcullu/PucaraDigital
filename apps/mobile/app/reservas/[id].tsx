@@ -8,6 +8,7 @@ import {
   Heading,
   NavRow,
   Section,
+  TileGrid,
   StateView,
 } from '../../components/member-ui';
 import {
@@ -59,31 +60,18 @@ export default function ReservationScreen() {
                   {data.padel.availableCredits} crédito de turno disponible ·
                   demo
                 </Copy>
-                <Copy muted>
-                  1 crédito = 1 turno de 90 minutos. No hay saldo monetario
-                  interno.
-                </Copy>
               </Card>
             ) : null}
             <Section title="Gestionar reserva">
-              <Action title="Modificar" disabled />
+              <TileGrid>
+                <Action title="Modificar" disabled />
+                <Action title="Cancelar" variant="destructive" disabled />
+              </TileGrid>
               <Copy muted>
-                {padel
-                  ? 'Elegirás otra fecha y hora y confirmarás la modificación, sin pagar ni generar créditos. Si falla, se conserva el turno original.'
-                  : 'El cambio de fecha y horario se habilitará cuando estén definidas las condiciones del quincho.'}
-              </Copy>
-              <Action title="Cancelar" disabled />
-              <Copy muted>
-                {padel
-                  ? 'Se solicitará confirmación. Si cumple la política del club, la cancelación liberará el turno y generará exactamente 1 crédito.'
-                  : 'Se solicitará confirmación y se mostrarán las condiciones de cancelación del quincho.'}
+                La modificación y la cancelación están deshabilitadas en la
+                demo.
               </Copy>
             </Section>
-            <Copy muted>
-              Estas acciones todavía no están habilitadas. Las políticas de
-              cancelación y reintegros siguen pendientes de validación con el
-              club.
-            </Copy>
             <NavRow title="Ver mi agenda" href="/agenda" />
           </>
         );

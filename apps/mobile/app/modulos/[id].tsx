@@ -25,7 +25,14 @@ export default function ModuleScreen() {
         return (
           <>
             <Stack.Screen options={{ title: module.title }} />
-            <Heading title={module.title} subtitle={module.summary} />
+            <Heading
+              title={module.title}
+              {...(id === 'padel'
+                ? {
+                    subtitle: 'Turnos de ejemplo · sin disponibilidad en vivo.',
+                  }
+                : {})}
+            />
             <ModuleContent id={module.id} data={data} />
           </>
         );

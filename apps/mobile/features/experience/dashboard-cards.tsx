@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Link } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native';
+import { RoutePressable } from '../../components/route-pressable';
 import { memberTheme as theme } from '@pucara/design-tokens';
 import {
   clubTimeZone,
@@ -10,22 +10,8 @@ import {
 } from '@pucara/shared';
 import { AppIcon } from '../../components/app-icon';
 import { ButtonLink, StatusBadge, TileGrid } from '../../components/member-ui';
-import {
-  formatDate,
-  formatMoney,
-  formatTime,
-  moduleHref,
-  targetHref,
-} from './navigation';
+import { formatDate, formatTime, moduleHref, targetHref } from './navigation';
 
-const dayNumber = new Intl.DateTimeFormat('es-AR', {
-  timeZone: clubTimeZone,
-  day: '2-digit',
-});
-const monthName = new Intl.DateTimeFormat('es-AR', {
-  timeZone: clubTimeZone,
-  month: 'short',
-});
 const dayLabel = new Intl.DateTimeFormat('es-AR', {
   timeZone: clubTimeZone,
   weekday: 'short',
@@ -34,65 +20,48 @@ const dayLabel = new Intl.DateTimeFormat('es-AR', {
 });
 
 export function ReservationHub({ data }: { data: MemberExperience }) {
-  const count = data.reservations.filter(
-    (r) => r.status !== 'cancelled',
-  ).length;
   return (
     <View style={styles.hub}>
       <View style={styles.hubTop}>
         <Text accessibilityRole="header" style={styles.hubTitle}>
-          Reservá tu lugar
+          Reservas
         </Text>
-        <StatusBadge tone="inverse">
+        <StatusBadge>
           {data.padel.availableCredits}{' '}
-          {data.padel.availableCredits === 1 ? 'crédito' : 'créditos'} · demo
+          {data.padel.availableCredits === 1
+            ? 'crédito de pádel'
+            : 'créditos de pádel'}
         </StatusBadge>
       </View>
-      <Text style={styles.hubDetail}>
-        Pádel · {data.padel.durationMinutes} min ·{' '}
-        {formatMoney(data.padel.priceMinor)}
-      </Text>
+      <ButtonLink
+        title="Ver turnos de pádel"
+        icon="padel"
+        href={moduleHref('padel')}
+      />
       <TileGrid>
         <ButtonLink
-          title="Ver turnos de pádel"
-          href={moduleHref('padel')}
-          icon="padel"
+          title="Reservar quincho"
+          icon="quincho"
+          href={moduleHref('quinchos')}
+          variant="secondary"
         />
         <ButtonLink
-          title="Reservar quincho"
-          href={moduleHref('quinchos')}
-          variant="inverse"
-          icon="quincho"
+          title="Mis reservas"
+          icon="reservations"
+          href={moduleHref('reservas')}
+          variant="tonal"
         />
       </TileGrid>
-      <Link href={moduleHref('reservas')} asChild>
-        <Pressable
-          accessibilityRole="link"
-          accessibilityLabel={
-            'Ver mis reservas. ' + count + ' reservas de demostración'
-          }
-          style={({ pressed }) => [
-            styles.myReservations,
-            pressed && styles.hubPressed,
-          ]}
-        >
-          <AppIcon
-            name="reservations"
-            size={20}
-            color={theme.color.inverseText}
-          />
-          <Text style={styles.myReservationsLabel}>Ver mis reservas</Text>
-          <View style={styles.count}>
-            <Text style={styles.countText}>{count}</Text>
-          </View>
-          <AppIcon name="chevron" size={17} color={theme.color.inverseText} />
-        </Pressable>
-      </Link>
-      <Text style={styles.demo}>Vista demo · sin reservas reales</Text>
     </View>
   );
 }
-export function MatchCard({ match }: { match: ClubMatch }) {
+export function MatchCard({
+  match,
+  showFixture = true,
+}: {
+  match: ClubMatch;
+  showFixture?: boolean;
+}) {
   const sport = match.sport === 'rugby' ? 'Rugby' : 'Hockey';
   return (
     <View style={styles.matchCard}>
@@ -136,14 +105,16 @@ export function MatchCard({ match }: { match: ClubMatch }) {
           <ButtonLink
             title="Ver partido"
             href={targetHref({ kind: 'match', id: match.id })}
-            variant="secondary"
+            variant="tonal"
           />
-          <ButtonLink
-            title="Ver fixture"
-            href={moduleHref(match.sport)}
-            variant="secondary"
-            icon="calendar"
-          />
+          {showFixture && (
+            <ButtonLink
+              title="Ver fixture"
+              href={moduleHref(match.sport)}
+              variant="secondary"
+              icon="calendar"
+            />
+          )}
         </TileGrid>
       </View>
     </View>
@@ -157,87 +128,89 @@ export function NoticeCard({
   featured?: boolean;
 }) {
   return (
-    <Link href={targetHref({ kind: 'notice', id: notice.id })} asChild>
-      <Pressable
-        accessibilityRole="link"
-        accessibilityLabel={
-          notice.category +
-          '. ' +
-          notice.title +
-          '. ' +
-          notice.summary +
-          '. Leer comunicado.'
-        }
-        style={({ pressed }) => [
-          styles.notice,
-          featured && styles.featuredNotice,
-          pressed && styles.lightPressed,
-        ]}
-      >
-        <View style={styles.noticeTop}>
-          <View style={[styles.noticeIcon, featured && styles.featuredIcon]}>
-            <AppIcon
-              name="news"
-              size={23}
-              color={featured ? theme.color.inverseText : theme.color.action}
-            />
-          </View>
-          <StatusBadge tone="accent">{notice.category}</StatusBadge>
+    <RoutePressable
+      href={targetHref({ kind: 'notice', id: notice.id })}
+      accessibilityRole="link"
+      accessibilityLabel={
+        notice.category +
+        '. ' +
+        notice.title +
+        '. ' +
+        notice.summary +
+        '. Leer comunicado.'
+      }
+      style={({ pressed }) => [
+        styles.notice,
+        featured && styles.featuredNotice,
+        pressed && styles.lightPressed,
+      ]}
+    >
+      <View style={styles.noticeTop}>
+        <View style={[styles.noticeIcon, featured && styles.featuredIcon]}>
+          <AppIcon
+            name="news"
+            size={23}
+            color={featured ? theme.color.inverseText : theme.color.action}
+          />
         </View>
-        <Text style={styles.noticeTitle}>{notice.title}</Text>
-        <Text style={styles.noticeSummary}>{notice.summary}</Text>
-        <View style={styles.readAction}>
-          <Text style={styles.readLabel}>Leer comunicado</Text>
-          <AppIcon name="arrow" size={17} color={theme.color.action} />
-        </View>
-      </Pressable>
-    </Link>
+        <StatusBadge tone="accent">{notice.category}</StatusBadge>
+      </View>
+      <Text style={styles.noticeTitle}>{notice.title}</Text>
+      <Text style={styles.noticeSummary}>{notice.summary}</Text>
+      <View style={styles.readAction}>
+        <Text style={styles.readLabel}>Leer comunicado</Text>
+        <AppIcon name="arrow" size={17} color={theme.color.action} />
+      </View>
+    </RoutePressable>
   );
 }
-export function AgendaCard({ event }: { event: PersonalEvent }) {
-  const date = new Date(event.startsAt);
+export function AgendaCard({
+  event,
+  showDate = true,
+}: {
+  event: PersonalEvent;
+  showDate?: boolean;
+}) {
+  const status =
+    event.kind === 'reservation'
+      ? 'Reserva confirmada'
+      : event.kind === 'activity'
+        ? 'Clase · inscripto'
+        : 'Entrenamiento';
+  const hours = formatTime(event.startsAt) + ' – ' + formatTime(event.endsAt);
   return (
-    <Link href={targetHref(event.target)} asChild>
-      <Pressable
-        accessibilityRole="link"
-        accessibilityLabel={
-          event.title +
-          '. ' +
-          formatDate(event.startsAt) +
-          '. ' +
-          event.location
-        }
-        style={({ pressed }) => [styles.agenda, pressed && styles.lightPressed]}
-      >
-        <View style={styles.dateBlock} accessible={false}>
-          <Text style={styles.dateNumber}>{dayNumber.format(date)}</Text>
-          <Text style={styles.dateMonth}>
-            {monthName.format(date).replace('.', '').toUpperCase()}
-          </Text>
-        </View>
-        <View style={styles.agendaContent}>
-          <Text style={styles.agendaTitle}>{event.title}</Text>
-          <Text style={styles.agendaMeta}>
-            {formatTime(event.startsAt)} h · {event.location}
-          </Text>
-          <Text style={styles.agendaStatus}>
-            {event.kind === 'reservation'
-              ? 'Reserva confirmada · demo'
-              : event.kind === 'activity'
-                ? 'Inscripción activa · demo'
-                : 'Entrenamiento · demo'}
-          </Text>
-        </View>
-        <AppIcon name="chevron" size={18} color={theme.color.secondaryText} />
-      </Pressable>
-    </Link>
+    <RoutePressable
+      href={targetHref(event.target)}
+      accessibilityLabel={[
+        event.title,
+        formatDate(event.startsAt),
+        hours,
+        event.location,
+        status,
+      ].join('. ')}
+      style={({ pressed }) => [styles.agenda, pressed && styles.lightPressed]}
+    >
+      <View style={styles.agendaContent}>
+        <Text style={styles.eventTime}>
+          {showDate ? dayLabel.format(new Date(event.startsAt)) + ' · ' : ''}
+          {hours}
+        </Text>
+        <Text style={styles.agendaTitle}>{event.title}</Text>
+        <Text style={styles.agendaMeta}>
+          {event.location} · {status}
+        </Text>
+      </View>
+      <AppIcon name="chevron" size={18} color={theme.color.secondaryText} />
+    </RoutePressable>
   );
 }
 const styles = StyleSheet.create({
   hub: {
-    backgroundColor: theme.color.navy,
-    borderRadius: 24,
-    padding: 20,
+    backgroundColor: theme.color.surface,
+    borderWidth: 1,
+    borderColor: theme.color.controlBorder,
+    borderRadius: theme.radius.card,
+    padding: theme.space.md,
     gap: theme.space.md,
   },
   hubTop: {
@@ -248,45 +221,11 @@ const styles = StyleSheet.create({
     gap: theme.space.sm,
   },
   hubTitle: {
-    color: theme.color.inverseText,
+    color: theme.color.navy,
     fontSize: 24,
     fontWeight: '700',
     flexShrink: 1,
   },
-  hubDetail: {
-    color: theme.color.onDarkMuted,
-    fontSize: theme.type.secondary,
-    lineHeight: 22,
-  },
-  myReservations: {
-    minHeight: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.space.sm,
-    borderRadius: 12,
-    paddingHorizontal: 8,
-  },
-  myReservationsLabel: {
-    color: theme.color.inverseText,
-    fontSize: theme.type.secondary,
-    fontWeight: '700',
-    flex: 1,
-  },
-  count: {
-    backgroundColor: theme.color.navyPressed,
-    borderRadius: 10,
-    minWidth: 26,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    alignItems: 'center',
-  },
-  countText: {
-    color: theme.color.inverseText,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  hubPressed: { backgroundColor: theme.color.navyPressed },
-  demo: { color: theme.color.onDarkMuted, fontSize: theme.type.caption },
   matchCard: {
     flexGrow: 1,
     borderWidth: 1,
@@ -338,6 +277,13 @@ const styles = StyleSheet.create({
   matchDay: { color: theme.color.secondaryText, fontSize: 13 },
 
   readAction: {
+    alignSelf: 'flex-start',
+    backgroundColor: theme.color.surface,
+    borderColor: theme.color.controlBorder,
+    borderWidth: 1,
+    borderRadius: theme.radius.control,
+    paddingHorizontal: 12,
+    minHeight: 44,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
@@ -352,15 +298,15 @@ const styles = StyleSheet.create({
   matchFooter: { padding: theme.space.md, paddingTop: 0 },
   notice: {
     borderWidth: 1,
-    borderColor: theme.color.border,
+    borderColor: theme.color.controlBorder,
     borderRadius: theme.radius.card,
-    padding: 20,
+    padding: theme.space.lg,
     backgroundColor: theme.color.surface,
     gap: theme.space.md,
   },
   featuredNotice: {
     backgroundColor: theme.color.actionSoft,
-    borderColor: theme.color.actionBorder,
+    borderColor: theme.color.controlBorder,
   },
   noticeTop: {
     flexDirection: 'row',
@@ -388,23 +334,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: theme.space.md,
     padding: theme.space.lg,
-    borderRadius: theme.radius.card,
+    borderRadius: theme.radius.control,
     borderWidth: 1,
-    borderColor: theme.color.border,
+    borderColor: theme.color.controlBorder,
     backgroundColor: theme.color.surface,
   },
-  dateBlock: {
-    minWidth: 50,
-    borderRadius: 13,
-    padding: 8,
-    alignItems: 'center',
-    backgroundColor: theme.color.navySoft,
-  },
-  dateNumber: { fontSize: 25, fontWeight: '800', color: theme.color.navy },
-  dateMonth: {
-    fontSize: 11,
+  eventTime: {
+    color: theme.color.action,
     fontWeight: '700',
-    color: theme.color.secondaryText,
+    fontSize: theme.type.secondary,
+    fontVariant: ['tabular-nums'],
   },
   agendaContent: { flex: 1, minWidth: 0, gap: 4 },
   agendaTitle: {
@@ -417,6 +356,5 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: theme.color.secondaryText,
   },
-  agendaStatus: { fontSize: 12, lineHeight: 18, color: theme.color.success },
   lightPressed: { backgroundColor: theme.color.navySoft },
 });

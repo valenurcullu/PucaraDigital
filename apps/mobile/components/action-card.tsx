@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Link, type Href } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native';
+import type { Href } from 'expo-router';
+import { RoutePressable } from './route-pressable';
 import { memberTheme as theme } from '@pucara/design-tokens';
 import { AppIcon, type AppIconName } from './app-icon';
 import { StatusBadge } from './member-ui';
@@ -22,52 +23,53 @@ export function ActionCard({
   accent?: boolean;
 }) {
   return (
-    <Link href={href} asChild>
-      <Pressable
-        accessibilityRole="link"
-        accessibilityLabel={[title, detail, badge, action]
-          .filter(Boolean)
-          .join('. ')}
-        style={({ pressed }) => [
-          styles.card,
-          accent && styles.accent,
-          pressed && styles.pressed,
-        ]}
-      >
-        <View style={styles.top}>
-          <View style={[styles.iconWell, accent && styles.accentWell]}>
-            <AppIcon
-              name={icon}
-              size={26}
-              color={accent ? theme.color.action : theme.color.navy}
-            />
-          </View>
-          <AppIcon name="chevron" size={17} color={theme.color.secondaryText} />
+    <RoutePressable
+      href={href}
+      accessibilityRole="link"
+      accessibilityLabel={[title, detail, badge, action]
+        .filter(Boolean)
+        .join('. ')}
+      style={({ pressed }) => [
+        styles.card,
+        accent && styles.accent,
+        pressed && styles.pressed,
+      ]}
+    >
+      <View style={styles.top}>
+        <View style={[styles.iconWell, accent && styles.accentWell]}>
+          <AppIcon
+            name={icon}
+            size={21}
+            color={accent ? theme.color.action : theme.color.navy}
+          />
         </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
-          {detail ? <Text style={styles.detail}>{detail}</Text> : null}
-          {badge ? <StatusBadge tone="positive">{badge}</StatusBadge> : null}
-        </View>
+      </View>
+      <View style={styles.content}>
+        <Text style={styles.title}>{title}</Text>
+        {detail ? <Text style={styles.detail}>{detail}</Text> : null}
+        {badge ? <StatusBadge tone="positive">{badge}</StatusBadge> : null}
+      </View>
+      <View style={styles.actionBar}>
         <Text style={styles.action}>{action}</Text>
-      </Pressable>
-    </Link>
+        <AppIcon name="chevron" size={15} color={theme.color.navy} />
+      </View>
+    </RoutePressable>
   );
 }
 const styles = StyleSheet.create({
   card: {
     flexGrow: 1,
-    minHeight: 156,
-    padding: theme.space.lg,
-    gap: theme.space.md,
+    minHeight: 108,
+    padding: theme.space.md,
+    gap: theme.space.sm,
     backgroundColor: theme.color.surface,
     borderWidth: 1,
-    borderColor: theme.color.border,
+    borderColor: theme.color.controlBorder,
     borderRadius: theme.radius.card,
   },
   accent: {
     backgroundColor: theme.color.actionSoft,
-    borderColor: theme.color.actionBorder,
+    borderColor: theme.color.controlBorder,
   },
   top: {
     flexDirection: 'row',
@@ -76,8 +78,8 @@ const styles = StyleSheet.create({
     gap: theme.space.sm,
   },
   iconWell: {
-    width: 46,
-    height: 46,
+    width: 34,
+    height: 34,
     borderRadius: 15,
     backgroundColor: theme.color.navySoft,
     justifyContent: 'center',
@@ -91,10 +93,22 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     color: theme.color.secondaryText,
   },
+  actionBar: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 4,
+    backgroundColor: theme.color.navySoft,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
   action: {
+    flexShrink: 1,
     fontSize: theme.type.secondary,
     fontWeight: '700',
-    color: theme.color.action,
+    color: theme.color.navy,
   },
   pressed: {
     backgroundColor: theme.color.navySoft,

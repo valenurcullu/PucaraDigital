@@ -15,9 +15,6 @@ export default function Account() {
           <Card>
             <Copy>Socio {data.member.number}</Copy>
             <Copy>{data.member.administrativeStatus}</Copy>
-            <Copy muted>
-              Datos de demostración. Todavía no hay una sesión autenticada.
-            </Copy>
           </Card>
           <Section title="Tu relación con el club">
             <ModuleLink data={data} id="cuenta-corriente" />

@@ -40,10 +40,7 @@ export default function MatchScreen() {
               <Copy>{formatDate(match.startsAt)}</Copy>
               <Copy>{match.location}</Copy>
             </Card>
-            <Copy muted>
-              Partido ficticio. Consultar este encuentro no lo agrega a tu
-              agenda personal ni implica una convocatoria.
-            </Copy>
+
             <NavRow
               title="Ver fixture del deporte"
               href={moduleHref(match.sport)}

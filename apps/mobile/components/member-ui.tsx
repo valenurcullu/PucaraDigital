@@ -10,7 +10,14 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link, type Href } from 'expo-router';
+import type { Href } from 'expo-router';
+import { SafeAreaView as TabSafeArea } from 'react-native-screens/experimental';
+import { RoutePressable } from './route-pressable';
+import {
+  buttonColors,
+  controlColors,
+  type ButtonVariant,
+} from './control-colors';
 import { memberTheme as theme } from '@pucara/design-tokens';
 import type { MemberExperience } from '@pucara/shared';
 import { useExperience } from '../features/experience/provider';
@@ -46,7 +53,7 @@ export function AppHeader({
   subtitle,
 }: {
   title: string;
-  subtitle: string;
+  subtitle?: string;
 }) {
   return (
     <View style={styles.appHeader}>
@@ -55,20 +62,19 @@ export function AppHeader({
           <Text style={styles.wordmark}>PUCARÁ</Text>
           <StatusBadge tone="accent">DEMO</StatusBadge>
         </View>
-        <Link href="/cuenta" asChild>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Abrir mi cuenta"
-            style={({ pressed }) => [
-              styles.avatar,
-              pressed && styles.softPressed,
-            ]}
-          >
-            <AppIcon name="person" size={27} />
-          </Pressable>
-        </Link>
+        <RoutePressable
+          href="/cuenta"
+          accessibilityRole="button"
+          accessibilityLabel="Abrir mi cuenta"
+          style={({ pressed }) => [
+            styles.avatar,
+            pressed && styles.softPressed,
+          ]}
+        >
+          <AppIcon name="person" size={27} />
+        </RoutePressable>
       </View>
-      <Heading title={title} subtitle={subtitle} />
+      <Heading title={title} {...(subtitle ? { subtitle } : {})} />
     </View>
   );
 }
@@ -86,18 +92,7 @@ export function SectionHeader({
         {title}
       </Text>
       {action ? (
-        <Link href={action.href} asChild>
-          <Pressable
-            accessibilityRole="link"
-            style={({ pressed }) => [
-              styles.sectionAction,
-              pressed && styles.softPressed,
-            ]}
-          >
-            <Text style={styles.sectionActionText}>{action.title}</Text>
-            <AppIcon name="arrow" size={16} color={theme.color.action} />
-          </Pressable>
-        </Link>
+        <ButtonLink title={action.title} href={action.href} variant="tonal" />
       ) : null}
     </View>
   );
@@ -146,78 +141,67 @@ export function DemoNotice() {
     </View>
   );
 }
-type ButtonVariant = 'primary' | 'secondary' | 'inverse';
+interface ButtonProps {
+  title: string;
+  variant?: ButtonVariant;
+  icon?: AppIconName;
+}
 export function ButtonLink({
   title,
   href,
   variant = 'primary',
-  icon = 'arrow',
-}: {
-  title: string;
-  href: Href;
-  variant?: ButtonVariant;
-  icon?: AppIconName;
-}) {
-  const color =
-    variant === 'primary'
-      ? theme.color.inverseText
-      : variant === 'inverse'
-        ? theme.color.inverseText
-        : theme.color.text;
+  icon,
+}: ButtonProps & { href: Href }) {
+  const colors = buttonColors(variant, false);
   return (
-    <Link href={href} asChild>
-      <Pressable
-        accessibilityRole="link"
-        accessibilityLabel={title}
-        style={({ pressed }) => [
-          styles.button,
-          buttonStyles[variant],
-          pressed &&
-            (variant === 'primary'
-              ? styles.primaryPressed
-              : styles.buttonPressed),
-        ]}
-      >
-        <Text style={[styles.buttonText, { color }]}>{title}</Text>
-        <AppIcon name={icon} size={20} color={color} />
-      </Pressable>
-    </Link>
+    <RoutePressable
+      href={href}
+      accessibilityLabel={title}
+      style={({ pressed }) => [
+        styles.button,
+        {
+          backgroundColor: pressed ? colors.pressed : colors.fill,
+          borderColor: colors.border,
+        },
+      ]}
+    >
+      {icon && <AppIcon name={icon} size={18} color={colors.ink} />}
+      <Text style={[styles.buttonText, { color: colors.ink }]}>{title}</Text>
+    </RoutePressable>
   );
 }
 export function Action({
   title,
   onPress,
+  accessibilityLabel,
+  variant = 'primary',
   disabled = false,
-}: {
-  title: string;
+  loading = false,
+}: ButtonProps & {
   onPress?: () => void;
+  accessibilityLabel?: string;
   disabled?: boolean;
+  loading?: boolean;
 }) {
+  const inactive = disabled || loading;
+  const colors = buttonColors(variant, inactive);
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ disabled }}
-      disabled={disabled}
+      accessibilityLabel={accessibilityLabel ?? title}
+      accessibilityState={{ disabled: inactive, busy: loading }}
+      disabled={inactive}
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        buttonStyles.primary,
-        disabled && styles.disabled,
-        pressed && styles.primaryPressed,
+        {
+          backgroundColor: pressed ? colors.pressed : colors.fill,
+          borderColor: colors.border,
+        },
       ]}
     >
-      <Text
-        style={[
-          styles.buttonText,
-          {
-            color: disabled
-              ? theme.color.secondaryText
-              : theme.color.inverseText,
-          },
-        ]}
-      >
-        {title}
-      </Text>
+      {loading && <ActivityIndicator color={colors.ink} />}
+      <Text style={[styles.buttonText, { color: colors.ink }]}>{title}</Text>
     </Pressable>
   );
 }
@@ -235,42 +219,39 @@ export function NavRow({
   icon?: AppIconName;
 }) {
   return (
-    <Link href={href} asChild>
-      <Pressable
-        accessibilityRole="link"
-        accessibilityLabel={detail ? title + '. ' + detail : title}
-        style={({ pressed }) => [
-          styles.row,
-          prominent && styles.prominent,
-          pressed && (prominent ? styles.darkPressed : styles.softPressed),
-        ]}
-      >
-        <View style={[styles.iconWell, prominent && styles.iconWellInverse]}>
-          <AppIcon
-            name={icon}
-            size={22}
-            color={prominent ? theme.color.inverseText : theme.color.action}
-          />
-        </View>
-        <View style={styles.rowContent}>
-          <Text style={[styles.rowTitle, prominent && styles.inverse]}>
-            {title}
-          </Text>
-          {detail ? (
-            <Text style={[styles.detail, prominent && styles.inverseMuted]}>
-              {detail}
-            </Text>
-          ) : null}
-        </View>
+    <RoutePressable
+      href={href}
+      accessibilityRole="link"
+      accessibilityLabel={detail ? title + '. ' + detail : title}
+      style={({ pressed }) => [
+        styles.row,
+        prominent && styles.prominent,
+        pressed && (prominent ? styles.darkPressed : styles.softPressed),
+      ]}
+    >
+      <View style={[styles.iconWell, prominent && styles.iconWellInverse]}>
         <AppIcon
-          name="chevron"
-          size={18}
-          color={
-            prominent ? theme.color.inverseText : theme.color.secondaryText
-          }
+          name={icon}
+          size={22}
+          color={prominent ? theme.color.inverseText : theme.color.action}
         />
-      </Pressable>
-    </Link>
+      </View>
+      <View style={styles.rowContent}>
+        <Text style={[styles.rowTitle, prominent && styles.inverse]}>
+          {title}
+        </Text>
+        {detail ? (
+          <Text style={[styles.detail, prominent && styles.inverseMuted]}>
+            {detail}
+          </Text>
+        ) : null}
+      </View>
+      <AppIcon
+        name="chevron"
+        size={18}
+        color={prominent ? theme.color.inverseText : theme.color.secondaryText}
+      />
+    </RoutePressable>
   );
 }
 export function TileGrid({
@@ -330,7 +311,7 @@ function LoadingState() {
         <ActivityIndicator color={theme.color.action} />
         <Text style={styles.rowTitle}>Preparando tu club</Text>
       </View>
-      <Copy muted>Un momento, estamos cargando tu información.</Copy>
+
       <View
         accessible={false}
         accessibilityElementsHidden
@@ -353,24 +334,26 @@ export function MemberScreen({
   tab?: boolean;
   showDemoNotice?: boolean;
 }) {
-  return (
-    <SafeAreaView
-      style={styles.safe}
-      edges={
-        tab
-          ? Platform.OS === 'ios'
-            ? ['left', 'right']
-            : ['top', 'left', 'right']
-          : ['left', 'right', 'bottom']
-      }
+  const scroll = (
+    <ScrollView
+      contentInsetAdjustmentBehavior="never"
+      automaticallyAdjustsScrollIndicatorInsets={false}
+      contentContainerStyle={styles.content}
     >
-      <ScrollView
-        contentInsetAdjustmentBehavior={tab ? 'automatic' : 'never'}
-        contentContainerStyle={styles.content}
-      >
-        {showDemoNotice ? <DemoNotice /> : null}
-        {children}
-      </ScrollView>
+      {showDemoNotice && <DemoNotice />}
+      {children}
+    </ScrollView>
+  );
+  return tab ? (
+    <TabSafeArea
+      style={styles.safe}
+      edges={{ top: true, left: true, right: true, bottom: true }}
+    >
+      {scroll}
+    </TabSafeArea>
+  ) : (
+    <SafeAreaView style={styles.safe} edges={['left', 'right', 'bottom']}>
+      {scroll}
     </SafeAreaView>
   );
 }
@@ -408,7 +391,7 @@ const styles = StyleSheet.create({
     maxWidth: 760,
     alignSelf: 'center',
     padding: 20,
-    gap: theme.space.xl,
+    gap: theme.space.lg,
     paddingBottom: theme.space.xxl,
   },
   appHeader: { gap: theme.space.lg },
@@ -463,20 +446,6 @@ const styles = StyleSheet.create({
     color: theme.color.text,
     flexShrink: 1,
   },
-  sectionAction: {
-    minHeight: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    borderRadius: 12,
-    paddingHorizontal: 8,
-  },
-  sectionActionText: {
-    fontSize: theme.type.secondary,
-    fontWeight: '700',
-    color: theme.color.action,
-  },
   card: {
     backgroundColor: theme.color.surface,
     borderRadius: theme.radius.card,
@@ -508,22 +477,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.space.sm,
-    paddingHorizontal: theme.space.lg,
-    paddingVertical: 14,
+    paddingHorizontal: theme.space.md,
+    paddingVertical: 10,
     borderRadius: theme.radius.control,
     borderWidth: 1,
   },
   buttonText: { fontSize: theme.type.body, fontWeight: '700', flexShrink: 1 },
-  disabled: {
-    backgroundColor: theme.color.subtle,
-    borderColor: theme.color.border,
-  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.space.md,
     padding: theme.space.lg,
-    minHeight: 72,
+    minHeight: 58,
     backgroundColor: theme.color.surface,
     borderRadius: theme.radius.card,
     borderColor: theme.color.border,
@@ -551,18 +516,16 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   prominent: {
-    backgroundColor: theme.color.navy,
-    borderColor: theme.color.navy,
+    backgroundColor: controlColors.selected.fill,
+    borderColor: controlColors.selected.border,
   },
-  inverse: { color: theme.color.inverseText },
+  inverse: { color: controlColors.selected.ink },
   inverseMuted: { color: theme.color.onDarkMuted },
   softPressed: {
     backgroundColor: theme.color.navySoft,
     borderColor: theme.color.controlBorder,
   },
   darkPressed: { backgroundColor: theme.color.navyPressed },
-  primaryPressed: { backgroundColor: theme.color.actionPressed },
-  buttonPressed: { opacity: 0.7 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.md },
   gridItem: { flexBasis: '47%', flexGrow: 1, minWidth: 0 },
   gridSingle: { flexBasis: '100%' },
@@ -576,8 +539,8 @@ const styles = StyleSheet.create({
   },
   errorState: { borderColor: theme.color.error },
   stateIcon: {
-    width: 56,
-    height: 56,
+    width: 40,
+    height: 40,
     backgroundColor: theme.color.navySoft,
     borderRadius: 18,
     alignItems: 'center',
@@ -622,18 +585,4 @@ const badgeTextStyles = StyleSheet.create({
   positive: { color: theme.color.success },
   inverse: { color: theme.color.inverseText },
   danger: { color: theme.color.error },
-});
-const buttonStyles = StyleSheet.create({
-  primary: {
-    backgroundColor: theme.color.action,
-    borderColor: theme.color.action,
-  },
-  secondary: {
-    backgroundColor: theme.color.surface,
-    borderColor: theme.color.controlBorder,
-  },
-  inverse: {
-    backgroundColor: theme.color.navy,
-    borderColor: theme.color.inverseBorder,
-  },
 });

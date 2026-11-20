@@ -12,7 +12,7 @@ export default function Carnet() {
     <ExperienceScreen tab>
       {(data) => (
         <>
-          <Heading title="Tu carnet" subtitle="Pertenecer nos une." />
+          <Heading title="Tu carnet" />
           <Card>
             <Badge>CLUB PUCARÁ</Badge>
             <Heading title={data.member.name} />
@@ -27,10 +27,6 @@ export default function Carnet() {
               <Copy muted>Sin validez de ingreso</Copy>
             </View>
           </Card>
-          <Copy muted>
-            Todos los datos son ficticios. El código verificable y su validación
-            en el club se incorporarán en otro bloque.
-          </Copy>
         </>
       )}
     </ExperienceScreen>

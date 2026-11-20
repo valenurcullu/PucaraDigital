@@ -13,6 +13,7 @@ import type {
 } from '@pucara/shared';
 import {
   Action,
+  ButtonLink,
   Badge,
   Card,
   Copy,
@@ -27,7 +28,7 @@ import {
   moduleHref,
   targetHref,
 } from './navigation';
-import { MatchRows, ModuleLink, NoticeRows } from './rows';
+import { MatchRows, NoticeRows } from './rows';
 
 function ReservationList({
   data,
@@ -117,11 +118,7 @@ function ActivityContent({ activity }: { activity: MemberActivity }) {
         }
         disabled
       />
-      <Copy muted>
-        Las inscripciones se habilitarán en un próximo bloque. Una inscripción
-        recurrente incorpora clases futuras a tu Agenda; no confirma asistencia
-        individual. La baja retira sólo las clases futuras de tu calendario.
-      </Copy>
+      <Copy muted>Inscripciones en modo de consulta.</Copy>
       <NavRow title="Ver mi agenda" href="/agenda" />
     </>
   );
@@ -137,16 +134,24 @@ export function ModuleContent({
     case 'reservas':
       return (
         <>
-          <ModuleLink data={data} id="padel" prominent />
-          <ModuleLink data={data} id="quinchos" />
-          <Card>
-            <Copy>
-              {data.padel.availableCredits} crédito de pádel disponible · demo
-            </Copy>
-            <Copy muted>
-              1 crédito equivale a un turno completo. No es saldo en pesos.
-            </Copy>
-          </Card>
+          <ButtonLink
+            title="Ver disponibilidad de pádel"
+            href={moduleHref('padel')}
+            icon="padel"
+          />
+          <ButtonLink
+            title="Reservar quincho"
+            href={moduleHref('quinchos')}
+            variant="secondary"
+            icon="quincho"
+          />
+          <Badge>
+            {data.padel.availableCredits}{' '}
+            {data.padel.availableCredits === 1
+              ? 'crédito de turno'
+              : 'créditos de turno'}{' '}
+            · demo
+          </Badge>
           <ReservationList data={data} />
         </>
       );
@@ -155,14 +160,10 @@ export function ModuleContent({
     case 'quinchos':
       return (
         <>
-          <Copy>
-            Elegí un espacio para compartir en el club. La aprobación y el pago
-            dependerán de las condiciones de cada reserva.
-          </Copy>
           <ReservationList data={data} resource="quincho" />
           <StateView
             title="Consulta de disponibilidad pendiente"
-            description="La selección de fecha y horario se habilitará en otro bloque. Las condiciones de aprobación y pago deben validarse con el club."
+            description="La consulta de horarios de quinchos aún no está habilitada."
           />
         </>
       );
@@ -184,6 +185,7 @@ export function ModuleContent({
         <>
           <Section title="Fixture">
             <MatchRows
+              showFixture={false}
               matches={data.matches.filter((match) => match.sport === id)}
             />
           </Section>
@@ -196,17 +198,9 @@ export function ModuleContent({
     case 'gimnasio':
       return (
         <>
-          <Card>
-            <Badge>ENTRENAMIENTO LIBRE</Badge>
-            <Copy>Tu rutina, a tu ritmo.</Copy>
-            <Copy muted>
-              Entrená cuando puedas. Las rutinas no generan horarios automáticos
-              en Agenda.
-            </Copy>
-          </Card>
           <StateView
             title="Todavía no hay una rutina asignada"
-            description="La asignación de rutinas, el registro de cargas por serie y tu historial son parte del próximo bloque deportivo."
+            description="Cuando tengas una rutina asignada, la vas a encontrar acá."
           />
         </>
       );
@@ -219,10 +213,6 @@ export function ModuleContent({
           <Copy>{data.account.status}</Copy>
           <Copy>Deuda: {formatMoney(data.account.amountDueMinor)}</Copy>
           <Copy>{data.account.scholarship}</Copy>
-          <Copy muted>
-            La situación económica es independiente del estado administrativo.
-            No es una billetera ni un saldo disponible para reservas.
-          </Copy>
         </Card>
       );
     case 'familia':
@@ -242,11 +232,6 @@ export function ModuleContent({
               description="Los vínculos verificados se mostrarán acá."
             />
           )}
-          <Copy muted>
-            Un menor puede tener más de un responsable autorizado. El registro
-            del socio y la cuenta de acceso son distintos; la verificación y los
-            permisos aún no están implementados.
-          </Copy>
         </>
       );
     case 'perfil':
@@ -255,10 +240,6 @@ export function ModuleContent({
           <Copy>{data.member.name}</Copy>
           <Copy>Socio {data.member.number}</Copy>
           <Copy>{data.member.administrativeStatus}</Copy>
-          <Copy muted>
-            Perfil ficticio de lectura. La edición se incorporará con identidad
-            y permisos verificados.
-          </Copy>
         </Card>
       );
     case 'eventos':
