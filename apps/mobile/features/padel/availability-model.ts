@@ -4,19 +4,20 @@ import type {
   PadelAvailabilityReader,
   PadelSlot,
 } from '@pucara/shared';
-import { clubTimeZone } from '@pucara/shared';
 import { formatMoney, formatTime } from '../experience/navigation';
 
+export interface AvailableCourt {
+  id: string;
+  name: string;
+  slots: PadelSlot[];
+}
 export type AvailabilityState =
   | { status: 'loading' | 'empty' | 'error' }
-  | { status: 'ready'; courts: ReturnType<typeof groupByCourt> };
+  | { status: 'ready'; courts: AvailableCourt[] };
 
 function groupByCourt(data: PadelAvailability) {
   const names = new Map(data.courts.map((court) => [court.id, court.name]));
-  const groups = new Map<
-    string,
-    { id: string; name: string; slots: PadelSlot[] }
-  >();
+  const groups = new Map<string, AvailableCourt>();
   for (const slot of data.slots) {
     let group = groups.get(slot.court_id);
     if (!group) {
@@ -49,24 +50,6 @@ export async function loadAvailability(
   } catch {
     if (!signal.aborted) publish({ status: 'error' });
   }
-}
-const weekday = new Intl.DateTimeFormat('es-AR', {
-  timeZone: clubTimeZone,
-  weekday: 'short',
-});
-const fullDay = new Intl.DateTimeFormat('es-AR', {
-  timeZone: clubTimeZone,
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-});
-export function dayLabels(day: string) {
-  const noon = new Date(day + 'T12:00:00-03:00');
-  return {
-    weekday: weekday.format(noon),
-    number: String(noon.getUTCDate()),
-    full: fullDay.format(noon),
-  };
 }
 export function slotLabels(slot: PadelSlot) {
   const minutes =

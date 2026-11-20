@@ -1,3 +1,4 @@
+import { dayLabels } from '../experience/calendar';
 import { describe, expect, it, vi } from 'vitest';
 import {
   padelDayQuery,
@@ -5,7 +6,6 @@ import {
   type PadelSlot,
 } from '@pucara/shared';
 import {
-  dayLabels,
   loadAvailability,
   slotLabels,
   type AvailabilityState,

@@ -26,12 +26,14 @@ import {
   StateView,
 } from '../../components/member-ui';
 import {
-  dayLabels,
   loadAvailability,
   slotLabels,
+  type AvailableCourt,
   type AvailabilityState,
 } from './availability-model';
 
+import { dayLabels } from '../experience/calendar';
+import { DateStrip } from '../../components/date-strip';
 interface Props {
   reader: PadelAvailabilityReader<AbortSignal>;
   clubId: string;
@@ -46,33 +48,7 @@ export function PadelAvailabilityScreen({ reader, clubId, firstDay }: Props) {
   return (
     <>
       <Section title="Elegí un día">
-        <View style={styles.choices}>
-          {days.map((value) => {
-            const labels = dayLabels(value);
-            const selected = value === day;
-            return (
-              <Pressable
-                key={value}
-                accessibilityRole="button"
-                accessibilityLabel={labels.full}
-                accessibilityState={{ selected }}
-                onPress={() => setDay(value)}
-                style={({ pressed }) => [
-                  styles.day,
-                  selected && styles.active,
-                  pressed && styles.pressed,
-                ]}
-              >
-                <Text style={[styles.weekday, selected && styles.inverse]}>
-                  {labels.weekday}
-                </Text>
-                <Text style={[styles.number, selected && styles.inverse]}>
-                  {labels.number}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        <DateStrip days={days} selected={day} onSelect={setDay} />
       </Section>
       <DayResults
         key={clubId + day}
@@ -130,55 +106,11 @@ function DayResults({
   return (
     <Section title={dayLabels(day).full}>
       {state.courts.map((court) => (
-        <Card key={court.id}>
-          <View style={styles.courtTitle}>
-            <AppIcon name="padel" color={theme.color.action} />
-            <Text accessibilityRole="header" style={styles.name}>
-              {court.name}
-            </Text>
-          </View>
-          {court.slots.map((slot) => {
-            const labels = slotLabels(slot);
-            return (
-              <Pressable
-                key={slot.starts_at}
-                accessibilityRole="button"
-                accessibilityLabel={
-                  court.name +
-                  ', ' +
-                  labels.start +
-                  ' a ' +
-                  labels.end +
-                  ', ' +
-                  labels.duration +
-                  ', ' +
-                  labels.price
-                }
-                accessibilityHint="Abre el resumen del turno"
-                onPress={() => select({ court: court.name, slot })}
-                style={({ pressed }) => [
-                  styles.slot,
-                  pressed && styles.pressed,
-                ]}
-              >
-                <View style={styles.time}>
-                  <Text style={styles.hour}>
-                    {labels.start} – {labels.end}
-                  </Text>
-                  <Text style={styles.detail}>{labels.duration}</Text>
-                </View>
-                <View style={styles.amount}>
-                  <Text style={styles.price}>{labels.price}</Text>
-                  <AppIcon
-                    name="chevron"
-                    size={16}
-                    color={theme.color.action}
-                  />
-                </View>
-              </Pressable>
-            );
-          })}
-        </Card>
+        <CourtSlots
+          key={court.id}
+          court={court}
+          onSelect={(slot) => select({ court: court.name, slot })}
+        />
       ))}
       {selection && (
         <SlotSummary
@@ -192,7 +124,59 @@ function DayResults({
   );
 }
 
-function SlotSummary({
+export function CourtSlots({
+  court,
+  onSelect,
+}: {
+  court: AvailableCourt;
+  onSelect: (slot: PadelSlot) => void;
+}) {
+  return (
+    <Card>
+      <View style={styles.courtTitle}>
+        <AppIcon name="padel" color={theme.color.action} />
+        <Text accessibilityRole="header" style={styles.name}>
+          {court.name}
+        </Text>
+      </View>
+      {court.slots.map((slot) => {
+        const labels = slotLabels(slot);
+        return (
+          <Pressable
+            key={slot.starts_at}
+            accessibilityRole="button"
+            accessibilityLabel={
+              court.name +
+              ', ' +
+              labels.start +
+              ' a ' +
+              labels.end +
+              ', ' +
+              labels.duration +
+              ', ' +
+              labels.price
+            }
+            accessibilityHint="Abre el resumen del turno"
+            onPress={() => onSelect(slot)}
+            style={({ pressed }) => [styles.slot, pressed && styles.pressed]}
+          >
+            <View style={styles.time}>
+              <Text style={styles.hour}>
+                {labels.start} – {labels.end}
+              </Text>
+              <Text style={styles.detail}>{labels.duration}</Text>
+            </View>
+            <View style={styles.amount}>
+              <Text style={styles.price}>{labels.price}</Text>
+              <Text style={styles.openSlot}>Ver resumen</Text>
+            </View>
+          </Pressable>
+        );
+      })}
+    </Card>
+  );
+}
+export function SlotSummary({
   court,
   slot,
   day,
@@ -231,10 +215,7 @@ function SlotSummary({
                 <Text style={styles.price}>{labels.price}</Text>
               </View>
             </View>
-            <Copy muted>
-              Vista previa de demostración. Elegir este turno no genera una
-              reserva.
-            </Copy>
+            <Copy muted>Turno de ejemplo. No se generó una reserva.</Copy>
             <Action title="Volver a los horarios" onPress={onClose} />
           </ScrollView>
         </SafeAreaView>
@@ -244,33 +225,10 @@ function SlotSummary({
 }
 
 const styles = StyleSheet.create({
-  choices: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm },
-  day: {
-    flexGrow: 1,
-    minWidth: 58,
-    minHeight: 68,
-    padding: theme.space.sm,
-    borderRadius: theme.radius.control,
-    backgroundColor: theme.color.surface,
-    borderColor: theme.color.controlBorder,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  pressed: {
+    backgroundColor: theme.color.navySoft,
+    borderColor: theme.color.navy,
   },
-  weekday: {
-    fontSize: theme.type.secondary,
-    color: theme.color.secondaryText,
-    textTransform: 'capitalize',
-  },
-  number: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: theme.color.navy,
-    fontVariant: ['tabular-nums'],
-  },
-  active: { backgroundColor: theme.color.navy, borderColor: theme.color.navy },
-  inverse: { color: theme.color.inverseText },
-  pressed: { opacity: 0.65 },
   loading: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -289,6 +247,8 @@ const styles = StyleSheet.create({
     color: theme.color.navy,
   },
   slot: {
+    borderWidth: 1,
+    borderColor: theme.color.controlBorder,
     minHeight: 62,
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -307,7 +267,12 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   detail: { fontSize: theme.type.secondary, color: theme.color.secondaryText },
-  amount: { gap: theme.space.xs, alignItems: 'center', flexDirection: 'row' },
+  amount: { gap: theme.space.xs, alignItems: 'flex-end' },
+  openSlot: {
+    color: theme.color.action,
+    fontWeight: '700',
+    fontSize: theme.type.secondary,
+  },
   price: {
     fontSize: theme.type.body,
     fontWeight: '700',
