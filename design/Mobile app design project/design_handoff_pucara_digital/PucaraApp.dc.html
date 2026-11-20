@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block">
+<style>
+body{margin:0;background:#E7E6E1;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input{font-family:inherit}
+a{color:#BC2438}a:hover{color:#981B2C}
+@keyframes pdUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes pdFade{from{opacity:0}to{opacity:1}}
+@keyframes pdToast{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</helmet>
+<div style="display:flex;justify-content:center;padding:24px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif;color:#18283B">
+<div style="width:412px;height:866px;border-radius:62px;background:#0B0C0E;padding:11px;box-sizing:border-box;box-shadow:0 30px 60px -20px rgba(20,38,61,.35),0 0 0 1px #2a2c30;flex:none">
+<div data-screen-label="{{ screenLabel }}" style="position:relative;width:390px;height:844px;border-radius:51px;overflow:hidden;background:#F4F3EF">
+
+<!-- STATUS BAR -->
+<div style="position:absolute;top:0;left:0;right:0;height:50px;z-index:30;background:{{ statusBg }};color:{{ statusFg }}">
+<sc-if value="{{ ios }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;justify-content:space-between;height:50px;padding:0 30px 0 44px;font-size:16px;font-weight:600">
+<span>9:41</span>
+<div style="position:absolute;left:50%;top:11px;transform:translateX(-50%);width:122px;height:34px;border-radius:20px;background:#000"></div>
+<div style="display:flex;gap:5px;align-items:center"><span class="material-symbols-rounded" style="font-size:18px;font-variation-settings:'FILL' 1">signal_cellular_alt</span><span class="material-symbols-rounded" style="font-size:18px;font-variation-settings:'FILL' 1">wifi</span><span class="material-symbols-rounded" style="font-size:22px;font-variation-settings:'FILL' 1">battery_full</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ android }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;justify-content:space-between;height:50px;padding:6px 28px 0;font-size:14px;font-weight:500;box-sizing:border-box">
+<span>9:41</span>
+<div style="position:absolute;left:50%;top:16px;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:#000"></div>
+<div style="display:flex;gap:4px;align-items:center"><span class="material-symbols-rounded" style="font-size:17px;font-variation-settings:'FILL' 1">wifi</span><span class="material-symbols-rounded" style="font-size:17px;font-variation-settings:'FILL' 1">signal_cellular_alt</span><span class="material-symbols-rounded" style="font-size:18px;font-variation-settings:'FILL' 1">battery_full</span></div>
+</div>
+</sc-if>
+</div>
+
+<!-- SCROLL -->
+<div ref="{{ scrollRef }}" style="position:absolute;top:50px;left:0;right:0;bottom:84px;overflow-y:auto;overflow-x:hidden;scrollbar-width:none">
+
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ false }}">
+<div style="position:sticky;top:0;z-index:10;background:rgba(244,243,239,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+<sc-if value="{{ ios }}" hint-placeholder-val="{{ true }}">
+<div style="height:48px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 8px">
+<button onClick="{{ back }}" style="justify-self:start;display:flex;align-items:center;gap:0;border:none;background:none;color:#BC2438;font-size:17px;height:44px;padding:0 8px 0 0" style-active="opacity:.5"><span class="material-symbols-rounded" style="font-size:30px;font-variation-settings:'wght' 500">chevron_left</span>{{ backLabel }}</button>
+<div style="font-size:17px;font-weight:600">{{ title }}</div>
+<div></div>
+</div>
+</sc-if>
+<sc-if value="{{ android }}" hint-placeholder-val="{{ false }}">
+<div style="height:60px;display:flex;align-items:center;gap:6px;padding:0 6px">
+<button onClick="{{ back }}" aria-label="Volver" style="width:48px;height:48px;border-radius:24px;border:none;background:none;color:#18283B;display:grid;place-items:center" style-active="background:rgba(20,38,61,.08)"><span class="material-symbols-rounded" style="font-size:24px">arrow_back</span></button>
+<div style="font-size:21px;font-weight:500">{{ title }}</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ INICIO ============ -->
+<sc-if value="{{ scr.inicio }}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{ homeA }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 28px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="width:34px;height:34px;border-radius:9px;background:#BC2438;color:#fff;font:700 22px/34px 'Barlow Condensed';text-align:center">P</div>
+<div><div style="font:700 16px/1 'Barlow Condensed';letter-spacing:.16em;color:#14263D">PUCARÁ</div><div style="font-size:9px;font-weight:600;letter-spacing:.3em;color:#586575;margin-top:3px">DIGITAL</div></div>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<span style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#7A4F00;background:#FBF0D9;padding:5px 8px;border-radius:7px">DEMO</span>
+<button onClick="{{ go.cuenta }}" aria-label="Mi cuenta" style="width:44px;height:44px;border-radius:22px;border:none;background:#14263D;color:#fff;font-weight:600;font-size:15px" style-active="opacity:.8">MF</button>
+</div>
+</div>
+<div>
+<div style="font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1">Hola, Martín</div>
+<div style="font-size:15px;color:#586575;margin-top:4px">Viernes 20 de noviembre</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+<button onClick="{{ go.padel }}" style="border:none;background:#BC2438;border-radius:18px;padding:14px 4px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#fff;box-shadow:0 6px 14px -6px rgba(188,36,56,.6)" style-active="background:#981B2C;transform:scale(.97)"><span style="width:44px;height:44px;border-radius:22px;background:rgba(255,255,255,.16);display:grid;place-items:center"><span class="material-symbols-rounded" style="font-size:26px">sports_tennis</span></span><span style="font-size:13px;font-weight:600">Pádel</span></button>
+<button onClick="{{ go.quinchos }}" style="border:none;background:#fff;border-radius:18px;padding:14px 4px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#18283B;box-shadow:0 0 0 1px rgba(20,38,61,.08),0 1px 2px rgba(20,38,61,.05)" style-active="background:#EEEDE9;transform:scale(.97)"><span style="width:44px;height:44px;border-radius:22px;background:#E8EEF5;display:grid;place-items:center;color:#14263D"><span class="material-symbols-rounded" style="font-size:26px">outdoor_grill</span></span><span style="font-size:13px;font-weight:600">Quinchos</span></button>
+<button onClick="{{ go.gimnasio }}" style="border:none;background:#fff;border-radius:18px;padding:14px 4px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#18283B;box-shadow:0 0 0 1px rgba(20,38,61,.08),0 1px 2px rgba(20,38,61,.05)" style-active="background:#EEEDE9;transform:scale(.97)"><span style="width:44px;height:44px;border-radius:22px;background:#E8EEF5;display:grid;place-items:center;color:#14263D"><span class="material-symbols-rounded" style="font-size:26px">fitness_center</span></span><span style="font-size:13px;font-weight:600">Gimnasio</span></button>
+<button onClick="{{ go.cuentaCorriente }}" style="border:none;background:#fff;border-radius:18px;padding:14px 4px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#18283B;box-shadow:0 0 0 1px rgba(20,38,61,.08),0 1px 2px rgba(20,38,61,.05)" style-active="background:#EEEDE9;transform:scale(.97)"><span style="width:44px;height:44px;border-radius:22px;background:#E8EEF5;display:grid;place-items:center;color:#14263D"><span class="material-symbols-rounded" style="font-size:26px">receipt_long</span></span><span style="font-size:13px;font-weight:600">Cuenta</span></button>
+</div>
+<sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
+<div style="background:#14263D;border-radius:22px;padding:18px;color:#fff;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden">
+<div style="position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;border:22px solid rgba(188,36,56,.35)"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;position:relative">
+<span style="font-size:13px;font-weight:600;color:#D3DFEB;letter-spacing:.02em">Tu próximo turno</span>
+<span style="font-size:12px;font-weight:600;color:#BFE3CD;background:rgba(80,170,120,.2);padding:4px 9px;border-radius:999px">Confirmada</span>
+</div>
+<div style="position:relative">
+<div style="font-size:22px;font-weight:700">{{ next.title }} · {{ next.date }}</div>
+<div style="font:600 30px/1.1 'Barlow Condensed';margin-top:4px;letter-spacing:.01em">{{ next.time }}</div>
+</div>
+<div style="display:flex;gap:10px;position:relative">
+<button onClick="{{ next.open }}" style="flex:1;height:46px;border:none;border-radius:13px;background:#fff;color:#14263D;font-size:15px;font-weight:600" style-active="background:#DDE5EE">Ver reserva</button>
+<button onClick="{{ go.padel }}" style="flex:1;height:46px;border:none;border-radius:13px;background:rgba(255,255,255,.12);color:#fff;font-size:15px;font-weight:600" style-active="background:rgba(255,255,255,.2)">Nuevo turno</button>
+</div>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:700">Esta semana</div><button onClick="{{ go.agenda }}" style="border:none;background:none;color:#BC2438;font-size:15px;font-weight:600;height:44px;padding:0 4px" style-active="opacity:.5">Ver agenda</button></div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ weekItems }}" as="w" hint-placeholder-count="3">
+<button onClick="{{ w.onTap }}" style="width:100%;border:none;background:#fff;display:flex;align-items:center;gap:12px;padding:12px 14px;text-align:left;border-bottom:1px solid #EEEDE9;min-height:60px" style-active="background:#F4F3EF">
+<span style="width:40px;height:40px;border-radius:12px;background:{{ w.bg }};color:{{ w.fg }};display:grid;place-items:center;flex:none"><span class="material-symbols-rounded" style="font-size:22px">{{ w.icon }}</span></span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:16px;font-weight:600;color:#18283B">{{ w.title }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ w.sub }}</span></span>
+<span class="material-symbols-rounded" style="font-size:22px;color:#9AA3AD">chevron_right</span>
+</button>
+</sc-for>
+<button onClick="{{ go.gimnasio }}" style="width:100%;border:none;background:#fff;display:flex;align-items:center;gap:12px;padding:12px 14px;text-align:left;min-height:60px" style-active="background:#F4F3EF">
+<span style="width:40px;height:40px;border-radius:12px;background:#E8EEF5;color:#14263D;display:grid;place-items:center;flex:none"><span class="material-symbols-rounded" style="font-size:22px">fitness_center</span></span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:16px;font-weight:600;color:#18283B">Rutina asignada · Semana 3</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">Prof. Diego Ramos · Día A pendiente</span></span>
+<span style="font-size:12px;font-weight:700;color:#A51F31;background:#FBECEF;padding:4px 8px;border-radius:999px">Nueva</span>
+</button>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:700">Primera</div><button onClick="{{ go.fixture }}" style="border:none;background:none;color:#BC2438;font-size:15px;font-weight:600;height:44px;padding:0 4px" style-active="opacity:.5">Fixture y resultados</button></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ matches }}" as="m" hint-placeholder-count="2">
+<button onClick="{{ go.fixture }}" style="border:none;background:#fff;border-radius:18px;padding:14px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);display:flex;flex-direction:column;gap:10px;color:#18283B" style-active="background:#F4F3EF">
+<span style="display:flex;justify-content:space-between;align-items:center;width:100%"><span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.06em;color:#586575;text-transform:uppercase"><span class="material-symbols-rounded" style="font-size:18px;color:#BC2438">{{ m.icon }}</span>{{ m.sport }}</span><span style="font-size:11px;font-weight:700;color:{{ m.lvFg }};background:{{ m.lvBg }};padding:3px 7px;border-radius:6px">{{ m.lv }}</span></span>
+<span style="font-size:13px;color:#586575">vs</span>
+<span style="font-size:17px;font-weight:700;line-height:1.15;margin-top:-8px">{{ m.vs }}</span>
+<span style="font:600 20px/1 'Barlow Condensed';color:#14263D">{{ m.when }} · {{ m.time }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:700">Novedades</div><button onClick="{{ go.noticia }}" style="border:none;background:none;color:#BC2438;font-size:15px;font-weight:600;height:44px;padding:0 4px" style-active="opacity:.5">Ver todas</button></div>
+<sc-for list="{{ news }}" as="n" hint-placeholder-count="2">
+<button onClick="{{ go.noticia }}" style="border:none;background:#fff;border-radius:18px;padding:10px;display:flex;gap:12px;align-items:center;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="background:#F4F3EF">
+<span style="width:64px;height:64px;border-radius:12px;flex:none;background:repeating-linear-gradient(135deg,#E4E2DC 0 6px,#EDEBE6 6px 12px);display:grid;place-items:center;font:9px ui-monospace,Menlo,monospace;color:#8A8F95">foto</span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:12px;font-weight:700;color:#BC2438;text-transform:uppercase;letter-spacing:.05em">{{ n.cat }} · {{ n.when }}</span><span style="display:block;font-size:16px;font-weight:600;margin-top:3px">{{ n.title }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ n.sum }}</span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ homeB }}" hint-placeholder-val="{{ true }}">
+<div style="background:#14263D;color:#fff;padding:6px 16px 22px;display:flex;flex-direction:column;gap:18px;border-radius:0 0 28px 28px">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:9px;background:#BC2438;color:#fff;font:700 22px/34px 'Barlow Condensed';text-align:center">P</div><div style="font:700 16px/1 'Barlow Condensed';letter-spacing:.16em">PUCARÁ</div><span style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#14263D;background:#FBF0D9;padding:4px 7px;border-radius:6px">DEMO</span></div>
+<button onClick="{{ go.cuenta }}" aria-label="Mi cuenta" style="width:44px;height:44px;border-radius:22px;border:none;background:rgba(255,255,255,.14);color:#fff;font-weight:600;font-size:15px">MF</button>
+</div>
+<div><div style="font-size:15px;color:#D3DFEB">Viernes 20 de noviembre</div><div style="font-size:30px;font-weight:700;letter-spacing:-.02em;margin-top:2px">Hola, Martín</div></div>
+<button onClick="{{ go.padel }}" style="height:58px;border:none;border-radius:16px;background:#BC2438;color:#fff;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:space-between;padding:0 18px" style-active="background:#981B2C"><span style="display:flex;align-items:center;gap:10px"><span class="material-symbols-rounded" style="font-size:26px">sports_tennis</span>Reservar pádel</span><span style="font-size:13px;font-weight:600;background:rgba(255,255,255,.18);padding:5px 9px;border-radius:999px">{{ creditsShort }}</span></button>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+<button onClick="{{ go.quinchos }}" style="height:64px;border:none;border-radius:14px;background:rgba(255,255,255,.1);color:#fff;font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px" style-active="background:rgba(255,255,255,.2)"><span class="material-symbols-rounded" style="font-size:22px">outdoor_grill</span>Quinchos</button>
+<button onClick="{{ go.gimnasio }}" style="height:64px;border:none;border-radius:14px;background:rgba(255,255,255,.1);color:#fff;font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px" style-active="background:rgba(255,255,255,.2)"><span class="material-symbols-rounded" style="font-size:22px">fitness_center</span>Gimnasio</button>
+<button onClick="{{ go.cuentaCorriente }}" style="height:64px;border:none;border-radius:14px;background:rgba(255,255,255,.1);color:#fff;font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px" style-active="background:rgba(255,255,255,.2)"><span class="material-symbols-rounded" style="font-size:22px">receipt_long</span>Cuenta</button>
+</div>
+</div>
+<div style="padding:20px 16px 28px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:700">Próximo para vos</div><button onClick="{{ go.agenda }}" style="border:none;background:none;color:#BC2438;font-size:15px;font-weight:600;height:44px" style-active="opacity:.5">Agenda</button></div>
+<sc-for list="{{ upcoming }}" as="u" hint-placeholder-count="3">
+<button onClick="{{ u.onTap }}" style="border:none;background:#fff;border-radius:16px;display:flex;align-items:center;gap:14px;padding:10px 14px 10px 10px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B;min-height:64px" style-active="background:#F4F3EF">
+<span style="width:48px;height:48px;border-radius:12px;background:#F4F3EF;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none"><span style="font-size:10px;font-weight:700;color:#BC2438;letter-spacing:.06em">{{ u.dow }}</span><span style="font:700 22px/1 'Barlow Condensed'">{{ u.num }}</span></span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:16px;font-weight:600">{{ u.title }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ u.sub }}</span></span>
+<span style="font-size:12px;font-weight:600;color:{{ u.tagFg }};background:{{ u.tagBg }};padding:4px 8px;border-radius:999px">{{ u.tag }}</span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{ homeBOnly }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:700">Primera</div><button onClick="{{ go.fixture }}" style="border:none;background:none;color:#BC2438;font-size:15px;font-weight:600;height:44px" style-active="opacity:.5">Fixture</button></div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ matches }}" as="m" hint-placeholder-count="2">
+<button onClick="{{ go.fixture }}" style="width:100%;border:none;background:#fff;border-bottom:1px solid #EEEDE9;display:flex;align-items:center;gap:12px;padding:14px;text-align:left;color:#18283B" style-active="background:#F4F3EF">
+<span class="material-symbols-rounded" style="font-size:26px;color:#BC2438">{{ m.icon }}</span>
+<span style="flex:1"><span style="display:block;font-size:12px;font-weight:700;color:#586575;letter-spacing:.05em;text-transform:uppercase">{{ m.sport }} · {{ m.lv }}</span><span style="display:block;font-size:16px;font-weight:600;margin-top:2px">vs {{ m.vs }}</span></span>
+<span style="text-align:right"><span style="display:block;font:600 20px/1 'Barlow Condensed';color:#14263D">{{ m.time }}</span><span style="display:block;font-size:12px;color:#586575;margin-top:3px">{{ m.when }}</span></span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:20px;font-weight:700">Novedades</div>
+<div style="display:flex;gap:10px;overflow-x:auto;margin:0 -16px;padding:0 16px 4px;scrollbar-width:none">
+<sc-for list="{{ news }}" as="n" hint-placeholder-count="2">
+<button onClick="{{ go.noticia }}" style="flex:none;width:250px;border:none;background:#fff;border-radius:18px;padding:0;overflow:hidden;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="opacity:.85">
+<span style="display:grid;place-items:center;height:110px;background:repeating-linear-gradient(135deg,#E4E2DC 0 8px,#EDEBE6 8px 16px);font:10px ui-monospace,Menlo,monospace;color:#8A8F95">foto de la novedad</span>
+<span style="display:block;padding:12px 14px 14px"><span style="display:block;font-size:12px;font-weight:700;color:#BC2438;text-transform:uppercase;letter-spacing:.05em">{{ n.cat }}</span><span style="display:block;font-size:16px;font-weight:600;margin-top:4px">{{ n.title }}</span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ homeC }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:700">Primera</div><button onClick="{{ go.fixture }}" style="border:none;background:none;color:#BC2438;font-size:15px;font-weight:600;height:44px;padding:0 4px" style-active="opacity:.5">Fixture y resultados</button></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ matches }}" as="m" hint-placeholder-count="2">
+<button onClick="{{ go.fixture }}" style="border:none;background:#fff;border-radius:18px;padding:14px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);display:flex;flex-direction:column;gap:10px;color:#18283B" style-active="background:#F4F3EF">
+<span style="display:flex;justify-content:space-between;align-items:center;width:100%"><span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.06em;color:#586575;text-transform:uppercase"><span class="material-symbols-rounded" style="font-size:18px;color:#BC2438">{{ m.icon }}</span>{{ m.sport }}</span><span style="font-size:11px;font-weight:700;color:{{ m.lvFg }};background:{{ m.lvBg }};padding:3px 7px;border-radius:6px">{{ m.lv }}</span></span>
+<span style="font-size:13px;color:#586575">vs</span>
+<span style="font-size:17px;font-weight:700;line-height:1.15;margin-top:-8px">{{ m.vs }}</span>
+<span style="font:600 20px/1 'Barlow Condensed';color:#14263D">{{ m.when }} · {{ m.time }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:700">Novedades</div><button onClick="{{ go.noticia }}" style="border:none;background:none;color:#BC2438;font-size:15px;font-weight:600;height:44px;padding:0 4px" style-active="opacity:.5">Ver todas</button></div>
+<sc-for list="{{ news }}" as="n" hint-placeholder-count="2">
+<button onClick="{{ go.noticia }}" style="border:none;background:#fff;border-radius:18px;padding:10px;display:flex;gap:12px;align-items:center;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="background:#F4F3EF">
+<span style="width:64px;height:64px;border-radius:12px;flex:none;background:repeating-linear-gradient(135deg,#E4E2DC 0 6px,#EDEBE6 6px 12px);display:grid;place-items:center;font:9px ui-monospace,Menlo,monospace;color:#8A8F95">foto</span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:12px;font-weight:700;color:#BC2438;text-transform:uppercase;letter-spacing:.05em">{{ n.cat }} · {{ n.when }}</span><span style="display:block;font-size:16px;font-weight:600;margin-top:3px">{{ n.title }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ n.sum }}</span></span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- ============ CLUB ============ -->
+<sc-if value="{{ scr.club }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 28px;display:flex;flex-direction:column;gap:24px">
+<div style="font-size:32px;font-weight:700;letter-spacing:-.02em">Club</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:20px;font-weight:700">Reservas</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<button onClick="{{ go.padel }}" style="border:none;border-radius:20px;background:#BC2438;color:#fff;padding:16px;height:164px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;box-shadow:0 8px 18px -8px rgba(188,36,56,.6)" style-active="background:#981B2C;transform:scale(.98)">
+<span class="material-symbols-rounded" style="font-size:32px">sports_tennis</span>
+<span><span style="display:block;font-size:22px;font-weight:700">Pádel</span><span style="display:block;font-size:13px;opacity:.85;margin-top:2px">Turnos de 90 min</span></span>
+<span style="display:inline-flex;align-items:center;gap:4px;align-self:flex-start;background:#fff;color:#BC2438;font-size:14px;font-weight:700;padding:7px 12px;border-radius:999px">Reservar<span class="material-symbols-rounded" style="font-size:18px">arrow_forward</span></span>
+</button>
+<button onClick="{{ go.quinchos }}" style="border:none;border-radius:20px;background:#14263D;color:#fff;padding:16px;height:164px;display:flex;flex-direction:column;justify-content:space-between;text-align:left" style-active="background:#223C59;transform:scale(.98)">
+<span class="material-symbols-rounded" style="font-size:32px">outdoor_grill</span>
+<span><span style="display:block;font-size:22px;font-weight:700">Quinchos</span><span style="display:block;font-size:13px;opacity:.85;margin-top:2px">Para reuniones y eventos</span></span>
+<span style="display:inline-flex;align-items:center;gap:4px;align-self:flex-start;background:rgba(255,255,255,.16);color:#fff;font-size:14px;font-weight:700;padding:7px 12px;border-radius:999px">Consultar<span class="material-symbols-rounded" style="font-size:18px">arrow_forward</span></span>
+</button>
+</div>
+<button onClick="{{ go.reservas }}" style="border:none;background:#fff;border-radius:18px;padding:12px 12px 12px 14px;display:flex;align-items:center;gap:12px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.1),0 2px 6px -2px rgba(20,38,61,.12);color:#18283B;min-height:68px" style-active="background:#F4F3EF;transform:scale(.98)">
+<span style="width:44px;height:44px;border-radius:12px;background:#E8EEF5;color:#14263D;display:grid;place-items:center;flex:none;position:relative"><span class="material-symbols-rounded" style="font-size:24px">event_note</span><span style="position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;border-radius:10px;background:#BC2438;color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;box-shadow:0 0 0 2px #fff">{{ resCount }}</span></span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:17px;font-weight:600">Mis reservas</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ nextResLabel }}</span></span>
+<span style="display:inline-flex;align-items:center;gap:2px;background:#14263D;color:#fff;font-size:14px;font-weight:600;height:38px;padding:0 10px 0 14px;border-radius:11px">Ver<span class="material-symbols-rounded" style="font-size:20px">chevron_right</span></span>
+</button>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:20px;font-weight:700">Deportes</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+<button onClick="{{ go.fixture }}" style="border:none;background:#fff;border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;gap:18px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="background:#EEEDE9"><span class="material-symbols-rounded" style="font-size:28px;color:#14263D">sports_rugby</span><span style="font-size:16px;font-weight:600">Rugby</span></button>
+<button onClick="{{ go.fixtureHockey }}" style="border:none;background:#fff;border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;gap:18px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="background:#EEEDE9"><span class="material-symbols-rounded" style="font-size:28px;color:#14263D">sports_hockey</span><span style="font-size:16px;font-weight:600">Hockey</span></button>
+<button onClick="{{ go.gimnasio }}" style="border:none;background:#fff;border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;gap:18px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B;position:relative" style-active="background:#EEEDE9"><span class="material-symbols-rounded" style="font-size:28px;color:#14263D">fitness_center</span><span style="font-size:16px;font-weight:600">Gimnasio</span><span style="position:absolute;top:12px;right:12px;width:9px;height:9px;border-radius:50%;background:#BC2438"></span></button>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:20px;font-weight:700">Actividades</div>
+<sc-for list="{{ actCards }}" as="a" hint-placeholder-count="2">
+<button onClick="{{ a.onTap }}" style="border:none;background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B;min-height:68px" style-active="background:#F4F3EF">
+<span style="width:44px;height:44px;border-radius:12px;background:#E8EEF5;color:#14263D;display:grid;place-items:center;flex:none"><span class="material-symbols-rounded" style="font-size:24px">{{ a.icon }}</span></span>
+<span style="flex:1"><span style="display:block;font-size:17px;font-weight:600">{{ a.title }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ a.sub }}</span></span>
+<span style="font-size:13px;font-weight:600;color:{{ a.tagFg }};background:{{ a.tagBg }};padding:6px 10px;border-radius:999px">{{ a.tag }}</span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:20px;font-weight:700">Vida en el club</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<sc-for list="{{ lifeTiles }}" as="l" hint-placeholder-count="4">
+<button onClick="{{ l.onTap }}" style="border:none;background:#fff;border-radius:16px;padding:12px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="background:#EEEDE9"><span class="material-symbols-rounded" style="font-size:26px;color:#14263D">{{ l.icon }}</span><span style="font-size:12px;font-weight:600">{{ l.label }}</span></button>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ RESERVAS HUB ============ -->
+<sc-if value="{{ scr.reservas }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:14px">
+<button onClick="{{ go.padel }}" style="border:none;border-radius:20px;background:#BC2438;color:#fff;padding:16px;display:flex;align-items:center;gap:14px;text-align:left" style-active="background:#981B2C">
+<span style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none"><span class="material-symbols-rounded" style="font-size:30px">sports_tennis</span></span>
+<span style="flex:1"><span style="display:block;font-size:20px;font-weight:700">Pádel</span><span style="display:block;font-size:14px;opacity:.88;margin-top:2px">90 min · $40.000 o 1 crédito</span></span>
+<span style="background:#fff;color:#BC2438;font-size:15px;font-weight:700;padding:9px 14px;border-radius:999px">Reservar</span>
+</button>
+<button onClick="{{ go.quinchos }}" style="border:none;border-radius:20px;background:#14263D;color:#fff;padding:16px;display:flex;align-items:center;gap:14px;text-align:left" style-active="background:#223C59">
+<span style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.12);display:grid;place-items:center;flex:none"><span class="material-symbols-rounded" style="font-size:30px">outdoor_grill</span></span>
+<span style="flex:1"><span style="display:block;font-size:20px;font-weight:700">Quinchos</span><span style="display:block;font-size:14px;opacity:.88;margin-top:2px">Consultá disponibilidad</span></span>
+<span style="background:rgba(255,255,255,.16);color:#fff;font-size:15px;font-weight:700;padding:9px 14px;border-radius:999px">Consultar</span>
+</button>
+<button onClick="{{ explainCredits }}" style="border:none;background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="background:#F4F3EF">
+<span class="material-symbols-rounded" style="font-size:24px;color:{{ creditFg }};font-variation-settings:'FILL' 1">confirmation_number</span>
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">{{ creditsLong }}</span><span style="display:block;font-size:13px;color:#586575">1 crédito = 1 turno completo de pádel</span></span>
+<span class="material-symbols-rounded" style="font-size:22px;color:#9AA3AD">info</span>
+</button>
+<div style="font-size:20px;font-weight:700;margin-top:10px">Mis reservas</div>
+<sc-for list="{{ allRes }}" as="r" hint-placeholder-count="2">
+<button onClick="{{ r.onTap }}" style="border:none;background:#fff;border-radius:18px;padding:10px 14px 10px 10px;display:flex;align-items:center;gap:14px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B;min-height:72px" style-active="background:#F4F3EF">
+<span style="width:52px;height:52px;border-radius:13px;background:#F4F3EF;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none"><span style="font-size:11px;font-weight:700;color:#BC2438;letter-spacing:.06em">{{ r.dow }}</span><span style="font:700 24px/1 'Barlow Condensed'">{{ r.num }}</span></span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:17px;font-weight:600">{{ r.title }}</span><span style="display:block;font-size:14px;color:#586575;margin-top:2px">{{ r.time }}</span></span>
+<span style="font-size:12px;font-weight:600;color:{{ r.tagFg }};background:{{ r.tagBg }};padding:5px 9px;border-radius:999px">{{ r.tag }}</span>
+</button>
+</sc-for>
+<sc-if value="{{ noRes }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border-radius:18px;padding:22px;text-align:center;box-shadow:0 0 0 1px rgba(20,38,61,.07)"><span class="material-symbols-rounded" style="font-size:32px;color:#9AA3AD">event_available</span><div style="font-size:16px;font-weight:600;margin-top:6px">No tenés reservas activas</div></div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ PADEL ============ -->
+<sc-if value="{{ scr.padel }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 0;display:flex;flex-direction:column;gap:18px">
+<sc-if value="{{ modifying }}" hint-placeholder-val="{{ false }}">
+<div style="background:#E8EEF5;border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:center">
+<span class="material-symbols-rounded" style="font-size:26px;color:#14263D">edit_calendar</span>
+<div style="flex:1"><div style="font-size:15px;font-weight:700;color:#14263D">Modificando {{ modLabel }}</div><div style="font-size:13px;color:#3D5068;margin-top:2px">Tu turno actual se mantiene hasta que confirmes.</div></div>
+<button onClick="{{ exitModify }}" style="border:none;background:#fff;color:#14263D;font-size:14px;font-weight:600;height:40px;padding:0 12px;border-radius:10px" style-active="opacity:.7">Salir</button>
+</div>
+</sc-if>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+<div><div style="font-size:15px;font-weight:600">Cancha de pádel</div><div style="font-size:13px;color:#586575;margin-top:2px">Turnos de 90 min · $40.000</div></div>
+<button onClick="{{ explainCredits }}" style="border:none;display:flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:999px;background:{{ creditBg }};color:{{ creditFg }};font-size:14px;font-weight:700" style-active="opacity:.75"><span class="material-symbols-rounded" style="font-size:19px;font-variation-settings:'FILL' 1">confirmation_number</span>{{ creditsShort }}</button>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:18px;font-weight:700">Elegí el día</div><div style="font-size:14px;color:#586575">Noviembre – Diciembre</div></div>
+<div style="display:flex;gap:8px;overflow-x:auto;margin:0 -16px;padding:2px 16px 4px;scrollbar-width:none">
+<sc-for list="{{ pDays }}" as="d" hint-placeholder-count="7">
+<button onClick="{{ d.onTap }}" style="flex:none;width:58px;height:80px;border:none;border-radius:16px;background:{{ d.bg }};color:{{ d.fg }};box-shadow:{{ d.shadow }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px" style-active="transform:scale(.95)">
+<span style="font-size:12px;font-weight:600;opacity:.85">{{ d.dow }}</span>
+<span style="font:700 26px/1 'Barlow Condensed'">{{ d.num }}</span>
+<span style="font-size:10px;font-weight:600;color:{{ d.subFg }}">{{ d.sub }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:18px;font-weight:700">Elegí el horario</div><div style="font-size:14px;color:#586575">{{ pAvailLabel }}</div></div>
+<sc-if value="{{ pEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 0 0 1px rgba(20,38,61,.07);display:flex;flex-direction:column;align-items:center;gap:8px">
+<span class="material-symbols-rounded" style="font-size:34px;color:#9AA3AD">event_busy</span>
+<div style="font-size:17px;font-weight:600">No quedan turnos libres</div>
+<div style="font-size:14px;color:#586575">Probá con otro día.</div>
+<button onClick="{{ pNextFree }}" style="margin-top:6px;height:46px;border:none;border-radius:13px;background:#E8EEF5;color:#14263D;font-size:15px;font-weight:600;padding:0 18px" style-active="background:#D6E0EC">Ver {{ pNextFreeLabel }}</button>
+</div>
+</sc-if>
+<sc-if value="{{ pickGrid }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<sc-for list="{{ pSlots }}" as="s" hint-placeholder-count="6">
+<button onClick="{{ s.onTap }}" aria-pressed="{{ s.sel }}" style="height:62px;border:none;border-radius:14px;background:{{ s.bg }};color:{{ s.fg }};box-shadow:{{ s.shadow }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px" style-active="transform:scale(.96)">
+<span style="font:600 24px/1 'Barlow Condensed';letter-spacing:.01em">{{ s.t }}</span>
+<span style="font-size:11px;font-weight:500;opacity:.8">hasta {{ s.end }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ pickList }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<sc-for list="{{ pGroups }}" as="g" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#586575;text-transform:uppercase;letter-spacing:.06em"><span class="material-symbols-rounded" style="font-size:18px">{{ g.icon }}</span>{{ g.label }}</div>
+<div style="background:#fff;border-radius:16px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ g.slots }}" as="s" hint-placeholder-count="2">
+<button onClick="{{ s.onTap }}" style="width:100%;border:none;border-bottom:1px solid #EEEDE9;background:{{ s.rowBg }};display:flex;align-items:center;gap:12px;padding:0 14px;height:56px;color:#18283B" style-active="background:#F4F3EF">
+<span style="font:600 22px/1 'Barlow Condensed'">{{ s.t }}</span><span style="font-size:14px;color:#586575">– {{ s.end }}</span>
+<span style="margin-left:auto;width:24px;height:24px;border-radius:12px;box-sizing:border-box;border:{{ s.radio }};background:#fff"></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ pickWheel }}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{ pHasSlots }}" hint-placeholder-val="{{ true }}">
+<div style="background:#fff;border-radius:20px;box-shadow:0 0 0 1px rgba(20,38,61,.07);position:relative;height:220px;overflow:hidden">
+<div style="position:absolute;left:12px;right:12px;top:88px;height:44px;border-radius:12px;background:#F0EFEA"></div>
+<div style="position:absolute;right:28px;top:88px;height:44px;display:flex;align-items:center;font-size:14px;color:#586575;z-index:2;pointer-events:none">hasta {{ pSlotEnd }}</div>
+<div ref="{{ wheelRef }}" onScroll="{{ onWheel }}" style="position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;padding:88px 0;box-sizing:border-box">
+<sc-for list="{{ pSlots }}" as="s" hint-placeholder-count="5">
+<div onClick="{{ s.onWheelTap }}" style="height:44px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font:600 28px/1 'Barlow Condensed';color:{{ s.wheelFg }};position:relative;cursor:pointer">{{ s.t }}</div>
+</sc-for>
+</div>
+<div style="position:absolute;left:0;right:0;top:0;height:70px;background:linear-gradient(#fff,rgba(255,255,255,0));pointer-events:none"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(rgba(255,255,255,0),#fff);pointer-events:none"></div>
+</div>
+<div style="font-size:13px;color:#586575;text-align:center">Deslizá o tocá un horario · solo se muestran los libres</div>
+</sc-if>
+</sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+<div style="font-size:18px;font-weight:700">Mis reservas</div>
+<sc-for list="{{ myPadel }}" as="r" hint-placeholder-count="1">
+<button onClick="{{ r.onTap }}" style="border:none;background:#fff;border-radius:18px;padding:10px 14px 10px 10px;display:flex;align-items:center;gap:14px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B;min-height:72px" style-active="background:#F4F3EF">
+<span style="width:52px;height:52px;border-radius:13px;background:#F4F3EF;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none"><span style="font-size:11px;font-weight:700;color:#BC2438;letter-spacing:.06em">{{ r.dow }}</span><span style="font:700 24px/1 'Barlow Condensed'">{{ r.num }}</span></span>
+<span style="flex:1;min-width:0"><span style="display:block;font-size:17px;font-weight:600">{{ r.time }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ r.paid }}</span></span>
+<span style="font-size:14px;font-weight:600;color:#14263D;background:#E8EEF5;padding:8px 12px;border-radius:10px">Gestionar</span>
+</button>
+</sc-for>
+<sc-if value="{{ noPadel }}" hint-placeholder-val="{{ false }}">
+<div style="border:1.5px dashed #CBD0D5;border-radius:18px;padding:18px;text-align:center;font-size:15px;color:#586575">Todavía no tenés turnos reservados.</div>
+</sc-if>
+</div>
+<div style="height:{{ pBottomPad }}px"></div>
+</div>
+</sc-if>
+
+<!-- ============ QUINCHOS ============ -->
+<sc-if value="{{ scr.quinchos }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#FBF0D9;border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#5E3D00"><span class="material-symbols-rounded" style="font-size:20px">info</span><span>Condiciones de pago y aprobación a definir por el club. En esta demo, la reserva queda como solicitud.</span></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:700">Elegí el día</div>
+<div style="display:flex;gap:8px;overflow-x:auto;margin:0 -16px;padding:2px 16px 4px;scrollbar-width:none">
+<sc-for list="{{ qDays }}" as="d" hint-placeholder-count="7">
+<button onClick="{{ d.onTap }}" style="flex:none;width:58px;height:72px;border:none;border-radius:16px;background:{{ d.bg }};color:{{ d.fg }};box-shadow:{{ d.shadow }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px" style-active="transform:scale(.95)"><span style="font-size:12px;font-weight:600;opacity:.85">{{ d.dow }}</span><span style="font:700 26px/1 'Barlow Condensed'">{{ d.num }}</span></button>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:700">Elegí el quincho</div>
+<sc-for list="{{ qList }}" as="q" hint-placeholder-count="2">
+<button onClick="{{ q.onTap }}" style="border:none;background:#fff;border-radius:18px;padding:10px;display:flex;align-items:center;gap:12px;text-align:left;box-shadow:{{ q.shadow }};color:#18283B" style-active="background:#F4F3EF">
+<span style="width:72px;height:56px;border-radius:12px;flex:none;background:repeating-linear-gradient(135deg,#E4E2DC 0 6px,#EDEBE6 6px 12px);display:grid;place-items:center;font:9px ui-monospace,Menlo,monospace;color:#8A8F95">foto</span>
+<span style="flex:1"><span style="display:block;font-size:17px;font-weight:600">{{ q.name }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ q.sub }}</span></span>
+<span style="width:24px;height:24px;border-radius:12px;box-sizing:border-box;border:{{ q.radio }};flex:none"></span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:700">Elegí la franja</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ qTurnos }}" as="t" hint-placeholder-count="2">
+<button onClick="{{ t.onTap }}" style="height:62px;border:none;border-radius:14px;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.shadow }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px" style-active="transform:scale(.97)"><span style="font-size:16px;font-weight:600">{{ t.label }}</span><span style="font-size:12px;opacity:.8">{{ t.hours }}</span></button>
+</sc-for>
+</div>
+<div style="font-size:12px;color:#586575">Franjas y capacidades de ejemplo.</div>
+</div>
+<button onClick="{{ requestQuincho }}" style="height:54px;border:none;border-radius:15px;background:#BC2438;color:#fff;font-size:17px;font-weight:600" style-active="background:#981B2C">Solicitar reserva</button>
+</div>
+</sc-if>
+
+<!-- ============ GIMNASIO ============ -->
+<sc-if value="{{ scr.gimnasio }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#14263D;border-radius:22px;padding:18px;color:#fff;display:flex;flex-direction:column;gap:6px">
+<span style="align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#14263D;background:#fff;padding:4px 8px;border-radius:6px">Rutina asignada</span>
+<div style="font-size:24px;font-weight:700;margin-top:6px">Semana 3 · Fuerza</div>
+<div style="font-size:14px;color:#D3DFEB">Prof. Diego Ramos · 3 días por semana</div>
+</div>
+<div style="display:flex;background:#E7E6E1;border-radius:12px;padding:3px">
+<sc-for list="{{ gymDays }}" as="g" hint-placeholder-count="2">
+<button onClick="{{ g.onTap }}" style="flex:1;height:40px;border:none;border-radius:10px;background:{{ g.bg }};color:#18283B;font-size:15px;font-weight:600;box-shadow:{{ g.shadow }}">{{ g.label }}</button>
+</sc-for>
+</div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ gymList }}" as="e" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #EEEDE9">
+<span style="width:32px;height:32px;border-radius:16px;background:#F4F3EF;display:grid;place-items:center;font:700 17px 'Barlow Condensed';color:#14263D;flex:none">{{ e.i }}</span>
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">{{ e.n }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ e.scheme }}</span></span>
+<span style="font:600 18px 'Barlow Condensed';color:#586575">{{ e.last }}</span>
+</div>
+</sc-for>
+</div>
+<button onClick="{{ go.gymLog }}" style="height:56px;border:none;border-radius:16px;background:#BC2438;color:#fff;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px" style-active="background:#981B2C"><span class="material-symbols-rounded" style="font-size:24px;font-variation-settings:'FILL' 1">play_arrow</span>Empezar entrenamiento</button>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:17px;font-weight:700">Progreso · Sentadilla</div><div style="font-size:14px;font-weight:600;color:#1F5C3F">+15 kg</div></div>
+<div style="display:flex;align-items:flex-end;gap:12px;height:110px">
+<sc-for list="{{ progress }}" as="p" hint-placeholder-count="4">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font:600 15px 'Barlow Condensed';color:#14263D">{{ p.v }}</span><div style="width:100%;height:{{ p.h }}%;border-radius:8px 8px 4px 4px;background:{{ p.bg }}"></div><span style="font-size:11px;color:#586575">{{ p.l }}</span></div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ GYM LOG ============ -->
+<sc-if value="{{ scr.gymLog }}" hint-placeholder-val="{{ false }}">
+<div style="padding:0 12px 28px;display:flex;flex-direction:column;gap:12px">
+<div style="position:sticky;top:48px;z-index:9;background:#F4F3EF;padding:4px 4px 8px;display:flex;align-items:center;gap:8px">
+<div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border-radius:14px;box-shadow:0 0 0 1px rgba(20,38,61,.07);padding:8px 4px">
+<div style="text-align:center"><div style="font-size:11px;color:#586575;font-weight:600">Tiempo</div><div style="font:600 20px/1.1 'Barlow Condensed'">{{ gElapsed }}</div></div>
+<div style="text-align:center;border-left:1px solid #EEEDE9;border-right:1px solid #EEEDE9"><div style="font-size:11px;color:#586575;font-weight:600">Series</div><div style="font:600 20px/1.1 'Barlow Condensed'">{{ gDone }}</div></div>
+<div style="text-align:center"><div style="font-size:11px;color:#586575;font-weight:600">Volumen</div><div style="font:600 20px/1.1 'Barlow Condensed'">{{ gVol }}</div></div>
+</div>
+<button onClick="{{ finishGym }}" style="height:50px;border:none;border-radius:14px;background:#BC2438;color:#fff;font-size:15px;font-weight:600;padding:0 14px" style-active="background:#981B2C">Finalizar</button>
+</div>
+<sc-for list="{{ gymLog }}" as="e" hint-placeholder-count="3">
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);padding:14px 12px 8px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px"><div style="font-size:17px;font-weight:700;color:#14263D">{{ e.n }}</div><div style="font-size:13px;color:#586575">{{ e.scheme }}</div></div>
+<div style="display:grid;grid-template-columns:36px 1fr 68px 60px 44px;gap:6px;align-items:center;padding:12px 4px 4px;font-size:11px;font-weight:700;color:#8A929B;letter-spacing:.05em"><span>SERIE</span><span>ANTERIOR</span><span style="text-align:center">KG</span><span style="text-align:center">REPS</span><span></span></div>
+<sc-for list="{{ e.sets }}" as="s" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:36px 1fr 68px 60px 44px;gap:6px;align-items:center;padding:4px;border-radius:12px;background:{{ s.rowBg }}">
+<span style="font:700 18px 'Barlow Condensed';text-align:center;color:#14263D">{{ s.i }}</span>
+<span style="font-size:14px;color:#586575">{{ s.prev }}</span>
+<input value="{{ s.kg }}" onChange="{{ s.onKg }}" inputmode="decimal" aria-label="Kilos" style="height:42px;width:100%;box-sizing:border-box;border:none;border-radius:10px;background:{{ s.inBg }};text-align:center;font:600 18px 'Barlow Condensed';color:#18283B;outline:none">
+<input value="{{ s.reps }}" onChange="{{ s.onReps }}" inputmode="numeric" aria-label="Repeticiones" style="height:42px;width:100%;box-sizing:border-box;border:none;border-radius:10px;background:{{ s.inBg }};text-align:center;font:600 18px 'Barlow Condensed';color:#18283B;outline:none">
+<button onClick="{{ s.onDone }}" aria-label="Marcar serie" style="width:44px;height:42px;border:none;border-radius:10px;background:{{ s.chkBg }};color:{{ s.chkFg }};display:grid;place-items:center" style-active="transform:scale(.92)"><span class="material-symbols-rounded" style="font-size:24px;font-variation-settings:'wght' 600">check</span></button>
+</div>
+</sc-for>
+<button onClick="{{ e.onAdd }}" style="width:100%;height:44px;border:none;background:none;color:#14263D;font-size:15px;font-weight:600;margin-top:4px;border-radius:10px" style-active="background:#F4F3EF">+ Agregar serie</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- ============ ACTIVIDAD ============ -->
+<sc-if value="{{ scr.actividad }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;background:#E7E6E1;border-radius:12px;padding:3px">
+<sc-for list="{{ actTabs }}" as="g" hint-placeholder-count="2">
+<button onClick="{{ g.onTap }}" style="flex:1;height:40px;border:none;border-radius:10px;background:{{ g.bg }};color:#18283B;font-size:15px;font-weight:600;box-shadow:{{ g.shadow }}">{{ g.label }}</button>
+</sc-for>
+</div>
+<div style="height:150px;border-radius:20px;background:repeating-linear-gradient(135deg,#E4E2DC 0 8px,#EDEBE6 8px 16px);display:grid;place-items:center;font:11px ui-monospace,Menlo,monospace;color:#8A8F95">foto de {{ act.title }}</div>
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:28px;font-weight:700;letter-spacing:-.01em">{{ act.title }}</div><span style="font-size:13px;font-weight:700;color:{{ act.tagFg }};background:{{ act.tagBg }};padding:6px 10px;border-radius:999px">{{ act.tag }}</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 0 0 1px rgba(20,38,61,.07)"><div style="font-size:12px;color:#586575;font-weight:600">Días</div><div style="font-size:16px;font-weight:600;margin-top:3px">{{ act.days }}</div></div>
+<div style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 0 0 1px rgba(20,38,61,.07)"><div style="font-size:12px;color:#586575;font-weight:600">Horario</div><div style="font:600 19px/1.2 'Barlow Condensed';margin-top:3px">{{ act.time }}</div></div>
+<div style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 0 0 1px rgba(20,38,61,.07)"><div style="font-size:12px;color:#586575;font-weight:600">Lugar</div><div style="font-size:16px;font-weight:600;margin-top:3px">{{ act.place }}</div></div>
+<div style="background:#fff;border-radius:14px;padding:12px;box-shadow:0 0 0 1px rgba(20,38,61,.07)"><div style="font-size:12px;color:#586575;font-weight:600">Cupos</div><div style="font-size:16px;font-weight:600;margin-top:3px">{{ act.cupos }}</div></div>
+</div>
+<div style="font-size:14px;color:#586575">{{ act.prof }}</div>
+<sc-if value="{{ act.enrolled }}" hint-placeholder-val="{{ false }}">
+<div style="background:#E6F2EA;border-radius:16px;padding:14px;display:flex;gap:10px;align-items:center;color:#1F5C3F"><span class="material-symbols-rounded" style="font-size:26px;font-variation-settings:'FILL' 1">check_circle</span><div><div style="font-size:16px;font-weight:700">Estás inscripto</div><div style="font-size:13px;margin-top:2px">Tus próximas clases están en la Agenda.</div></div></div>
+<button onClick="{{ askUnenroll }}" style="height:52px;border:1.5px solid #E5B9C0;border-radius:15px;background:#fff;color:#A51F31;font-size:16px;font-weight:600" style-active="background:#FBECEF">Cancelar inscripción</button>
+</sc-if>
+<sc-if value="{{ act.notEnrolled }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ askEnroll }}" style="height:56px;border:none;border-radius:16px;background:#BC2438;color:#fff;font-size:17px;font-weight:600" style-active="background:#981B2C">Inscribirme</button>
+<div style="font-size:13px;color:#586575;text-align:center">Al inscribirte, las clases se suman a tu Agenda.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ AGENDA ============ -->
+<sc-if value="{{ scr.agenda }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 28px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div style="font-size:32px;font-weight:700;letter-spacing:-.02em">Agenda</div>
+<button onClick="{{ agToday }}" style="height:38px;padding:0 14px;border-radius:999px;border:1.5px solid {{ todayBorder }};background:#fff;color:#14263D;font-size:14px;font-weight:600" style-active="background:#EEEDE9">Hoy</button>
+</div>
+<div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px">
+<sc-for list="{{ whoChips }}" as="w" hint-placeholder-count="4">
+<button onClick="{{ w.onTap }}" style="flex:none;height:36px;padding:0 14px;border-radius:999px;border:none;background:{{ w.bg }};color:{{ w.fg }};box-shadow:{{ w.shadow }};font-size:14px;font-weight:600">{{ w.label }}</button>
+</sc-for>
+</div>
+<div style="background:#fff;border-radius:20px;box-shadow:0 0 0 1px rgba(20,38,61,.07);padding:8px 8px 10px">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px 4px 10px">
+<div style="font-size:17px;font-weight:700">{{ agMonth }}</div>
+<div style="display:flex">
+<button onClick="{{ agPrev }}" aria-label="Semana anterior" style="width:44px;height:44px;border:none;background:none;border-radius:22px;color:#BC2438;display:grid;place-items:center" style-active="background:#F4F3EF"><span class="material-symbols-rounded" style="font-size:26px">chevron_left</span></button>
+<button onClick="{{ agNext }}" aria-label="Semana siguiente" style="width:44px;height:44px;border:none;background:none;border-radius:22px;color:#BC2438;display:grid;place-items:center" style-active="background:#F4F3EF"><span class="material-symbols-rounded" style="font-size:26px">chevron_right</span></button>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr)">
+<sc-for list="{{ agWeek }}" as="d" hint-placeholder-count="7">
+<button onClick="{{ d.onTap }}" style="border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:#18283B">
+<span style="font-size:12px;font-weight:600;color:#8A929B">{{ d.l }}</span>
+<span style="width:38px;height:38px;border-radius:19px;background:{{ d.bg }};color:{{ d.fg }};display:grid;place-items:center;font-size:17px;font-weight:{{ d.w }}">{{ d.num }}</span>
+<span style="width:5px;height:5px;border-radius:3px;background:{{ d.dot }}"></span>
+</button>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ agList }}" hint-placeholder-val="{{ false }}">
+<sc-for list="{{ agWeekFull }}" as="day" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:baseline;gap:8px;padding-top:6px"><span style="font-size:15px;font-weight:700;color:{{ day.fg }}">{{ day.title }}</span><span style="font-size:13px;color:#8A929B">{{ day.count }}</span></div>
+<sc-for list="{{ day.events }}" as="e" hint-placeholder-count="1">
+<button onClick="{{ e.onTap }}" style="border:none;background:#fff;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:12px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B" style-active="background:#F4F3EF"><span style="font:600 18px 'Barlow Condensed';width:44px;color:#14263D">{{ e.t }}</span><span style="flex:1;min-width:0"><span style="display:block;font-size:15px;font-weight:600">{{ e.title }}</span><span style="display:block;font-size:12px;color:#586575">{{ e.place }}</span></span><span style="font-size:11px;font-weight:600;color:{{ e.tagFg }};background:{{ e.tagBg }};padding:4px 8px;border-radius:999px">{{ e.tag }}</span></button>
+</sc-for>
+<sc-if value="{{ day.empty }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:#9AA3AD;padding:0 2px 4px">Sin actividades</div></sc-if>
+</div>
+</sc-for>
+</sc-if>
+<sc-if value="{{ agNotList }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:4px"><div style="font-size:18px;font-weight:700">{{ agDayTitle }}</div><div style="font-size:14px;color:#586575">{{ agCount }}</div></div>
+<sc-if value="{{ agEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border-radius:18px;padding:24px 18px;text-align:center;box-shadow:0 0 0 1px rgba(20,38,61,.07);display:flex;flex-direction:column;align-items:center;gap:6px">
+<span class="material-symbols-rounded" style="font-size:34px;color:#9AA3AD">event_available</span>
+<div style="font-size:17px;font-weight:600">Día libre</div>
+<div style="font-size:14px;color:#586575">No tenés compromisos este día.</div>
+<button onClick="{{ go.padel }}" style="margin-top:8px;height:46px;border:none;border-radius:13px;background:#E8EEF5;color:#14263D;font-size:15px;font-weight:600;padding:0 18px" style-active="background:#D6E0EC">Reservar pádel</button>
+</div>
+</sc-if>
+<sc-if value="{{ agCards }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ agEvents }}" as="e" hint-placeholder-count="2">
+<button onClick="{{ e.onTap }}" style="border:none;background:#fff;border-radius:18px;padding:12px 14px 12px 12px;display:flex;align-items:stretch;gap:12px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);color:#18283B;min-height:76px" style-active="background:#F4F3EF">
+<span style="width:50px;display:flex;flex-direction:column;justify-content:center;flex:none"><span style="font:600 21px/1 'Barlow Condensed';color:#14263D">{{ e.t }}</span><span style="font:500 15px/1.2 'Barlow Condensed';color:#8A929B;margin-top:2px">{{ e.e }}</span></span>
+<span style="width:3px;border-radius:2px;background:{{ e.bar }};flex:none"></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px"><span style="font-size:16px;font-weight:600">{{ e.title }}</span><span style="display:flex;align-items:center;gap:4px;font-size:13px;color:#586575"><span class="material-symbols-rounded" style="font-size:16px">location_on</span>{{ e.place }}</span></span>
+<span style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px"><span style="font-size:12px;font-weight:600;color:{{ e.tagFg }};background:{{ e.tagBg }};padding:4px 8px;border-radius:999px">{{ e.tag }}</span><span style="font-size:11px;font-weight:700;color:#586575">{{ e.whoLabel }}</span></span>
+</button>
+</sc-for>
+</sc-if>
+<sc-if value="{{ agTimeline }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);position:relative;height:{{ tlHeight }}px;overflow:hidden">
+<sc-for list="{{ tlHours }}" as="h" hint-placeholder-count="8">
+<div style="position:absolute;left:0;right:0;top:{{ h.top }}px;display:flex;align-items:center;gap:6px;padding-left:10px"><span style="font:500 13px 'Barlow Condensed';color:#9AA3AD;width:34px">{{ h.l }}</span><span style="flex:1;height:1px;background:#EEEDE9"></span></div>
+</sc-for>
+<sc-if value="{{ tlNow }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:44px;right:0;top:{{ tlNowTop }}px;height:2px;background:#BC2438"><span style="position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:5px;background:#BC2438"></span></div></sc-if>
+<sc-for list="{{ agEvents }}" as="e" hint-placeholder-count="2">
+<button onClick="{{ e.onTap }}" style="position:absolute;left:52px;right:10px;top:{{ e.top }}px;height:{{ e.h }}px;border:none;border-radius:10px;background:{{ e.tagBg }};color:{{ e.tagFg }};text-align:left;padding:6px 10px;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;gap:1px;box-shadow:inset 3px 0 0 {{ e.bar }}" style-active="filter:brightness(.96)"><span style="font-size:14px;font-weight:700">{{ e.title }}</span><span style="font-size:12px">{{ e.t }}–{{ e.e }} · {{ e.place }}</span></button>
+</sc-for>
+</div>
+</sc-if>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ CARNET ============ -->
+<sc-if value="{{ scr.carnet }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 28px;display:flex;flex-direction:column;gap:16px">
+<div style="font-size:32px;font-weight:700;letter-spacing:-.02em">Carnet</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ carnetTabs }}" as="c" hint-placeholder-count="3">
+<button onClick="{{ c.onTap }}" style="flex:1;height:48px;border:none;border-radius:14px;background:{{ c.bg }};color:{{ c.fg }};box-shadow:{{ c.shadow }};display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600"><span style="width:26px;height:26px;border-radius:13px;background:{{ c.avBg }};color:{{ c.avFg }};font-size:11px;font-weight:700;display:grid;place-items:center">{{ c.ini }}</span>{{ c.label }}</button>
+</sc-for>
+</div>
+<div style="background:#14263D;border-radius:24px;color:#fff;overflow:hidden;box-shadow:0 16px 30px -14px rgba(20,38,61,.6);position:relative">
+<div style="height:8px;background:#BC2438"></div>
+<div style="position:absolute;right:-60px;top:-40px;width:220px;height:220px;border-radius:50%;border:30px solid rgba(255,255,255,.05)"></div>
+<div style="padding:18px 20px 20px;display:flex;flex-direction:column;gap:16px;position:relative">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:46px;height:46px;border-radius:50%;background:#fff;color:#BC2438;display:grid;place-items:center;font:700 26px 'Barlow Condensed';box-shadow:0 0 0 3px #BC2438" title="Escudo del club (pendiente)">P</div>
+<div><div style="font:700 18px/1 'Barlow Condensed';letter-spacing:.2em">CLUB PUCARÁ</div><div style="font-size:11px;letter-spacing:.16em;color:#D3DFEB;margin-top:4px">CARNET DE SOCIO</div></div>
+<span style="margin-left:auto;font-size:12px;font-weight:700;color:#BFE3CD;background:rgba(80,170,120,.22);padding:5px 10px;border-radius:999px">{{ card.estado }}</span>
+</div>
+<div><div style="font-size:24px;font-weight:700">{{ card.name }}</div><div style="font-size:14px;color:#D3DFEB;margin-top:3px">{{ card.cat }}</div></div>
+<div style="display:flex;gap:16px;align-items:flex-end">
+<div style="background:#fff;border-radius:16px;padding:12px;flex:none">
+<div style="display:grid;grid-template-columns:repeat(25,1fr);width:150px;height:150px">
+<sc-for list="{{ qr }}" as="q" hint-placeholder-count="0"><span style="background:{{ q.c }}"></span></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;padding-bottom:4px">
+<div><div style="font-size:11px;letter-spacing:.1em;color:#D3DFEB">SOCIO N°</div><div style="font:700 34px/1 'Barlow Condensed';letter-spacing:.04em">{{ card.n }}</div></div>
+<div><div style="font-size:11px;letter-spacing:.1em;color:#D3DFEB">VENCE</div><div style="font:600 18px/1 'Barlow Condensed'">12 / 2026</div></div>
+</div>
+</div>
+</div>
+</div>
+<div style="background:#FBF0D9;border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:13px;color:#5E3D00"><span class="material-symbols-rounded" style="font-size:20px">qr_code_2</span>QR demostrativo · todavía no habilita el ingreso.</div>
+<sc-if value="{{ card.minor }}" hint-placeholder-val="{{ false }}">
+<div style="background:#E8EEF5;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;font-size:14px;color:#14263D"><span class="material-symbols-rounded" style="font-size:22px">family_restroom</span>Lo ves porque sos responsable de {{ card.first }}.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ CUENTA ============ -->
+<sc-if value="{{ scr.cuenta }}" hint-placeholder-val="{{ false }}">
+<div style="padding:6px 16px 28px;display:flex;flex-direction:column;gap:20px">
+<div style="font-size:32px;font-weight:700;letter-spacing:-.02em">Cuenta</div>
+<div style="display:flex;align-items:center;gap:14px">
+<div style="width:60px;height:60px;border-radius:30px;background:#14263D;color:#fff;display:grid;place-items:center;font-size:20px;font-weight:600">MF</div>
+<div style="flex:1"><div style="font-size:20px;font-weight:700">Martín Ferreyra</div><div style="font-size:14px;color:#586575;margin-top:2px">Socio N° 4821 · Activo</div></div>
+<button onClick="{{ demoToast }}" style="height:40px;border:none;border-radius:12px;background:#E8EEF5;color:#14263D;font-size:14px;font-weight:600;padding:0 12px" style-active="background:#D6E0EC">Editar</button>
+</div>
+<button onClick="{{ go.cuentaCorriente }}" style="border:none;background:#fff;border-radius:20px;padding:16px;text-align:left;box-shadow:0 0 0 1px rgba(20,38,61,.07);display:flex;flex-direction:column;gap:12px;color:#18283B" style-active="background:#F4F3EF">
+<span style="display:flex;justify-content:space-between;align-items:center;width:100%"><span style="font-size:15px;font-weight:600;color:#586575">Cuenta corriente</span><span style="font-size:12px;font-weight:700;color:#1F5C3F;background:#E6F2EA;padding:4px 9px;border-radius:999px">Al día</span></span>
+<span style="display:flex;align-items:baseline;gap:8px"><span style="font:700 40px/1 'Barlow Condensed'">$0</span><span style="font-size:14px;color:#586575">saldo pendiente</span></span>
+<span style="display:flex;justify-content:space-between;align-items:center;width:100%;border-top:1px solid #EEEDE9;padding-top:12px"><span style="font-size:14px;color:#586575">Próxima cuota · vence 10 dic</span><span style="font-size:15px;font-weight:600;color:#BC2438">Ver movimientos</span></span>
+</button>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:20px;font-weight:700">Grupo familiar</div><div style="font-size:13px;color:#586575">Sos responsable</div></div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ kids }}" as="k" hint-placeholder-count="2">
+<button onClick="{{ k.onTap }}" style="width:100%;border:none;border-bottom:1px solid #EEEDE9;background:#fff;display:flex;align-items:center;gap:12px;padding:12px 14px;text-align:left;color:#18283B;min-height:68px" style-active="background:#F4F3EF">
+<span style="width:44px;height:44px;border-radius:22px;background:{{ k.av }};color:#fff;font-size:15px;font-weight:700;display:grid;place-items:center;flex:none">{{ k.ini }}</span>
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">{{ k.name }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ k.cat }}</span></span>
+<span class="material-symbols-rounded" style="font-size:22px;color:#9AA3AD">chevron_right</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ settings }}" as="s" hint-placeholder-count="4">
+<button onClick="{{ s.onTap }}" style="width:100%;border:none;border-bottom:1px solid #EEEDE9;background:#fff;display:flex;align-items:center;gap:12px;padding:0 14px;height:54px;text-align:left;color:#18283B" style-active="background:#F4F3EF">
+<span class="material-symbols-rounded" style="font-size:22px;color:#14263D">{{ s.icon }}</span>
+<span style="flex:1;font-size:16px">{{ s.label }}</span>
+<span style="font-size:13px;color:#586575">{{ s.value }}</span>
+<span class="material-symbols-rounded" style="font-size:22px;color:#9AA3AD">chevron_right</span>
+</button>
+</sc-for>
+</div>
+<button onClick="{{ demoToast }}" style="height:50px;border:none;border-radius:14px;background:none;color:#A51F31;font-size:16px;font-weight:600" style-active="background:#FBECEF">Cerrar sesión</button>
+</div>
+</sc-if>
+
+<!-- ============ CUENTA CORRIENTE ============ -->
+<sc-if value="{{ scr.cuentaCorriente }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#14263D;border-radius:22px;padding:18px;color:#fff;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:#D3DFEB">Saldo grupo familiar</span><span style="font-size:12px;font-weight:700;color:#BFE3CD;background:rgba(80,170,120,.22);padding:4px 9px;border-radius:999px">Al día</span></div>
+<div style="font:700 46px/1 'Barlow Condensed'">$0</div>
+<div style="font-size:14px;color:#D3DFEB">Próxima cuota: diciembre · vence 10 dic</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:700">Cuotas</div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ cuotas }}" as="c" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #EEEDE9">
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">{{ c.m }}</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">{{ c.d }}</span></span>
+<span style="text-align:right"><span style="display:block;font:600 19px 'Barlow Condensed'">{{ c.a }}</span><span style="font-size:12px;font-weight:600;color:{{ c.fg }}">{{ c.st }}</span></span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:700">Becas</div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);padding:14px;display:flex;gap:12px;align-items:center"><span style="width:40px;height:40px;border-radius:20px;background:#3E6A9A;color:#fff;font-size:14px;font-weight:700;display:grid;place-items:center">TF</span><span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">Tomás · Beca deportiva</span><span style="display:block;font-size:13px;color:#586575">50 % sobre la cuota · vigente</span></span></div>
+</div>
+<div style="font-size:12px;color:#586575;text-align:center">Importes de ejemplo. No se procesan pagos en esta demo.</div>
+</div>
+</sc-if>
+
+<!-- ============ FAMILIA (MENOR) ============ -->
+<sc-if value="{{ scr.familia }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#E8EEF5;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:12px">
+<span style="width:56px;height:56px;border-radius:28px;background:{{ kid.av }};color:#fff;font-size:19px;font-weight:700;display:grid;place-items:center">{{ kid.ini }}</span>
+<div><div style="font-size:21px;font-weight:700;color:#14263D">{{ kid.name }}</div><div style="font-size:14px;color:#3D5068;margin-top:2px">{{ kid.cat }} · N° {{ kid.n }}</div></div>
+</div>
+<div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#14263D;background:#fff;border-radius:10px;padding:8px 10px"><span class="material-symbols-rounded" style="font-size:18px">visibility</span>Estás viendo el perfil de {{ kid.first }} como responsable</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<button onClick="{{ kid.openCarnet }}" style="height:52px;border:none;border-radius:14px;background:#14263D;color:#fff;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px" style-active="background:#223C59"><span class="material-symbols-rounded" style="font-size:22px">id_card</span>Ver carnet</button>
+<button onClick="{{ kid.openAgenda }}" style="height:52px;border:none;border-radius:14px;background:#14263D;color:#fff;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px" style-active="background:#223C59"><span class="material-symbols-rounded" style="font-size:22px">calendar_month</span>Ver agenda</button>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:700">Qué podés hacer por {{ kid.first }}</div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<sc-for list="{{ perms }}" as="p" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;gap:12px;padding:0 14px;min-height:52px;border-bottom:1px solid #EEEDE9"><span class="material-symbols-rounded" style="font-size:22px;color:{{ p.fg }};font-variation-settings:'FILL' 1">{{ p.icon }}</span><span style="flex:1;font-size:15px;color:{{ p.text }}">{{ p.label }}</span><span style="font-size:12px;color:#586575">{{ p.note }}</span></div>
+</sc-for>
+</div>
+<div style="font-size:12px;color:#586575">Permisos de ejemplo. Los define el club para cada vínculo.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:700">Responsables</div>
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);overflow:hidden">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #EEEDE9"><span style="width:36px;height:36px;border-radius:18px;background:#14263D;color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center">MF</span><span style="flex:1;font-size:15px;font-weight:600">Martín Ferreyra</span><span style="font-size:12px;font-weight:600;color:#14263D;background:#E8EEF5;padding:4px 8px;border-radius:999px">Vos</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px"><span style="width:36px;height:36px;border-radius:18px;background:#7C5E8C;color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center">LG</span><span style="flex:1;font-size:15px;font-weight:600">Laura Gómez</span><span style="font-size:12px;color:#586575">Responsable</span></div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ FIXTURE ============ -->
+<sc-if value="{{ scr.fixture }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;background:#E7E6E1;border-radius:12px;padding:3px">
+<sc-for list="{{ fixTabs }}" as="g" hint-placeholder-count="2">
+<button onClick="{{ g.onTap }}" style="flex:1;height:40px;border:none;border-radius:10px;background:{{ g.bg }};color:#18283B;font-size:15px;font-weight:600;box-shadow:{{ g.shadow }}">{{ g.label }}</button>
+</sc-for>
+</div>
+<div style="font-size:18px;font-weight:700">Próximos</div>
+<sc-for list="{{ fixUp }}" as="m" hint-placeholder-count="2">
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);padding:14px;display:flex;align-items:center;gap:12px">
+<span style="flex:1"><span style="display:block;font-size:12px;font-weight:700;color:#586575;letter-spacing:.05em;text-transform:uppercase">{{ m.round }} · {{ m.lv }}</span><span style="display:block;font-size:17px;font-weight:600;margin-top:3px">vs {{ m.vs }}</span></span>
+<span style="font:600 20px 'Barlow Condensed';color:#14263D;text-align:right">{{ m.date }}</span>
+</div>
+</sc-for>
+<div style="font-size:18px;font-weight:700;margin-top:6px">Resultados</div>
+<sc-for list="{{ fixRes }}" as="m" hint-placeholder-count="2">
+<div style="background:#fff;border-radius:18px;box-shadow:0 0 0 1px rgba(20,38,61,.07);padding:14px;display:flex;align-items:center;gap:12px">
+<span style="width:30px;height:30px;border-radius:8px;background:{{ m.bg }};color:{{ m.fg }};font:700 16px/30px 'Barlow Condensed';text-align:center">{{ m.r }}</span>
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">vs {{ m.vs }}</span><span style="display:block;font-size:13px;color:#586575">{{ m.date }}</span></span>
+<span style="font:700 24px 'Barlow Condensed';color:#14263D">{{ m.score }}</span>
+</div>
+</sc-for>
+<div style="font-size:12px;color:#586575;text-align:center">Datos de ejemplo.</div>
+</div>
+</sc-if>
+
+<!-- ============ NOTICIA ============ -->
+<sc-if value="{{ scr.noticia }}" hint-placeholder-val="{{ false }}">
+<div style="padding:4px 16px 28px;display:flex;flex-direction:column;gap:14px">
+<div style="height:200px;border-radius:20px;background:repeating-linear-gradient(135deg,#E4E2DC 0 8px,#EDEBE6 8px 16px);display:grid;place-items:center;font:11px ui-monospace,Menlo,monospace;color:#8A8F95">foto de la novedad</div>
+<div style="font-size:13px;font-weight:700;color:#BC2438;text-transform:uppercase;letter-spacing:.05em">Comunicado · Hoy</div>
+<div style="font-size:26px;font-weight:700;line-height:1.15">Nuevo horario de secretaría</div>
+<div style="font-size:17px;line-height:1.5;color:#2E3C4E">Contenido de ejemplo. Acá la administración publica avisos, noticias y comunicados desde el panel del club.</div>
+</div>
+</sc-if>
+
+</div>
+
+<!-- PADEL CTA -->
+<sc-if value="{{ showCta }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:0;right:0;bottom:84px;z-index:15;background:#fff;box-shadow:0 -1px 0 rgba(20,38,61,.08),0 -10px 24px -12px rgba(20,38,61,.2);padding:12px 16px;display:flex;align-items:center;gap:12px">
+<div style="flex:1;min-width:0"><div style="font-size:13px;color:#586575">{{ ctaDay }}</div><div style="font:600 24px/1.1 'Barlow Condensed'">{{ ctaTime }}</div></div>
+<button onClick="{{ onContinue }}" style="height:52px;border:none;border-radius:15px;background:#BC2438;color:#fff;font-size:17px;font-weight:600;padding:0 26px" style-active="background:#981B2C">{{ ctaLabel }}</button>
+</div>
+</sc-if>
+
+<!-- TAB BAR -->
+<sc-if value="{{ ios }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;left:0;right:0;bottom:0;height:84px;z-index:20;background:rgba(250,250,248,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid rgba(20,38,61,.16);display:flex;padding:4px 4px 0;box-sizing:border-box">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button onClick="{{ t.onTap }}" aria-label="{{ t.label }}" style="flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:50px;color:{{ t.color }}"><span class="material-symbols-rounded" style="font-size:28px;font-variation-settings:{{ t.fvs }}">{{ t.icon }}</span><span style="font-size:10.5px;font-weight:{{ t.weight }}">{{ t.label }}</span></button>
+</sc-for>
+<div style="position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:#111"></div>
+</div>
+</sc-if>
+<sc-if value="{{ android }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:0;right:0;bottom:0;height:84px;z-index:20;background:#EFEDE8;display:flex;padding:10px 0 0;box-sizing:border-box">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button onClick="{{ t.onTap }}" aria-label="{{ t.label }}" style="flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ t.colorA }}"><span style="width:60px;height:32px;border-radius:16px;background:{{ t.pill }};display:grid;place-items:center"><span class="material-symbols-rounded" style="font-size:24px;font-variation-settings:{{ t.fvs }}">{{ t.icon }}</span></span><span style="font-size:12px;font-weight:{{ t.weight }}">{{ t.label }}</span></button>
+</sc-for>
+<div style="position:absolute;left:50%;bottom:7px;transform:translateX(-50%);width:108px;height:4px;border-radius:2px;background:#222"></div>
+</div>
+</sc-if>
+
+<!-- SHEETS -->
+<sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeSheet }}" style="position:absolute;inset:0;z-index:40;background:rgba(10,18,30,.45);animation:pdFade .2s ease"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;z-index:41;background:#fff;border-radius:28px 28px 0 0;padding:8px 20px 34px;animation:pdUp .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:16px;max-height:88%;overflow-y:auto;box-sizing:border-box">
+<div style="width:40px;height:5px;border-radius:3px;background:#D5D8DC;align-self:center"></div>
+
+<sc-if value="{{ sh.confirm }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:22px;font-weight:700">Confirmá tu turno</div>
+<div style="background:#F4F3EF;border-radius:16px;padding:4px 14px">
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #E6E4DF;font-size:15px"><span style="color:#586575">Día</span><span style="font-weight:600">{{ cf.day }}</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #E6E4DF;font-size:15px"><span style="color:#586575">Horario</span><span style="font-weight:600">{{ cf.time }}</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #E6E4DF;font-size:15px"><span style="color:#586575">Duración</span><span style="font-weight:600">90 minutos</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;font-size:15px"><span style="color:#586575">Precio</span><span style="font-weight:600">$40.000</span></div>
+</div>
+<sc-if value="{{ cf.hasCredits }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:15px;font-weight:700">¿Cómo querés reservar?</div>
+<button onClick="{{ cf.pickCredit }}" style="border:none;background:#fff;border-radius:16px;box-shadow:{{ cf.creditShadow }};padding:14px;display:flex;align-items:center;gap:12px;text-align:left;color:#18283B">
+<span class="material-symbols-rounded" style="font-size:26px;color:#1F5C3F;font-variation-settings:'FILL' 1">confirmation_number</span>
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">Usar 1 crédito</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">Sin pagar · te quedan {{ cf.left }}</span></span>
+<span style="width:24px;height:24px;border-radius:12px;box-sizing:border-box;border:{{ cf.creditRadio }}"></span>
+</button>
+<button onClick="{{ cf.pickPay }}" style="border:none;background:#fff;border-radius:16px;box-shadow:{{ cf.payShadow }};padding:14px;display:flex;align-items:center;gap:12px;text-align:left;color:#18283B">
+<span class="material-symbols-rounded" style="font-size:26px;color:#14263D">credit_card</span>
+<span style="flex:1"><span style="display:block;font-size:16px;font-weight:600">Pagar $40.000</span><span style="display:block;font-size:13px;color:#586575;margin-top:2px">Guardás tu crédito</span></span>
+<span style="width:24px;height:24px;border-radius:12px;box-sizing:border-box;border:{{ cf.payRadio }}"></span>
+</button>
+</sc-if>
+<sc-if value="{{ cf.noCredits }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#586575"><span class="material-symbols-rounded" style="font-size:18px">confirmation_number</span>No tenés créditos de turno disponibles.</div>
+</sc-if>
+<button onClick="{{ confirmBooking }}" style="height:56px;border:none;border-radius:16px;background:#BC2438;color:#fff;font-size:17px;font-weight:600" style-active="background:#981B2C">{{ cf.cta }}</button>
+<button onClick="{{ closeSheet }}" style="height:48px;border:none;border-radius:14px;background:#E8EEF5;color:#14263D;font-size:16px;font-weight:600;margin-top:-6px" style-active="background:#D6E0EC">Cambiar horario</button>
+<div style="font-size:12px;color:#7A4F00;text-align:center">Demostración · no se realiza ningún cobro.</div>
+</sc-if>
+
+<sc-if value="{{ sh.success }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding-top:8px">
+<span style="width:72px;height:72px;border-radius:36px;background:#E6F2EA;color:#1F5C3F;display:grid;place-items:center"><span class="material-symbols-rounded" style="font-size:44px;font-variation-settings:'wght' 600">check</span></span>
+<div style="font-size:24px;font-weight:700;margin-top:6px">¡Turno reservado!</div>
+<div style="font-size:16px;color:#586575">{{ ok.day }}</div>
+<div style="font:600 30px/1.1 'Barlow Condensed';color:#14263D">{{ ok.time }}</div>
+<div style="font-size:14px;color:#586575">{{ ok.paid }} · Ya está en tu Agenda</div>
+</div>
+<button onClick="{{ closeSheet }}" style="height:56px;border:none;border-radius:16px;background:#BC2438;color:#fff;font-size:17px;font-weight:600" style-active="background:#981B2C">Listo</button>
+<button onClick="{{ go.agendaFromOk }}" style="height:48px;border:none;border-radius:14px;background:#E8EEF5;color:#14263D;font-size:16px;font-weight:600;margin-top:-6px" style-active="background:#D6E0EC">Ver en Agenda</button>
+</sc-if>
+
+<sc-if value="{{ sh.res }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:22px;font-weight:700">{{ ar.title }}</div><span style="font-size:12px;font-weight:700;color:{{ ar.tagFg }};background:{{ ar.tagBg }};padding:5px 10px;border-radius:999px">{{ ar.tag }}</span></div>
+<div style="background:#F4F3EF;border-radius:16px;padding:14px;display:flex;align-items:center;gap:14px">
+<span style="width:56px;height:56px;border-radius:14px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-size:11px;font-weight:700;color:#BC2438;letter-spacing:.06em">{{ ar.dow }}</span><span style="font:700 26px/1 'Barlow Condensed'">{{ ar.num }}</span></span>
+<span><span style="display:block;font-size:16px;font-weight:600">{{ ar.long }}</span><span style="display:block;font:600 22px/1.2 'Barlow Condensed';color:#14263D">{{ ar.time }}</span><span style="display:block;font-size:13px;color:#586575">{{ ar.sub }}</span></span>
+</div>
+<sc-if value="{{ ar.isPadel }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ startModify }}" style="height:56px;border:none;border-radius:16px;background:#14263D;color:#fff;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px" style-active="background:#223C59"><span class="material-symbols-rounded" style="font-size:22px">edit_calendar</span>Modificar día u horario</button>
+</sc-if>
+<button onClick="{{ askCancel }}" style="height:54px;border:1.5px solid #E5B9C0;border-radius:16px;background:#fff;color:#A51F31;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px" style-active="background:#FBECEF"><span class="material-symbols-rounded" style="font-size:22px">event_busy</span>{{ ar.cancelLabel }}</button>
+<button onClick="{{ closeSheet }}" style="height:44px;border:none;background:none;color:#586575;font-size:16px;font-weight:600;margin-top:-6px">Cerrar</button>
+</sc-if>
+
+<sc-if value="{{ sh.cancel }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:22px;font-weight:700">¿Cancelar este turno?</div>
+<div style="font-size:16px;color:#2E3C4E">{{ ar.long }} · {{ ar.time }}</div>
+<div style="background:#F4F3EF;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:10px;font-size:15px"><span class="material-symbols-rounded" style="font-size:20px;color:#14263D">lock_open</span>El horario queda libre para otros socios.</div>
+<sc-if value="{{ ar.isPadel }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:10px;font-size:15px"><span class="material-symbols-rounded" style="font-size:20px;color:#1F5C3F;font-variation-settings:'FILL' 1">confirmation_number</span><span>Si cumple la política del club, recibís <b>1 crédito</b> para otro turno.</span></div>
+</sc-if>
+</div>
+<div style="font-size:12px;color:#7A4F00">Política de cancelación pendiente de definición. En esta demo se acredita 1 crédito.</div>
+<button onClick="{{ doCancel }}" style="height:56px;border:none;border-radius:16px;background:#9F2030;color:#fff;font-size:17px;font-weight:600" style-active="background:#7E1826">Sí, cancelar</button>
+<button onClick="{{ closeSheet }}" style="height:48px;border:none;border-radius:14px;background:#E8EEF5;color:#14263D;font-size:16px;font-weight:600;margin-top:-6px" style-active="background:#D6E0EC">No, mantener reserva</button>
+</sc-if>
+
+<sc-if value="{{ sh.modconfirm }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:22px;font-weight:700">Confirmá el cambio</div>
+<div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center">
+<div style="background:#F4F3EF;border-radius:14px;padding:12px;text-align:center"><div style="font-size:12px;color:#586575;font-weight:600">Antes</div><div style="font-size:15px;font-weight:600;margin-top:4px;text-decoration:line-through;color:#586575">{{ mc.fromDay }}</div><div style="font:600 20px 'Barlow Condensed';color:#586575;text-decoration:line-through">{{ mc.fromTime }}</div></div>
+<span class="material-symbols-rounded" style="font-size:24px;color:#14263D">arrow_forward</span>
+<div style="background:#E8EEF5;border-radius:14px;padding:12px;text-align:center"><div style="font-size:12px;color:#14263D;font-weight:600">Nuevo</div><div style="font-size:15px;font-weight:700;margin-top:4px">{{ mc.toDay }}</div><div style="font:600 20px 'Barlow Condensed';color:#14263D">{{ mc.toTime }}</div></div>
+</div>
+<div style="font-size:14px;color:#586575;text-align:center">Sin costo adicional. No se usan ni generan créditos.</div>
+<button onClick="{{ confirmModify }}" style="height:56px;border:none;border-radius:16px;background:#BC2438;color:#fff;font-size:17px;font-weight:600" style-active="background:#981B2C">Confirmar modificación</button>
+<button onClick="{{ closeSheet }}" style="height:48px;border:none;border-radius:14px;background:#E8EEF5;color:#14263D;font-size:16px;font-weight:600;margin-top:-6px" style-active="background:#D6E0EC">Elegir otro horario</button>
+</sc-if>
+
+<sc-if value="{{ sh.enroll }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:22px;font-weight:700">Inscribirte en {{ act.title }}</div>
+<div style="background:#F4F3EF;border-radius:16px;padding:14px;font-size:15px;display:flex;flex-direction:column;gap:6px"><span><b>{{ act.days }}</b> · {{ act.time }}</span><span style="color:#586575">{{ act.place }} · {{ act.cupos }}</span></div>
+<div style="font-size:14px;color:#586575">Las próximas clases aparecerán en tu Agenda.</div>
+<button onClick="{{ confirmEnroll }}" style="height:56px;border:none;border-radius:16px;background:#BC2438;color:#fff;font-size:17px;font-weight:600" style-active="background:#981B2C">Confirmar inscripción</button>
+<button onClick="{{ closeSheet }}" style="height:48px;border:none;border-radius:14px;background:#E8EEF5;color:#14263D;font-size:16px;font-weight:600;margin-top:-6px">Volver</button>
+</sc-if>
+
+<sc-if value="{{ sh.unenroll }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:22px;font-weight:700">¿Cancelar inscripción?</div>
+<div style="font-size:15px;color:#2E3C4E">Las clases futuras de {{ act.title }} dejan de aparecer en tu Agenda. Tu historial se conserva.</div>
+<button onClick="{{ confirmUnenroll }}" style="height:56px;border:none;border-radius:16px;background:#9F2030;color:#fff;font-size:17px;font-weight:600" style-active="background:#7E1826">Sí, cancelar inscripción</button>
+<button onClick="{{ closeSheet }}" style="height:48px;border:none;border-radius:14px;background:#E8EEF5;color:#14263D;font-size:16px;font-weight:600;margin-top:-6px">Mantener inscripción</button>
+</sc-if>
+
+<sc-if value="{{ sh.credits }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:12px"><span style="width:52px;height:52px;border-radius:16px;background:#E6F2EA;color:#1F5C3F;display:grid;place-items:center"><span class="material-symbols-rounded" style="font-size:30px;font-variation-settings:'FILL' 1">confirmation_number</span></span><div><div style="font-size:22px;font-weight:700">{{ creditsLong }}</div><div style="font-size:14px;color:#586575">Créditos de turno</div></div></div>
+<div style="background:#F4F3EF;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;font-size:15px">
+<div style="display:flex;gap:10px"><b style="font:700 18px 'Barlow Condensed';color:#14263D">1 = 1</b>Un crédito vale un turno completo de 90 min, sin importar el precio.</div>
+<div style="display:flex;gap:10px"><span class="material-symbols-rounded" style="font-size:20px;color:#14263D">add_circle</span>Se generan al cancelar un turno, si corresponde.</div>
+<div style="display:flex;gap:10px"><span class="material-symbols-rounded" style="font-size:20px;color:#14263D">do_not_disturb_on</span>No son dinero: no se pueden transferir ni cobrar.</div>
+</div>
+<button onClick="{{ closeSheet }}" style="height:52px;border:none;border-radius:15px;background:#14263D;color:#fff;font-size:16px;font-weight:600">Entendido</button>
+</sc-if>
+
+</div>
+</sc-if>
+
+<!-- TOAST -->
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:58px;left:16px;right:16px;z-index:50;background:#14263D;color:#fff;border-radius:16px;padding:14px 16px;display:flex;gap:10px;align-items:center;font-size:15px;font-weight:500;box-shadow:0 12px 24px -10px rgba(0,0,0,.4);animation:pdToast .25s ease"><span class="material-symbols-rounded" style="font-size:22px;color:#9FD8B5;font-variation-settings:'FILL' 1">check_circle</span>{{ toast }}</div>
+</sc-if>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:914},&quot;platform&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ios&quot;,&quot;android&quot;],&quot;default&quot;:&quot;ios&quot;,&quot;tsType&quot;:&quot;'ios'|'android'&quot;,&quot;section&quot;:&quot;Plataforma&quot;},&quot;credits&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;0&quot;,&quot;1&quot;,&quot;2&quot;],&quot;default&quot;:&quot;1&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;homeStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;c&quot;,&quot;a&quot;,&quot;b&quot;],&quot;default&quot;:&quot;c&quot;,&quot;tsType&quot;:&quot;'a'|'b'|'c'&quot;,&quot;section&quot;:&quot;Variantes&quot;},&quot;padelPicker&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;grilla&quot;,&quot;lista&quot;,&quot;rueda&quot;],&quot;default&quot;:&quot;grilla&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Variantes&quot;},&quot;agendaStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;semana&quot;,&quot;linea&quot;,&quot;lista&quot;],&quot;default&quot;:&quot;semana&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Variantes&quot;},&quot;start&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;inicio&quot;,&quot;club&quot;,&quot;reservas&quot;,&quot;padel&quot;,&quot;padelConfirm&quot;,&quot;padelSuccess&quot;,&quot;resSheet&quot;,&quot;modify&quot;,&quot;cancel&quot;,&quot;credits&quot;,&quot;quinchos&quot;,&quot;agenda&quot;,&quot;carnet&quot;,&quot;cuenta&quot;,&quot;cuentaCorriente&quot;,&quot;familia&quot;,&quot;gimnasio&quot;,&quot;gymLog&quot;,&quot;actividad&quot;,&quot;fixture&quot;],&quot;default&quot;:&quot;inicio&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+const DOW=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const DOWL=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MON=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MONL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const SLOTS=['08:00','09:30','11:00','12:30','14:00','15:30','17:00','18:30','20:00','21:30'];
+const pad=n=>String(n).padStart(2,'0');
+const dt=i=>new Date(2026,10,20+i);
+const endT=t=>{const[h,m]=t.split(':').map(Number);const v=h*60+m+90;return pad(Math.floor(v/60))+':'+pad(v%60);};
+const shortD=i=>{const x=dt(i);return DOW[x.getDay()]+' '+x.getDate()+' '+MON[x.getMonth()];};
+const longD=i=>{const x=dt(i);return DOWL[x.getDay()]+' '+x.getDate()+' de '+MONL[x.getMonth()].toLowerCase();};
+const mins=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
+const baseTaken=(day,si)=>{if(day<0)return true;if(day===0)return si<6||si===8;if(day===5)return true;if(day===2)return!(si===1||si===3);return((day*3+si*7)%5===0)||(si>=7&&(day+si)%3===0);};
+const TONE={g:['#1F5C3F','#E6F2EA'],r:['#A51F31','#FBECEF'],n:['#14263D','#E8EEF5'],a:['#7A4F00','#FBF0D9']};
+const BAR={g:'#2E8A5C',r:'#BC2438',n:'#14263D',a:'#C98A00'};
+const ACT={yoga:{title:'Yoga',icon:'self_improvement',days:'Martes y jueves',short:'Mar y Jue · 18:00',time:'18:00 – 19:00',place:'Salón SUM',cupos:'4 libres de 16',prof:'Prof. Carla Méndez · clase de ejemplo'},funcional:{title:'Funcional',icon:'directions_run',days:'Lunes y miércoles',short:'Lun y Mié · 19:00',time:'19:00 – 20:00',place:'Sector entrenamiento',cupos:'3 libres de 20',prof:'Prof. Diego Ramos · clase de ejemplo'}};
+const PEOPLE=[{name:'Martín Ferreyra',first:'Martín',label:'Yo',n:'4821',cat:'Activo · Plantel Superior Rugby',ini:'MF',av:'#14263D',seed:7},{name:'Sofía Ferreyra',first:'Sofía',label:'Sofía',n:'7316',cat:'Menor · Hockey Sub-12',ini:'SF',av:'#BC2438',seed:31},{name:'Tomás Ferreyra',first:'Tomás',label:'Tomás',n:'8042',cat:'Menor · Rugby M9',ini:'TF',av:'#3E6A9A',seed:59}];
+const MATCHES=[{sport:'Rugby',icon:'sports_rugby',vs:'Club del Sur',when:'Sáb 21 nov',time:'15:30',lv:'Local'},{sport:'Hockey',icon:'sports_hockey',vs:'Club del Parque',when:'Dom 22 nov',time:'16:00',lv:'Visitante'}];
+const NEWS=[{cat:'Comunicado',when:'Hoy',title:'Nuevo horario de secretaría',sum:'Aviso institucional de ejemplo.'},{cat:'Evento',when:'Ayer',title:'Cena de fin de año',sum:'Inscripciones para socios y familias.'}];
+const FIX={rugby:{up:[{round:'Fecha 9',lv:'Local',vs:'Club del Sur',date:'Sáb 21 · 15:30'},{round:'Fecha 10',lv:'Visitante',vs:'Club Norte',date:'Sáb 28 · 15:30'}],res:[{r:'G',vs:'Club Oeste',date:'Sáb 14 nov · Local',score:'27 – 18'},{r:'P',vs:'Club Río',date:'Sáb 7 nov · Visitante',score:'14 – 21'}]},hockey:{up:[{round:'Fecha 11',lv:'Visitante',vs:'Club del Parque',date:'Dom 22 · 16:00'},{round:'Fecha 12',lv:'Local',vs:'Club Lomas',date:'Dom 29 · 11:00'}],res:[{r:'E',vs:'Club Este',date:'Dom 15 nov · Local',score:'2 – 2'},{r:'G',vs:'Club Alto',date:'Dom 8 nov · Visitante',score:'3 – 1'}]}};
+const ROUT={A:[{n:'Sentadilla trasera',sets:4,reps:6,prev:100},{n:'Press de banca',sets:4,reps:8,prev:75},{n:'Peso muerto rumano',sets:3,reps:8,prev:80},{n:'Dominadas',sets:3,reps:8,prev:0,bw:true}],B:[{n:'Press militar',sets:4,reps:6,prev:45},{n:'Remo con barra',sets:4,reps:8,prev:70},{n:'Zancadas con mancuernas',sets:3,reps:10,prev:24},{n:'Plancha',sets:3,reps:'45 s',prev:0,bw:true}]};
+const mkGym=()=>ROUT.A.map(e=>Array.from({length:e.sets},()=>({kg:e.bw?'':String(e.prev),reps:String(e.reps),done:false})));
+const TABS=[['inicio','Inicio','home'],['agenda','Agenda','calendar_month'],['carnet','Carnet','id_card'],['club','Club','stadium'],['cuenta','Cuenta','person']];
+const TITLES={inicio:'Inicio',agenda:'Agenda',carnet:'Carnet',club:'Club',cuenta:'Cuenta',reservas:'Reservas',padel:'Pádel',quinchos:'Quinchos',gimnasio:'Gimnasio',gymLog:'Día A · Fuerza',actividad:'Actividades',cuentaCorriente:'Cuenta corriente',familia:'Grupo familiar',fixture:'Primera',noticia:'Novedades'};
+
+function init(p){
+  const credits=Number(p.credits??1);
+  const s={tab:'inicio',stack:[],day:1,slot:null,sheet:null,useCredit:credits>0,credits,
+    res:[{id:'r1',kind:'padel',day:2,time:'18:30',end:'20:00',status:'ok',paid:'Pagado'},{id:'r2',kind:'quincho',day:3,time:'12:00',end:'17:00',status:'pending',q:'Quincho 1'}],
+    activeRes:null,modifyId:null,enrolled:{yoga:false,funcional:true},actId:'funcional',agDay:0,who:'todos',carnet:0,gymDay:'A',gym:mkGym(),elapsed:0,qDay:3,qWhich:0,qTurno:0,fixSport:'rugby',child:1,toast:null,okId:null};
+  const st=p.start||'inicio';
+  if(TABS.some(t=>t[0]===st)) s.tab=st;
+  const m={reservas:['club',['reservas']],padel:['club',['reservas','padel']],quinchos:['club',['reservas','quinchos']],gimnasio:['club',['gimnasio']],gymLog:['club',['gimnasio','gymLog']],actividad:['club',['actividad']],cuentaCorriente:['cuenta',['cuentaCorriente']],familia:['cuenta',['familia']],fixture:['inicio',['fixture']],
+    padelConfirm:['club',['reservas','padel']],padelSuccess:['club',['reservas','padel']],resSheet:['club',['reservas','padel']],cancel:['club',['reservas','padel']],modify:['club',['reservas','padel']],credits:['club',['reservas','padel']]};
+  if(m[st]){s.tab=m[st][0];s.stack=m[st][1].slice();}
+  if(st==='padelConfirm'){s.slot='18:30';s.sheet='confirm';}
+  if(st==='padelSuccess'){s.res.push({id:'r3',kind:'padel',day:1,time:'18:30',end:'20:00',status:'ok',paid:credits>0?'Con 1 crédito':'Pagado'});if(credits>0)s.credits=credits-1;s.okId='r3';s.sheet='success';}
+  if(st==='resSheet'){s.activeRes='r1';s.sheet='res';}
+  if(st==='cancel'){s.activeRes='r1';s.sheet='cancel';}
+  if(st==='modify'){s.modifyId='r1';s.activeRes='r1';s.day=4;s.slot='17:00';}
+  if(st==='credits'){s.sheet='credits';}
+  if(st==='actividad'){s.actId='yoga';}
+  if(st==='gymLog'){s.gym[0][0].done=true;s.gym[0][1].done=true;s.elapsed=754;}
+  return s;
+}
+function qrCells(seed){const N=25,out=[];let x=seed*977+13;const rnd=()=>{x=(x*9301+49297)%233280;return x/233280;};
+  const fin=(r,c)=>{for(const[fr,fc]of[[0,0],[0,N-7],[N-7,0]]){if(r>=fr&&r<fr+7&&c>=fc&&c<fc+7){const a=r-fr,b=c-fc;return(a===0||a===6||b===0||b===6||(a>=2&&a<=4&&b>=2&&b<=4))?1:0;}}if((r<8&&c<8)||(r<8&&c>=N-8)||(r>=N-8&&c<8))return 0;return-1;};
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){const f=fin(r,c);out.push({c:(f===-1?rnd()<.48:f===1)?'#14263D':'transparent'});}return out;}
+
+class Component extends DCLogic {
+  state=init(this.props);
+  scrollRef=React.createRef();
+  wheelRef=React.createRef();
+  componentDidMount(){this.timer=setInterval(()=>{if(this.cur()==='gymLog')this.setState(s=>({elapsed:s.elapsed+1}));},1000);this.syncWheel();}
+  componentWillUnmount(){clearInterval(this.timer);clearTimeout(this.tt);}
+  componentDidUpdate(pp,ps){
+    if(pp.start!==this.props.start||pp.credits!==this.props.credits){this.setState(init(this.props));return;}
+    const c=this.cur(),pc=ps.stack.length?ps.stack[ps.stack.length-1]:ps.tab;
+    if(c!==pc&&this.scrollRef.current)this.scrollRef.current.scrollTop=0;
+    if(c==='padel'&&(pc!=='padel'||ps.day!==this.state.day||pp.padelPicker!==this.props.padelPicker||ps.modifyId!==this.state.modifyId))this.syncWheel();
+  }
+  cur(s=this.state){return s.stack.length?s.stack[s.stack.length-1]:s.tab;}
+  picker(){return this.props.padelPicker||'grilla';}
+  avail(day,s=this.state){return SLOTS.filter((t,i)=>!baseTaken(day,i)&&!s.res.some(r=>r.kind==='padel'&&r.day===day&&r.time===t&&r.id!==s.modifyId));}
+  syncWheel(){if(this.picker()!=='rueda')return;const av=this.avail(this.state.day);let i=av.indexOf(this.state.slot);if(i<0&&av.length){i=0;this.setState({slot:av[0]});}const el=this.wheelRef.current;if(el)el.scrollTop=Math.max(0,i)*44;}
+  toast(msg){this.setState({toast:msg});clearTimeout(this.tt);this.tt=setTimeout(()=>this.setState({toast:null}),2600);}
+  push(x){this.setState(s=>({stack:[...s.stack,x],sheet:null}));}
+  setTab(t){this.setState({tab:t,stack:[],sheet:null,modifyId:null});}
+  evts(off,who){
+    const s=this.state,x=dt(off),w=x.getDay(),out=[];
+    const add=e=>{if(who==='todos'||who===e.who)out.push(e);};
+    if(w===2||w===5)add({who:'martin',t:'20:00',e:'21:30',title:'Entrenamiento Plantel Superior',place:'Cancha 1',tag:'Grupal',tone:'n',icon:'sports_rugby',kind:'train'});
+    if(s.enrolled.funcional&&(w===1||w===3)&&off>=0)add({who:'martin',t:'19:00',e:'20:00',title:'Funcional',place:'Sector entrenamiento',tag:'Inscripto',tone:'g',icon:'directions_run',kind:'act',act:'funcional'});
+    if(s.enrolled.yoga&&(w===2||w===4)&&off>=0)add({who:'martin',t:'18:00',e:'19:00',title:'Yoga',place:'Salón SUM',tag:'Inscripto',tone:'g',icon:'self_improvement',kind:'act',act:'yoga'});
+    if(off===1)add({who:'martin',t:'15:30',e:'17:00',title:'Primera vs Club del Sur',place:'Cancha principal',tag:'Convocado',tone:'r',icon:'sports_rugby',kind:'match'});
+    s.res.forEach(r=>{if(r.day===off)add({who:'martin',t:r.time,e:r.end,title:r.kind==='padel'?'Pádel':r.q,place:r.kind==='padel'?'Cancha de pádel':'Quinchos',tag:r.status==='pending'?'Pendiente':'Confirmada',tone:r.status==='pending'?'a':'g',icon:r.kind==='padel'?'sports_tennis':'outdoor_grill',kind:'res',id:r.id});});
+    if(w===1||w===3)add({who:'sofia',t:'17:30',e:'19:00',title:'Hockey Sub-12',place:'Cancha sintética',tag:'Entrenamiento',tone:'n',icon:'sports_hockey',kind:'kid'});
+    if(w===6)add({who:'tomas',t:'10:00',e:'11:30',title:'Rugby M9 · Encuentro',place:'Cancha 3',tag:'Convocado',tone:'r',icon:'sports_rugby',kind:'kid'});
+    return out.sort((a,b)=>mins(a.t)-mins(b.t));
+  }
+  evTap(e){
+    if(e.kind==='res')return()=>this.setState({sheet:'res',activeRes:e.id});
+    if(e.kind==='act')return()=>{this.setState({actId:e.act});this.push('actividad');};
+    if(e.kind==='match')return()=>this.push('fixture');
+    return()=>this.toast('Detalle de '+e.title+' · demo');
+  }
+  resView(r){
+    const x=dt(r.day),pend=r.status==='pending',tn=TONE[pend?'a':'g'];
+    return{dow:DOW[x.getDay()].toUpperCase(),num:x.getDate(),title:r.kind==='padel'?'Pádel':r.q,time:r.time+' – '+r.end,long:longD(r.day),tag:pend?'Pendiente':'Confirmada',tagFg:tn[0],tagBg:tn[1],paid:r.paid||'',sub:r.kind==='padel'?'Cancha de pádel · 90 min · '+(r.paid||''):'Solicitud enviada · a confirmar',isPadel:r.kind==='padel',cancelLabel:r.kind==='padel'?'Cancelar reserva':'Cancelar solicitud',onTap:()=>this.setState({sheet:'res',activeRes:r.id})};
+  }
+  renderVals(){
+    const s=this.state,p=this.props,c=this.cur();
+    const ios=(p.platform||'ios')!=='android';
+    const scr={};Object.keys(TITLES).forEach(k=>scr[k]=c===k);
+    const pick=this.picker();
+    const prev=s.stack.length>1?s.stack[s.stack.length-2]:s.tab;
+    const ok=(a,b)=>a;
+    const go={
+      padel:()=>{if(c==='padel')return;this.setState({modifyId:null});this.push('padel');},
+      quinchos:()=>this.push('quinchos'),gimnasio:()=>this.push('gimnasio'),gymLog:()=>this.push('gymLog'),
+      cuentaCorriente:()=>this.push('cuentaCorriente'),reservas:()=>this.push('reservas'),
+      fixture:()=>{this.setState({fixSport:'rugby'});this.push('fixture');},fixtureHockey:()=>{this.setState({fixSport:'hockey'});this.push('fixture');},
+      noticia:()=>this.push('noticia'),agenda:()=>this.setTab('agenda'),cuenta:()=>this.setTab('cuenta'),
+      agendaFromOk:()=>{const r=s.res.find(x=>x.id===s.okId);this.setState({tab:'agenda',stack:[],sheet:null,agDay:r?r.day:0,who:'todos'});}
+    };
+    const tabs=TABS.map(([id,label,icon])=>{const on=s.tab===id;return{label,icon,onTap:()=>this.setTab(id),color:on?'#BC2438':'#6B7684',colorA:on?'#14263D':'#4A5563',fvs:on?"'FILL' 1, 'wght' 500":"'FILL' 0, 'wght' 400",weight:on?700:500,pill:on?'#F6D9DE':'transparent'};});
+    const homeB=p.homeStyle!=='a'&&c==='inicio';
+    const credits=s.credits;
+    const creditsShort=credits===1?'1 crédito':credits+' créditos';
+    const creditsLong=credits===0?'Sin créditos disponibles':credits===1?'1 crédito disponible':credits+' créditos disponibles';
+    // home
+    const fut=s.res.filter(r=>r.day>=0&&r.status==='ok').sort((a,b)=>a.day-b.day||mins(a.time)-mins(b.time));
+    const nx=fut[0];
+    const next=nx?{title:nx.kind==='padel'?'Pádel':nx.q,date:shortD(nx.day),time:nx.time+' – '+nx.end,open:()=>this.setState({sheet:'res',activeRes:nx.id})}:{};
+    const upAll=[];for(let i=0;i<7&&upAll.length<4;i++)this.evts(i,'martin').forEach(e=>{if(upAll.length<4)upAll.push({...e,off:i});});
+    const weekItems=upAll.slice(0,2).map(e=>({icon:e.icon,title:e.title,sub:(e.off===0?'Hoy':shortD(e.off))+' · '+e.t+' · '+e.place,bg:TONE[e.tone][1],fg:TONE[e.tone][0],onTap:this.evTap(e)}));
+    const upcoming=upAll.slice(0,3).map(e=>{const x=dt(e.off);return{dow:DOW[x.getDay()].toUpperCase(),num:x.getDate(),title:e.title,sub:e.t+' · '+e.place,tag:e.tag,tagFg:TONE[e.tone][0],tagBg:TONE[e.tone][1],onTap:this.evTap(e)};});
+    const matches=MATCHES.map(m=>({...m,lvFg:m.lv==='Local'?'#14263D':'#586575',lvBg:m.lv==='Local'?'#E8EEF5':'#EEEDE9'}));
+    // club
+    const actCards=['yoga','funcional'].map(id=>{const a=ACT[id],on=s.enrolled[id];return{icon:a.icon,title:a.title,sub:a.short,tag:on?'Inscripto':'Inscribirme',tagFg:on?'#1F5C3F':'#BC2438',tagBg:on?'#E6F2EA':'#FBECEF',onTap:()=>{this.setState({actId:id});this.push('actividad');}};});
+    const lifeTiles=[['restaurant','Buffet'],['loyalty','Beneficios'],['newspaper','Noticias'],['celebration','Eventos']].map(([icon,label])=>({icon,label,onTap:label==='Noticias'?go.noticia:()=>this.toast(label+' · próximamente en la demo')}));
+    const activeRes=s.res.filter(r=>r.day>=0);
+    const allRes=activeRes.sort((a,b)=>a.day-b.day).map(r=>this.resView(r));
+    // padel
+    const av=this.avail(s.day);
+    const pDays=Array.from({length:14},(_,i)=>{const x=dt(i),n=this.avail(i).length,sel=i===s.day;return{dow:i===0?'Hoy':DOW[x.getDay()],num:x.getDate(),sub:n?n+' libres':'Completo',bg:sel?'#14263D':'#fff',fg:sel?'#fff':(n?'#18283B':'#9AA3AD'),subFg:sel?'#D3DFEB':(n?'#1F5C3F':'#9AA3AD'),shadow:sel?'0 6px 14px -6px rgba(20,38,61,.6)':'0 0 0 1px rgba(20,38,61,.08)',onTap:()=>this.setState({day:i,slot:null})};});
+    const pSlots=av.map((t,i)=>{const sel=s.slot===t;return{t,end:endT(t),sel,bg:sel?'#BC2438':'#fff',fg:sel?'#fff':'#18283B',shadow:sel?'0 6px 14px -6px rgba(188,36,56,.7)':'0 0 0 1px rgba(20,38,61,.1)',rowBg:sel?'#FBECEF':'#fff',radio:sel?'7px solid #BC2438':'2px solid #B8BFC7',wheelFg:sel?'#14263D':'#A9B0B8',onTap:()=>this.setState({slot:sel&&pick!=='rueda'?null:t}),onWheelTap:()=>{const el=this.wheelRef.current;if(el)el.scrollTo({top:i*44,behavior:'smooth'});this.setState({slot:t});}};});
+    const grp=[['Mañana','wb_sunny',t=>mins(t)<720],['Tarde','partly_cloudy_day',t=>mins(t)>=720&&mins(t)<1080],['Noche','dark_mode',t=>mins(t)>=1080]];
+    const pGroups=grp.map(([label,icon,f])=>({label,icon,slots:pSlots.filter(x=>f(x.t))})).filter(g=>g.slots.length);
+    let nf=-1;for(let i=s.day+1;i<14;i++){if(this.avail(i).length){nf=i;break;}}
+    const myPadel=s.res.filter(r=>r.kind==='padel'&&r.day>=0).sort((a,b)=>a.day-b.day).map(r=>this.resView(r));
+    const modR=s.res.find(r=>r.id===s.modifyId);
+    const showCta=c==='padel'&&!!s.slot&&!s.sheet&&av.includes(s.slot);
+    // sheets
+    const ar0=s.res.find(r=>r.id===s.activeRes);
+    const ar=ar0?this.resView(ar0):{};
+    const useC=s.useCredit&&credits>0;
+    const cf={day:longD(s.day),time:(s.slot||'')+' – '+(s.slot?endT(s.slot):''),hasCredits:credits>0,noCredits:credits<=0,left:Math.max(0,credits-1),
+      creditShadow:useC?'0 0 0 2px #BC2438':'0 0 0 1px rgba(20,38,61,.12)',payShadow:!useC?'0 0 0 2px #BC2438':'0 0 0 1px rgba(20,38,61,.12)',
+      creditRadio:useC?'7px solid #BC2438':'2px solid #B8BFC7',payRadio:!useC?'7px solid #BC2438':'2px solid #B8BFC7',
+      pickCredit:()=>this.setState({useCredit:true}),pickPay:()=>this.setState({useCredit:false}),cta:useC?'Confirmar con 1 crédito':'Confirmar y pagar $40.000'};
+    const okR=s.res.find(r=>r.id===s.okId);
+    const okV=okR?{day:longD(okR.day),time:okR.time+' – '+okR.end,paid:okR.paid}:{};
+    const mc=modR?{fromDay:shortD(modR.day),fromTime:modR.time+' – '+modR.end,toDay:shortD(s.day),toTime:s.slot?s.slot+' – '+endT(s.slot):''}:{};
+    const sh={};['confirm','success','res','cancel','modconfirm','enroll','unenroll','credits'].forEach(k=>sh[k]=s.sheet===k);
+    // activity
+    const a=ACT[s.actId],en=s.enrolled[s.actId];
+    const act={...a,enrolled:en,notEnrolled:!en,tag:en?'Inscripto':'No inscripto',tagFg:en?'#1F5C3F':'#586575',tagBg:en?'#E6F2EA':'#EEEDE9'};
+    const seg=(on)=>({bg:on?'#fff':'transparent',shadow:on?'0 1px 3px rgba(20,38,61,.15)':'none'});
+    const actTabs=['yoga','funcional'].map(id=>({label:ACT[id].title,...seg(s.actId===id),onTap:()=>this.setState({actId:id})}));
+    // agenda
+    const agStyle=p.agendaStyle||'semana';
+    const sel=dt(s.agDay),mondayOff=s.agDay-((sel.getDay()+6)%7);
+    const L=['L','M','M','J','V','S','D'];
+    const agWeek=L.map((l,i)=>{const off=mondayOff+i,x=dt(off),on=off===s.agDay,today=off===0,has=this.evts(off,s.who).length>0;return{l,num:x.getDate(),bg:on?'#14263D':'transparent',fg:on?'#fff':(today?'#BC2438':(off<0?'#9AA3AD':'#18283B')),w:on||today?700:500,dot:has?(on?'#BC2438':'#BC2438'):'transparent',onTap:()=>this.setState({agDay:off})};});
+    const who={martin:'',sofia:'SOFÍA',tomas:'TOMÁS'};
+    const mapE=(e)=>{const tn=TONE[e.tone],st=mins(e.t),en2=mins(e.e);return{...e,tagFg:tn[0],tagBg:tn[1],bar:BAR[e.tone],whoLabel:s.who==='todos'?who[e.who]:'',onTap:this.evTap(e),top:(st-480)/60*56+10,h:Math.max(40,(en2-st)/60*56-4)};};
+    const agEvents=this.evts(s.agDay,s.who).map(mapE);
+    const agWeekFull=L.map((l,i)=>{const off=mondayOff+i,ev=this.evts(off,s.who).map(mapE);return{title:longD(off)+(off===0?' · Hoy':''),fg:off===0?'#BC2438':'#18283B',count:ev.length?ev.length+(ev.length===1?' actividad':' actividades'):'',events:ev,empty:!ev.length};});
+    const whoChips=[['todos','Todos'],['martin','Yo'],['sofia','Sofía'],['tomas','Tomás']].map(([id,label])=>{const on=s.who===id;return{label,bg:on?'#14263D':'#fff',fg:on?'#fff':'#18283B',shadow:on?'none':'0 0 0 1px rgba(20,38,61,.12)',onTap:()=>this.setState({who:id})};});
+    const tlHours=Array.from({length:15},(_,i)=>({l:pad(8+i)+':00',top:i*56+10-7}));
+    // carnet
+    const person=PEOPLE[s.carnet];
+    const carnetTabs=PEOPLE.map((pp,i)=>{const on=i===s.carnet;return{label:pp.label,ini:pp.ini,bg:on?'#14263D':'#fff',fg:on?'#fff':'#18283B',shadow:on?'none':'0 0 0 1px rgba(20,38,61,.12)',avBg:on?'#fff':pp.av,avFg:on?'#14263D':'#fff',onTap:()=>this.setState({carnet:i})};});
+    const card={...person,estado:'Habilitado',minor:s.carnet>0};
+    // cuenta
+    const kids=[1,2].map(i=>({...PEOPLE[i],cat:PEOPLE[i].cat.replace('Menor · ','')+(i===1?' · 12 años':' · 9 años'),onTap:()=>{this.setState({child:i});this.push('familia');}}));
+    const settings=[['person','Perfil',''],['school','Becas','1 activa'],['tune','Preferencias',''],['support_agent','Soporte','']].map(([icon,label,value])=>({icon,label,value,onTap:label==='Becas'?go.cuentaCorriente:()=>this.toast(label+' · fuera del alcance de la demo')}));
+    const kp=PEOPLE[s.child];
+    const kid={...kp,cat:kp.cat.replace('Menor · ',''),openCarnet:()=>this.setState({tab:'carnet',stack:[],carnet:s.child}),openAgenda:()=>this.setState({tab:'agenda',stack:[],who:s.child===1?'sofia':'tomas'})};
+    const perms=[['Ver carnet',true,''],['Ver agenda y convocatorias',true,''],['Ver y pagar cuotas',true,''],['Inscribir en actividades',true,''],['Reservar pádel o quinchos',false,'No habilitado']].map(([label,on,note])=>({label,note,icon:on?'check_circle':'block',fg:on?'#2E8A5C':'#B0B6BD',text:on?'#18283B':'#8A929B'}));
+    const cuotas=[['Diciembre 2026','Vence 10 dic','$58.000','A pagar','#7A4F00'],['Noviembre 2026','Pagada el 5 nov · Débito','$58.000','Pagada','#1F5C3F'],['Octubre 2026','Pagada el 6 oct · Débito','$58.000','Pagada','#1F5C3F']].map(([m,d,a2,st,fg])=>({m,d,a:a2,st,fg}));
+    const fixTabs=['rugby','hockey'].map(id=>({label:id==='rugby'?'Rugby':'Hockey',...seg(s.fixSport===id),onTap:()=>this.setState({fixSport:id})}));
+    const F=FIX[s.fixSport];
+    const fixRes=F.res.map(m=>({...m,bg:m.r==='G'?'#E6F2EA':m.r==='P'?'#FBECEF':'#EEEDE9',fg:m.r==='G'?'#1F5C3F':m.r==='P'?'#A51F31':'#586575'}));
+    // gym
+    const gymDays=['A','B'].map(d=>({label:'Día '+d,...seg(s.gymDay===d),onTap:()=>this.setState({gymDay:d})}));
+    const gymList=ROUT[s.gymDay].map((e,i)=>({i:i+1,n:e.n,scheme:e.sets+' × '+e.reps,last:e.bw?'PC':e.prev+' kg'}));
+    const hist=[85,90,95,100];
+    const progress=hist.map((v,i)=>({v,l:'Sem '+(i+1),h:Math.round(v/100*80),bg:i===3?'#BC2438':'#D6DEE8'}));
+    let done=0,total=0,vol=0;
+    const gymLog=ROUT.A.map((e,ei)=>({n:e.n,scheme:e.sets+' × '+e.reps+(e.bw?'':' · último '+e.prev+' kg'),onAdd:()=>this.setState(st=>{const g=st.gym.map(x=>x.slice());const last=g[ei][g[ei].length-1];g[ei].push({...last,done:false});return{gym:g};}),
+      sets:s.gym[ei].map((x,si)=>{total++;if(x.done){done++;vol+=(Number(x.kg)||0)*(Number(x.reps)||0);}const upd=(patch)=>this.setState(st=>{const g=st.gym.map(y=>y.map(z=>({...z})));Object.assign(g[ei][si],patch);return{gym:g};});
+        return{i:si+1,kg:x.kg,reps:x.reps,prev:e.bw?'PC × '+e.reps:e.prev+' × '+e.reps,rowBg:x.done?'#E6F2EA':'transparent',inBg:x.done?'#D2E8DA':'#F1F0EC',chkBg:x.done?'#2E8A5C':'#E8E7E2',chkFg:x.done?'#fff':'#8A929B',onKg:ev=>upd({kg:ev.target.value}),onReps:ev=>upd({reps:ev.target.value}),onDone:()=>upd({done:!x.done})};})}));
+    const el=s.elapsed;
+    const qDays=Array.from({length:14},(_,i)=>{const x=dt(i),on=i===s.qDay;return{dow:i===0?'Hoy':DOW[x.getDay()],num:x.getDate(),bg:on?'#14263D':'#fff',fg:on?'#fff':'#18283B',shadow:on?'none':'0 0 0 1px rgba(20,38,61,.08)',onTap:()=>this.setState({qDay:i})};});
+    const qList=[['Quincho 1','Hasta 40 personas · parrilla'],['Quincho 2','Hasta 20 personas · parrilla']].map(([name,sub],i)=>{const on=s.qWhich===i;return{name,sub,shadow:on?'0 0 0 2px #14263D':'0 0 0 1px rgba(20,38,61,.08)',radio:on?'7px solid #14263D':'2px solid #B8BFC7',onTap:()=>this.setState({qWhich:i})};});
+    const qTurnos=[['Mediodía','12:00 – 17:00'],['Noche','20:00 – 01:00']].map(([label,hours],i)=>{const on=s.qTurno===i;return{label,hours,bg:on?'#14263D':'#fff',fg:on?'#fff':'#18283B',shadow:on?'none':'0 0 0 1px rgba(20,38,61,.1)',onTap:()=>this.setState({qTurno:i})};});
+    const labels={inicio:'01 Inicio',club:'02 Club',reservas:'03 Reservas',padel:'04 Pádel',agenda:'08 Agenda',carnet:'09 Carnet',cuenta:'10 Cuenta',gimnasio:'11 Gimnasio',gymLog:'11b Registro',actividad:'12 Actividades',quinchos:'13 Quinchos',familia:'14 Familia',cuentaCorriente:'15 Cuenta corriente',fixture:'16 Fixture',noticia:'17 Novedad'};
+    return {
+      screenLabel:labels[c]||c,ios,android:!ios,scr,scrollRef:this.scrollRef,wheelRef:this.wheelRef,
+      statusBg:homeB?'#14263D':(scr.inicio?'#F4F3EF':'rgba(244,243,239,.94)'),statusFg:homeB?'#fff':'#18283B',
+      isStack:s.stack.length>0,title:c==='actividad'?'Yoga y Funcional':TITLES[c],backLabel:TITLES[prev],back:()=>this.setState(st=>({stack:st.stack.slice(0,-1),modifyId:c==='padel'?null:st.modifyId,slot:c==='padel'&&st.modifyId?null:st.slot})),
+      tabs,go,homeA:p.homeStyle==='a',homeB:p.homeStyle!=='a',homeBOnly:p.homeStyle==='b',homeC:p.homeStyle!=='a'&&p.homeStyle!=='b',hasNext:!!nx,next,weekItems,upcoming,matches,news:NEWS,
+      creditsShort,creditsLong,creditBg:credits>0?'#E6F2EA':'#EEEDE9',creditFg:credits>0?'#1F5C3F':'#586575',explainCredits:()=>this.setState({sheet:'credits'}),
+      actCards,lifeTiles,resCount:activeRes.length,nextResLabel:allRes.length?'Próxima: '+(allRes[0].title)+' · '+allRes[0].dow.charAt(0)+allRes[0].dow.slice(1).toLowerCase()+' '+allRes[0].num+' · '+allRes[0].time.split(' ')[0]:'No tenés reservas activas',allRes,noRes:!allRes.length,
+      modifying:!!modR,modLabel:modR?shortD(modR.day)+' · '+modR.time:'',exitModify:()=>this.setState({modifyId:null,slot:null}),
+      pDays,pSlots,pGroups,pHasSlots:av.length>0,pEmpty:av.length===0,pAvailLabel:av.length?av.length+(av.length===1?' disponible':' disponibles'):'',
+      pNextFree:()=>nf>=0&&this.setState({day:nf,slot:null}),pNextFreeLabel:nf>=0?shortD(nf):'otro día',
+      pickGrid:pick==='grilla',pickList:pick==='lista',pickWheel:pick==='rueda',pSlotEnd:s.slot?endT(s.slot):'',
+      onWheel:(e)=>{const i=Math.round(e.currentTarget.scrollTop/44);const t=av[i];if(t&&t!==this.state.slot)this.setState({slot:t});},
+      myPadel,noPadel:!myPadel.length,pBottomPad:showCta?110:24,
+      showCta,ctaDay:longD(s.day),ctaTime:s.slot?s.slot+' – '+endT(s.slot):'',ctaLabel:modR?'Revisar cambio':'Continuar',
+      onContinue:()=>this.setState({sheet:modR?'modconfirm':'confirm',useCredit:credits>0}),
+      sheetOpen:!!s.sheet,sh,closeSheet:()=>this.setState({sheet:null}),cf,ok:okV,ar,mc,
+      confirmBooking:()=>{const id='r'+Date.now();const paid=useC?'Con 1 crédito':'Pagado';this.setState(st=>({res:[...st.res,{id,kind:'padel',day:st.day,time:st.slot,end:endT(st.slot),status:'ok',paid}],credits:useC?st.credits-1:st.credits,slot:null,sheet:'success',okId:id}));},
+      startModify:()=>{const r=ar0;this.setState(st=>({sheet:null,modifyId:r.id,day:r.day,slot:null,stack:this.cur(st)==='padel'?st.stack:[...st.stack,'padel']}));},
+      confirmModify:()=>{this.setState(st=>({res:st.res.map(r=>r.id===st.modifyId?{...r,day:st.day,time:st.slot,end:endT(st.slot)}:r),modifyId:null,slot:null,sheet:null}));this.toast('Reserva modificada');},
+      askCancel:()=>this.setState({sheet:'cancel'}),
+      doCancel:()=>{const r=ar0;this.setState(st=>({res:st.res.filter(x=>x.id!==r.id),credits:r.kind==='padel'?st.credits+1:st.credits,sheet:null}));this.toast(r.kind==='padel'?'Turno cancelado · +1 crédito':'Solicitud cancelada');},
+      act,actTabs,askEnroll:()=>this.setState({sheet:'enroll'}),askUnenroll:()=>this.setState({sheet:'unenroll'}),
+      confirmEnroll:()=>{this.setState(st=>({enrolled:{...st.enrolled,[st.actId]:true},sheet:null}));this.toast('Inscripción confirmada · clases en tu Agenda');},
+      confirmUnenroll:()=>{this.setState(st=>({enrolled:{...st.enrolled,[st.actId]:false},sheet:null}));this.toast('Inscripción cancelada');},
+      agMonth:MONL[sel.getMonth()]+' '+sel.getFullYear(),agWeek,agEvents,agWeekFull,whoChips,agDayTitle:longD(s.agDay)+(s.agDay===0?' · Hoy':''),agCount:agEvents.length?agEvents.length+(agEvents.length===1?' actividad':' actividades'):'',
+      agEmpty:!agEvents.length,agCards:agStyle==='semana'&&agEvents.length>0,agTimeline:agStyle==='linea'&&agEvents.length>0,agList:agStyle==='lista',agNotList:agStyle!=='lista',
+      agPrev:()=>this.setState(st=>({agDay:st.agDay-7})),agNext:()=>this.setState(st=>({agDay:st.agDay+7})),agToday:()=>this.setState({agDay:0}),todayBorder:s.agDay===0?'#D5D8DC':'#14263D',
+      tlHours,tlHeight:15*56+10,tlNow:s.agDay===0,tlNowTop:(mins('16:20')-480)/60*56+10,
+      carnetTabs,card,qr:qrCells(person.seed),
+      kids,settings,kid,perms,cuotas,demoToast:()=>this.toast('Acción fuera del alcance de la demo'),
+      fixTabs,fixUp:F.up,fixRes,
+      gymDays,gymList,progress,gymLog,gElapsed:pad(Math.floor(el/60))+':'+pad(el%60),gDone:done+'/'+total,gVol:vol.toLocaleString('es-AR')+' kg',
+      finishGym:()=>{this.setState(st=>({stack:st.stack.slice(0,-1),gym:mkGym(),elapsed:0}));this.toast('Entrenamiento guardado · '+done+' series');},
+      qDays,qList,qTurnos,requestQuincho:()=>{const id='q'+Date.now();this.setState(st=>({res:[...st.res,{id,kind:'quincho',day:st.qDay,time:st.qTurno===0?'12:00':'20:00',end:st.qTurno===0?'17:00':'01:00',status:'pending',q:'Quincho '+(st.qWhich+1)}],stack:st.stack.slice(0,-1)}));this.toast('Solicitud enviada · queda pendiente');},
+      hasToast:!!s.toast,toast:s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
