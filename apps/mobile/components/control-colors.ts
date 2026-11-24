@@ -8,8 +8,8 @@ export const controlColors = {
     border: c.action,
   },
   secondary: {
-    fill: c.surface,
-    pressed: c.navySoft,
+    fill: c.navySoft,
+    pressed: c.subtle,
     ink: c.navy,
     border: c.controlBorder,
   },

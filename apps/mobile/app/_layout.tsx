@@ -1,3 +1,4 @@
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { memberTheme } from '@pucara/design-tokens';
@@ -5,14 +6,25 @@ import { ExperienceProvider } from '../features/experience/provider';
 export { ErrorBoundary } from 'expo-router';
 export const unstable_settings = { initialRouteName: '(tabs)' };
 export default function RootLayout() {
+  const [ready, error] = useFonts({
+    BarlowMedium: require('../assets/fonts/BarlowCondensed-Medium.ttf'),
+    BarlowSemibold: require('../assets/fonts/BarlowCondensed-SemiBold.ttf'),
+    BarlowBold: require('../assets/fonts/BarlowCondensed-Bold.ttf'),
+  });
+  if (!ready && !error) return null;
   return (
     <ExperienceProvider>
       <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: memberTheme.color.background },
-          headerTintColor: memberTheme.color.text,
-          headerBackButtonDisplayMode: 'minimal',
+          headerTintColor: memberTheme.color.action,
+          headerBackButtonDisplayMode: 'default',
+          headerTitleStyle: {
+            fontSize: 17,
+            fontWeight: '600',
+            color: memberTheme.color.text,
+          },
           contentStyle: { backgroundColor: memberTheme.color.background },
         }}
       >

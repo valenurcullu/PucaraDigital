@@ -6,7 +6,7 @@ const symbols = {
   arrow: { ios: 'arrow.right', android: 'arrow_forward' },
   chevron: { ios: 'chevron.right', android: 'chevron_right' },
   padel: { ios: 'tennis.racket', android: 'sports_tennis' },
-  quincho: { ios: 'sun.max', android: 'outdoor_grill' },
+  quincho: { ios: 'flame', android: 'outdoor_grill' },
   reservations: { ios: 'calendar.badge.clock', android: 'event_available' },
   rugby: { ios: 'american.football', android: 'sports_rugby' },
   hockey: { ios: 'figure.field.hockey', android: 'sports_hockey' },
@@ -27,6 +27,9 @@ const symbols = {
   credit: { ios: 'ticket', android: 'confirmation_number' },
   info: { ios: 'info.circle', android: 'info' },
   error: { ios: 'exclamationmark.triangle', android: 'error_outline' },
+  edit: { ios: 'calendar.badge.clock', android: 'edit_calendar' },
+  cancel: { ios: 'calendar.badge.minus', android: 'event_busy' },
+  payment: { ios: 'creditcard', android: 'credit_card' },
   check: { ios: 'checkmark.circle.fill', android: 'check_circle' },
 } as const satisfies Record<string, SymbolViewProps['name']>;
 export type AppIconName = keyof typeof symbols;

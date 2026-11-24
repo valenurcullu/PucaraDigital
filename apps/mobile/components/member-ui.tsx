@@ -1,7 +1,6 @@
 import { Children, type ReactNode } from 'react';
 import {
   ActivityIndicator,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -162,6 +161,8 @@ export function ButtonLink({
         {
           backgroundColor: pressed ? colors.pressed : colors.fill,
           borderColor: colors.border,
+          minHeight: variant === 'primary' ? 56 : 48,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
         },
       ]}
     >
@@ -197,6 +198,8 @@ export function Action({
         {
           backgroundColor: pressed ? colors.pressed : colors.fill,
           borderColor: colors.border,
+          minHeight: variant === 'primary' ? 56 : 48,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
         },
       ]}
     >
@@ -390,8 +393,8 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 760,
     alignSelf: 'center',
-    padding: 20,
-    gap: theme.space.lg,
+    padding: 16,
+    gap: 22,
     paddingBottom: theme.space.xxl,
   },
   appHeader: { gap: theme.space.lg },
@@ -427,7 +430,8 @@ const styles = StyleSheet.create({
   heading: { gap: 6 },
   title: {
     fontSize: theme.type.title,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    fontWeight: '700',
+    letterSpacing: -0.65,
     color: theme.color.text,
   },
   body: { fontSize: theme.type.body, lineHeight: 24, color: theme.color.text },
@@ -482,7 +486,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.control,
     borderWidth: 1,
   },
-  buttonText: { fontSize: theme.type.body, fontWeight: '700', flexShrink: 1 },
+  buttonText: { fontSize: 17, fontWeight: '600', flexShrink: 1 },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
