@@ -2,7 +2,9 @@
 
 ## Alcance actual
 
-Primer bloque nativo con cinco pestañas, Inicio/Club/Agenda inicial y destinos demo. Un repositorio y lockfile. Next conserva sus fundaciones. El backend local de desarrollo cuenta con migraciones, RLS y transacciones de pádel. Su integración con las apps queda pendiente.
+Cinco pestañas nativas con Inicio, Agenda familiar, Carnet, Club y Cuenta en demostración. Un repositorio y lockfile. Next conserva sus fundaciones. El backend local de desarrollo cuenta con migraciones, RLS y transacciones de pádel. Su integración con las apps queda pendiente.
+
+El lector de sesión devuelve la membresía del titular, los vínculos familiares de ejemplo y los datos económicos por separado. Agenda proyecta reservas e inscripciones de esa sesión; los compromisos de cada menor pertenecen a su vínculo. El selector de persona cambia la vista, sin cambiar el actor. Los ámbitos de demostración sirven a la presentación. El backend debe validar la autorización en cada lectura y escritura real.
 
 ## Prioridad de plataformas
 

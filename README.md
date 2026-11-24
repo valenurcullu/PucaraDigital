@@ -6,6 +6,8 @@ Plataforma del Club Pucará, desarrollada por Suplio. Monorepo oficial: https://
 
 Inicio, Club, la barra de cinco pestañas y Pádel implementan el diseño aprobado en `30160b0`. Desde **Reservar pádel** se eligen día y horario en la única cancha del club. La app permite ensayar pago, crédito, modificación y cancelación. Desde Mis reservas, **Modificar** permite elegir y confirmar otro turno dentro de la misma hoja. Los cambios actualizan Mis reservas y Agenda durante la sesión y se descartan al reiniciar. El diseño y el alcance por plataforma están en el [sistema visual](docs/design-system.md).
 
+Agenda 1f, Carnet y Cuenta comparten los perfiles ficticios de Martín, Sofía y Tomás. Desde el perfil de un menor se puede abrir su agenda o presentar su carnet de ejemplo. Cuenta reúne cuotas, movimientos de pago, becas y preferencias de esta sesión. Los QR contienen únicamente texto demo.
+
 El backend de desarrollo conserva identidad, autorización y comandos de pádel en PostgreSQL. La app móvil usa datos ficticios. [Guía del backend local](supabase/README.md).
 
 Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).

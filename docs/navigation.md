@@ -1,24 +1,25 @@
 # Navegación nativa
 
-Actualizado el 24 de noviembre de 2026. Expo Router conserva cinco pestañas nativas. Inicio y Club alojan un stack cada uno para conservar su pestaña durante la consulta de Pádel.
+Actualizado el 24 de noviembre de 2026. Expo Router conserva cinco pestañas nativas. Cuenta aloja sus vistas secundarias en su propio stack. Inicio y Club alojan un stack cada uno para conservar su pestaña durante la consulta de Pádel.
 
 ## Rutas implementadas
 
-| Ruta                 | Contenido                                                                                                       |
-| -------------------- | --------------------------------------------------------------------------------------------------------------- |
-| /                    | Inicio: saludo, Reservas/Gimnasio/Cuenta corriente, Primera rugby/hockey, resumen personal y comunicaciones     |
-| /turnos, /club/padel | Misma pantalla de una cancha en los stacks de Inicio y Club; parámetro opcional `manage` para abrir una reserva |
-| /club/reservas       | Directorio de reservas, créditos y reservas personales                                                          |
-| /fixture             | Partidos de Primera de ambos deportes y resultados disponibles                                                  |
-| /agenda              | Semana seleccionable, mes y año, regreso a Hoy y eventos personales del día                                     |
-| /carnet              | Datos ficticios; espacio para QR, sin código validable ni ingreso                                               |
-| /club                | Reservas primero, Deportes, Actividades y Vida en el club                                                       |
-| /cuenta              | Datos del socio, cuenta corriente, familia, perfil, preferencias y soporte                                      |
-| /modulos/[id]        | Entrada de cada módulo con contenido de lectura o vacío explicativo                                             |
-| /partidos/[id]       | Rival, deporte/división, local/visitante, fecha/hora/sede y acceso al fixture                                   |
-| /novedades/[id]      | Comunicación completa de demostración                                                                           |
-| /reservas/[id]       | Detalle demo; los turnos de pádel activos abren su hoja de gestión                                              |
-| /experiencia         | Redirección del enlace histórico a Club                                                                         |
+| Ruta                 | Contenido                                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| /                    | Inicio: saludo, Reservas/Gimnasio/Cuenta corriente, Primera rugby/hockey, resumen personal y comunicaciones         |
+| /turnos, /club/padel | Misma pantalla de una cancha en los stacks de Inicio y Club; parámetro opcional `manage` para abrir una reserva     |
+| /club/reservas       | Directorio de reservas, créditos y reservas personales                                                              |
+| /fixture             | Partidos de Primera de ambos deportes y resultados disponibles                                                      |
+| /agenda              | Variante 1f con semana, Hoy y filtro Todos/Yo/Sofía/Tomás                                                           |
+| /carnet              | Carnet del titular o familiar permitido, con QR demostrativo                                                        |
+| /club                | Reservas primero, Deportes, Actividades y Vida en el club                                                           |
+| /cuenta              | Datos del socio, cuenta corriente, familia, perfil, preferencias y soporte                                          |
+| /cuenta/[section]    | Perfil, cuenta corriente, becas, preferencias, soporte y grupo familiar. `integrante?id=…` abre el perfil vinculado |
+| /modulos/[id]        | Entrada de cada módulo con contenido de lectura o vacío explicativo                                                 |
+| /partidos/[id]       | Rival, deporte/división, local/visitante, fecha/hora/sede y acceso al fixture                                       |
+| /novedades/[id]      | Comunicación completa de demostración                                                                               |
+| /reservas/[id]       | Detalle demo; los turnos de pádel activos abren su hoja de gestión                                                  |
+| /experiencia         | Redirección del enlace histórico a Club                                                                             |
 
 Las cinco pestañas son Inicio, Agenda, Carnet, Club y Cuenta. Los detalles se apilan encima; el botón y gesto nativos vuelven al origen. Android conserva historial entre pestañas. La ruta inicial del stack ancla las pestañas en enlaces profundos; enlaces desconocidos tienen recuperación hacia Inicio/Club. No se implementa un historial paralelo en JavaScript.
 

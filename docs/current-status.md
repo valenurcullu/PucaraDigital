@@ -4,7 +4,9 @@ Actualizado el 24 de noviembre de 2026. El Hito 2 partió de `af9f5b7`, sincroni
 
 ## Aplicación
 
-La implementación del [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) parte de `30160b0`. Inicio 2a, Club, Reservas, Pádel 1c y la barra inferior están implementados en React Native. Agenda conserva su semana navegable y abre el día elegido desde el comprobante de Pádel. Carnet, Cuenta y los demás módulos conservan su alcance anterior. El socio probó el flujo anterior en iPhone y pidió mantener la modificación dentro de la hoja de gestión. La nueva interacción está pendiente de revisión en dispositivo.
+La implementación del [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) parte de `30160b0`. Inicio 2a, Club, Reservas, Pádel 1c y la barra inferior están implementados en React Native. El socio probó y aprobó en iPhone la modificación de Pádel dentro de su hoja. La entrega siguiente incorpora Agenda 1f, Carnet 09, Cuenta 10, Cuenta corriente 10b y perfil vinculado 10c. Falta la aceptación en dispositivo de estas cinco vistas.
+
+Agenda permite ver la semana de toda la familia o de una sola persona. Combina las reservas e inscripciones de la sesión del titular con los compromisos ficticios asociados al vínculo seleccionado. Carnet y Cuenta consultan los mismos números de socio y categorías. Los QR de muestra contienen texto público de demostración. Las preferencias de notificación se conservan en memoria durante la sesión de la pestaña. [Comparación con el handoff](design/verification/2026-11-24-agenda-carnet-cuenta.jpg).
 
 Pádel muestra 14 días, una sola cancha, turnos de 90 minutos y el precio del lector. El socio puede ensayar pago o uso de crédito, revisar su reserva, modificarla conservando el turno anterior hasta confirmar y probar una cancelación elegible de ejemplo. Modificar abre el selector de día y horario dentro de la misma hoja de detalle. Confirmar actualiza la reserva existente y vuelve a su detalle con el nuevo horario. Volver, cerrar o deslizar hacia abajo desde el tirador descarta el borrador. Mis reservas, Inicio y Agenda comparten la sesión en memoria. La elegibilidad real queda en PostgreSQL. [Verificaciones](verification.md).
 
@@ -30,7 +32,7 @@ En Windows se aplicaron migraciones y seed y se probaron autorización, integrid
 
 ## Para retomar
 
-1. Validar en Expo Go Inicio → Pádel → confirmar con crédito → Agenda, y Club → Mis reservas → modificar → cancelar. Revisar controles sobre la tab bar, texto ampliado, VoiceOver y gesto de regreso. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
+1. Revisar Agenda, Carnet y Cuenta en iPhone con VoiceOver, texto ampliado y gesto de regreso. Probar Perfil de Sofía → Ver carnet / Ver agenda y Pádel → Ver en Agenda. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
 2. Validar la API con sesiones Auth reales de ambos clubes, incluidos vínculos revocados. Implementar el lector autenticado de disponibilidad para esta pantalla y verificar los rangos de fechas con turnos publicados en esa base.
 3. Acordar con el club verificación del padrón, permisos de menores, cancelación y reintegros. El pago real requiere además proveedor, retención y conciliación. Gimnasio con asignación de rutinas y registro de cargas sigue entre las prioridades deportivas tempranas.
 
