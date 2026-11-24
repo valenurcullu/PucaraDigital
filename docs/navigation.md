@@ -1,21 +1,24 @@
 # Navegación nativa
 
-Actualizado 2026-11-20. Primer bloque implementado con Expo Router: pestañas nativas y stack nativo de detalles. Concepto A provisional; no HTML dentro de Expo.
+Actualizado el 24 de noviembre de 2026. Expo Router conserva cinco pestañas nativas. Inicio y Club alojan un stack cada uno para conservar su pestaña durante la consulta de Pádel.
 
 ## Rutas implementadas
 
-| Ruta            | Contenido                                                                                                   |
-| --------------- | ----------------------------------------------------------------------------------------------------------- |
-| /               | Inicio: saludo, Reservas/Gimnasio/Cuenta corriente, Primera rugby/hockey, resumen personal y comunicaciones |
-| /agenda         | Semana seleccionable, mes y año, regreso a Hoy y eventos personales del día                                 |
-| /carnet         | Datos ficticios; espacio para QR, sin código validable ni ingreso                                           |
-| /club           | Reservas primero, Deportes, Actividades y Vida en el club                                                   |
-| /cuenta         | Datos del socio, cuenta corriente, familia, perfil, preferencias y soporte                                  |
-| /modulos/[id]   | Entrada de cada módulo con contenido de lectura o vacío explicativo                                         |
-| /partidos/[id]  | Rival, deporte/división, local/visitante, fecha/hora/sede y acceso al fixture                               |
-| /novedades/[id] | Comunicación completa de demostración                                                                       |
-| /reservas/[id]  | Detalle demo, estados y acciones separadas Modificar/Cancelar todavía deshabilitadas                        |
-| /experiencia    | Redirección del enlace histórico a Club                                                                     |
+| Ruta                 | Contenido                                                                                                       |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| /                    | Inicio: saludo, Reservas/Gimnasio/Cuenta corriente, Primera rugby/hockey, resumen personal y comunicaciones     |
+| /turnos, /club/padel | Misma pantalla de una cancha en los stacks de Inicio y Club; parámetro opcional `manage` para abrir una reserva |
+| /club/reservas       | Directorio de reservas, créditos y reservas personales                                                          |
+| /fixture             | Partidos de Primera de ambos deportes y resultados disponibles                                                  |
+| /agenda              | Semana seleccionable, mes y año, regreso a Hoy y eventos personales del día                                     |
+| /carnet              | Datos ficticios; espacio para QR, sin código validable ni ingreso                                               |
+| /club                | Reservas primero, Deportes, Actividades y Vida en el club                                                       |
+| /cuenta              | Datos del socio, cuenta corriente, familia, perfil, preferencias y soporte                                      |
+| /modulos/[id]        | Entrada de cada módulo con contenido de lectura o vacío explicativo                                             |
+| /partidos/[id]       | Rival, deporte/división, local/visitante, fecha/hora/sede y acceso al fixture                                   |
+| /novedades/[id]      | Comunicación completa de demostración                                                                           |
+| /reservas/[id]       | Detalle demo; los turnos de pádel activos abren su hoja de gestión                                              |
+| /experiencia         | Redirección del enlace histórico a Club                                                                         |
 
 Las cinco pestañas son Inicio, Agenda, Carnet, Club y Cuenta. Los detalles se apilan encima; el botón y gesto nativos vuelven al origen. Android conserva historial entre pestañas. La ruta inicial del stack ancla las pestañas en enlaces profundos; enlaces desconocidos tienen recuperación hacia Inicio/Club. No se implementa un historial paralelo en JavaScript.
 
@@ -23,7 +26,7 @@ Las cinco pestañas son Inicio, Agenda, Carnet, Club y Cuenta. Los detalles se a
 
 Reservas accesible a un toque desde Inicio; pádel/quinchos visibles al entrar a Club. Un detalle único de reserva se alcanza desde Inicio, Agenda o Mis reservas. Partidos públicos no se agregan automáticamente a Agenda personal.
 
-Gimnasio libre no genera eventos. La fuente demo incluye Funcional inscripto y Yoga sin inscripción; Agenda refleja esa diferencia sin guardar cambios. Inscribirme/Cancelar inscripción y Modificar/Cancelar están identificados, deshabilitados y explicados: la app sigue en lectura demo.
+Gimnasio libre no genera eventos. La fuente demo incluye Funcional inscripto y Yoga sin inscripción; Agenda refleja esa diferencia sin guardar cambios. Las inscripciones de actividades siguen en consulta. Pádel permite ensayar Modificar o Cancelar en la sesión.
 
 La vista semanal permite cambiar de día y semana. La vista mensual secundaria queda pendiente. Los campos de familia no acreditan permisos. Cuenta, Carnet y módulos secundarios son demo, no funcionalidades terminadas.
 
@@ -31,7 +34,7 @@ La vista semanal permite cambiar de día y semana. La vista mensual secundaria q
 
 Comprobar Inicio → Reservas → detalle → atrás, Club → Yoga → Agenda, Inicio → partido → fixture y detalles por enlace profundo. Revisar regreso Android/iOS, conservación del scroll, 320/390/430 puntos y tablet, orientación, tamaño de texto 200 %, VoiceOver/TalkBack y safe areas. Exportar bundles valida compilación, no estos recorridos en dispositivo.
 
-## Revisión UX/UI — 2026-11-13
+## Antecedente de navegación — 2026-11-13
 
 Las rutas y el stack no cambian. Inicio/Club exponen Reservar pádel, Reservar quincho, Mis reservas, rutina, cuenta y fixture mediante botones/tarjetas. Esos accesos abren los módulos demo ya existentes; no ejecutan reservas. NativeTabs mantiene cinco destinos con variantes de icono y estados activos/inactivos más claros. Los componentes compartidos mejoran también listas y estados en pantallas secundarias, sin ampliar sus funciones.
 

@@ -121,3 +121,7 @@ Los CTAs navegan a módulos demo existentes, sin reservas, pagos o inscripciones
 Las membresías, vínculos, roles por ámbito, becas, decisiones de elegibilidad y auditoría se guardan en un esquema privado. El cliente solo recibe lectura filtrada por RLS y los comandos autorizados. Una misma restricción de exclusión cubre bloqueos y reservas de cancha. Una segunda protege al titular. Cada movimiento de un turno actualiza el contador en su transacción. Los reintentos usan una clave por club y actor.
 
 Hasta validar la política comercial, una aprobación administrativa privada habilita la cancelación de una versión concreta. Los responsables pueden consultar los registros y reservas del menor vinculado. Los créditos y sus operaciones quedan reservados al titular. El siguiente bloque debe validar estas decisiones con Auth y PostgREST antes de conectar Expo. [Detalle técnico](database.md).
+
+## ADR-022 — Diseño nativo aprobado y simulación por sesión (2026-11-24)
+
+El [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) reemplaza la elección estética provisional de ADR-018/020. Implementar Inicio 2a y Pádel 1c con NativeTabs, stacks y hojas nativas. La cancha de pádel es única. El mismo lector tipado conserva el contrato de la RPC. En esta etapa sólo se simula el resultado de las interacciones en el estado de demostración compartido. En producción, PostgreSQL sigue siendo la autoridad para disponibilidad, autorización y emisión de créditos.

@@ -4,9 +4,9 @@ Plataforma del Club Pucará, desarrollada por Suplio. Monorepo oficial: https://
 
 ## Estado
 
-Primer bloque nativo: cinco pestañas del sistema, Inicio y Club demo, Agenda inicial, Carnet/Cuenta de demostración y navegación a módulos/detalles. Desde Inicio o Club, **Ver turnos de pádel** permite elegir una fecha y abrir el resumen de un horario de ejemplo. Mi agenda permite cambiar de semana y abrir los compromisos del día seleccionado. La app consume datos demo de lectura. El backend de desarrollo ya implementa identidad, autorización y comandos de pádel en PostgreSQL. Ver la [guía local](supabase/README.md).
+Inicio, Club, la barra de cinco pestañas y Pádel implementan el diseño aprobado en `30160b0`. Desde **Reservar pádel** se eligen día y horario en la única cancha del club. La app permite ensayar pago, crédito, modificación y cancelación. Los cambios actualizan Mis reservas y Agenda durante la sesión y se descartan al reiniciar. El diseño y el alcance por plataforma están en el [sistema visual](docs/design-system.md).
 
-Inicio y Club ahora usan reservas destacadas, botones, tarjetas de módulos/partidos y estados visuales coherentes; la barra sigue siendo nativa. A · Club editorial modernizado provisionalmente, con estética definitiva pendiente sin bloquear desarrollo. App móvil primero; panel administrativo web después; portal del socio posterior. Reglas vigentes en [pádel](docs/padel-rules.md) y [diseño transaccional](docs/database.md). Los HTML son antecedentes históricos, no el entregable actual.
+El backend de desarrollo conserva identidad, autorización y comandos de pádel en PostgreSQL. La app móvil usa datos ficticios. [Guía del backend local](supabase/README.md).
 
 Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
 

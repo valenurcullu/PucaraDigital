@@ -7,3 +7,5 @@ dist
 coverage
 next-env.d.ts
 expo-env.d.ts
+# Paquete de referencia entregado por Claude Design
+design/Mobile app design project/design_handoff_pucara_digital/

@@ -2,7 +2,11 @@
 
 Actualizado 2026-11-12 tras auditoría independiente. App nativa primero, panel administrativo después, portal web del socio posterior. Una etapa se acepta con evidencia, no por existir carpetas o maquetas.
 
-## Bloque 1 — Base nativa (ejecución actual)
+## Entrega móvil del 24 de noviembre
+
+El [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) reemplaza la dirección visual provisional. La primera entrega cubre la barra, Inicio, Club y el flujo de Pádel en memoria. El siguiente paso de aceptación es recorrerlo en iPhone. El backend real continúa por el bloque de identidad y reservas locales.
+
+## Bloque 1 — Base nativa (antecedente)
 
 Concepto A · Club editorial seleccionado provisionalmente. La estética definitiva se revisará después; queda levantado el bloqueo de aprobación visual para este bloque.
 

@@ -1,12 +1,14 @@
 # Estado actual de Pucará Digital
 
-Actualizado el 20 de noviembre de 2026. El Hito 2 partió de `af9f5b7`, sincronizado con la rama principal de GitHub al inicio. El desarrollo activo usa el clon del escritorio de Windows.
+Actualizado el 24 de noviembre de 2026. El Hito 2 partió de `af9f5b7`, sincronizado con la rama principal de GitHub al inicio. El desarrollo activo usa el clon del escritorio de Windows.
 
 ## Aplicación
 
-El usuario probó en iPhone la navegación de cinco pestañas y la aceptó como base. Inicio, Club, Agenda, Carnet y Cuenta usan datos ficticios. El rediseño táctil y la dirección A · Club editorial siguen siendo provisorios. Expo y Next conservan sus lectores existentes.
+La implementación del [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) parte de `30160b0`. Inicio 2a, Club, Reservas, Pádel 1c y la barra inferior están implementados en React Native. Agenda conserva su semana navegable y abre el día elegido desde el comprobante de Pádel. Carnet, Cuenta y los demás módulos conservan su alcance anterior. La navegación previa fue probada en iPhone. La aceptación de esta entrega en dispositivo sigue pendiente.
 
-## Último bloque móvil — revisión táctil y Agenda semanal
+Pádel muestra 14 días, una sola cancha, turnos de 90 minutos y el precio del lector. El socio puede ensayar pago o uso de crédito, revisar su reserva, modificarla conservando el turno anterior hasta confirmar y probar una cancelación elegible de ejemplo. Mis reservas, Inicio y Agenda comparten la sesión en memoria. La elegibilidad real queda en PostgreSQL. [Verificaciones](verification.md).
+
+## Antecedente del 20 de noviembre — revisión táctil y Agenda semanal
 
 Inicio y Club exponen **Ver turnos de pádel** en el primer bloque de Reservas. En Mis reservas, **Ver disponibilidad de pádel** abre la misma pantalla. Una selección muestra el resumen del horario y vuelve a la fecha elegida al cerrarlo. El directorio de Club mantiene sus cuatro grupos.
 
@@ -28,7 +30,7 @@ En Windows se aplicaron migraciones y seed y se probaron autorización, integrid
 
 ## Para retomar
 
-1. Revisar en iPhone los tres accesos a Pádel, el regreso desde el resumen, la semana de Agenda y el último control de cada pestaña con texto ampliado y VoiceOver. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
+1. Validar en Expo Go Inicio → Pádel → confirmar con crédito → Agenda, y Club → Mis reservas → modificar → cancelar. Revisar controles sobre la tab bar, texto ampliado, VoiceOver y gesto de regreso. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
 2. Validar la API con sesiones Auth reales de ambos clubes, incluidos vínculos revocados. Implementar el lector autenticado de disponibilidad para esta pantalla y verificar los rangos de fechas con turnos publicados en esa base.
 3. Acordar con el club verificación del padrón, permisos de menores, cancelación y reintegros. El pago real requiere además proveedor, retención y conciliación. Gimnasio con asignación de rutinas y registro de cargas sigue entre las prioridades deportivas tempranas.
 

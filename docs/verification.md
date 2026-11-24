@@ -200,3 +200,14 @@ Para revisar en Expo Go, entrar por Inicio o Club, tocar **Ver turnos de pádel*
 - Se calculó contraste con luminancia relativa para texto normal y presionado, estados y etiquetas. Blanco sobre rojo primario da 6,09:1. Texto secundario sobre el fondo deshabilitado da 5,09:1. Las pruebas exigen al menos 4,5:1 para los pares de texto cubiertos y 3:1 para el borde de control sobre blanco.
 - Expo generó los bundles iOS y Android. Expo install --check en línea sigue devolviendo código 1 por cinco parches recomendados en el stack fijado. Metro sirvió el manifiesto del proyecto y el bundle iOS con HTTP 200 en la LAN.
 - La revisión física queda pendiente. Probar en iPhone el último control de las cinco pestañas, volver con gesto y botón, cerrar el resumen con la misma fecha seleccionada y recorrer Agenda con VoiceOver y texto al 200 %. En Android comprobar el regreso del sistema y TalkBack. No se midieron FPS ni latencia.
+
+## 2026-11-24 — Inicio 2a, Club y Pádel 1c
+
+Clon del escritorio de Windows, rama `main`, base publicada `30160b0`. Se revisaron el README, los prototipos y las 26 referencias de Claude Design.
+
+- La instalación offline con el lockfile congelado pasó. Expo Font ya estaba resuelto en el monorepo. Se declaró directamente para empaquetar Barlow Condensed con su licencia OFL.
+- Prettier, ESLint y TypeScript pasan. Vitest ejecutó 39 pruebas, 26 móviles y 13 compartidas. Incluyen accesos desde Inicio y Club, el contrato de disponibilidad, reintento, conservación de Agenda, modificación del mismo turno y cancelación elegible única en la sesión.
+- Pasaron el build de Next.js y la exportación Hermes para iOS y Android. El build web se ejecutó después de TypeScript para que ambos procesos no regeneren `.next/types` a la vez. Metro sirvió el manifiesto del proyecto y el bundle iOS a través de la red local.
+- `expo install --check` devolvió código 1. El catálogo del SDK 58 recomienda parches para Expo, Constants, Font, Linking, Router y Status Bar. Se conservó el conjunto fijado. Conviene validar los seis parches juntos en un bloque de mantenimiento.
+- La comparación usa los componentes de producción con React Native Web en una herramienta temporal, iconos Material, fuentes locales y un viewport de 390 × 804. Se recorrieron selección, consulta de créditos, pago simulado con y sin crédito, gestión, modificación, cancelación y recuperación desde un día completo. Se comprobó el ancho del documento a 320 px. [Comparación de pantallas](design/verification/2026-11-24-pantallas.jpg) · [Comparación de hojas](design/verification/2026-11-24-hojas.jpg).
+- La altura de la cabecera y el texto de las fichas varían con el contenido de la sesión y las métricas del sistema. El render de comparación omite las barras de navegación de iOS y Android. Queda probar su aspecto, safe areas, VoiceOver/TalkBack, gesto de regreso y texto ampliado en dispositivo. No se midieron tiempos de cuadro.

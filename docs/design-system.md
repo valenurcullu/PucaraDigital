@@ -1,8 +1,18 @@
-# Sistema visual nativo — revisión táctil
+# Sistema visual nativo
+
+## Diseño nativo aprobado · 24 de noviembre de 2026
+
+La referencia para nuevas implementaciones es el [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md), publicado en `30160b0`. Las 26 capturas y los dos prototipos acompañan la especificación. Las variantes aprobadas son Inicio 2a, Pádel 1c y Agenda 1f.
+
+La primera entrega aplica los tokens de `memberTheme`, fuente del sistema para texto y Barlow Condensed empaquetada localmente para números y marca. `handoff-ui.tsx` reúne tipografía, tarjetas, botones, insignias, grillas adaptables, fechas y hojas modales. Las acciones usan Pressable, los destinos usan Expo Router y la barra usa NativeTabs. Los datos de la sesión son ficticios. La marca P y las miniaturas rayadas siguen la referencia hasta que el club entregue recursos definitivos.
+
+Inicio muestra la cabecera marina, accesos rápidos, próximos compromisos, Primera y novedades. Club agrupa Reservas, Deportes, Actividades y Vida en el club. Pádel presenta el selector de 14 días, la grilla de tres columnas, la barra de acción inferior y las hojas de confirmación y gestión. El tamaño de texto del dispositivo adapta el número de columnas. La barra y el encabezado final los dibuja cada sistema operativo.
+
+## Antecedente · 13 de noviembre de 2026
 
 Actualizado 2026-11-13. Concepto A permanece como base provisional: fondo cálido, rojo y marino, acento editorial en títulos. El usuario probó el bloque anterior en iPhone: navegación funcional, **UX/UI no aprobada**. Esta implementación responde a su pedido de más jerarquía y acciones visibles. La nueva estética aún requiere su revisión en Expo Go.
 
-## Composición implementada
+## Composición de la versión anterior
 
 - **Inicio:** cabecera con saludo/cuenta y badge demo; Reservas como bloque marino con botones Reservar pádel/quincho y acceso Mis reservas; tarjetas de rutina/cuenta; próximos partidos; resumen personal; novedades.
 - **Club:** el mismo acceso destacado a Reservas, seguido de grillas de Deportes, Actividades y Vida en el club. Gimnasio destacado y actividad inscripta con badge desde el dato demo.
