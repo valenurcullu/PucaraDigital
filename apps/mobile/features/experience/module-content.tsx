@@ -1,3 +1,5 @@
+import { Ledger, accountHref } from '../account/account-ui';
+import { DemoCaption } from './identity-ui';
 import { Redirect } from 'expo-router';
 import type {
   MemberActivity,
@@ -13,13 +15,7 @@ import {
   Section,
   StateView,
 } from '../../components/member-ui';
-import {
-  formatDate,
-  formatMoney,
-  formatTime,
-  moduleHref,
-  targetHref,
-} from './navigation';
+import { formatDate, formatTime, moduleHref, targetHref } from './navigation';
 import { MatchRows, NoticeRows } from './rows';
 
 function ReservationList({
@@ -159,40 +155,14 @@ export function ModuleContent({
       return <NoticeRows data={data} />;
     case 'cuenta-corriente':
       return (
-        <Card>
-          <Badge>SITUACIÓN ECONÓMICA · DEMO</Badge>
-          <Copy>{data.account.status}</Copy>
-          <Copy>Deuda: {formatMoney(data.account.amountDueMinor)}</Copy>
-          <Copy>{data.account.scholarship}</Copy>
-        </Card>
-      );
-    case 'familia':
-      return (
         <>
-          {data.family.length ? (
-            data.family.map((member) => (
-              <Card key={member.id}>
-                <Copy>{member.name}</Copy>
-                <Copy>{member.relationship}</Copy>
-                <Copy muted>{member.authorization}</Copy>
-              </Card>
-            ))
-          ) : (
-            <StateView
-              title="Sin vínculos familiares"
-              description="Los vínculos verificados se mostrarán acá."
-            />
-          )}
+          <Ledger data={data} />
+          <DemoCaption>Importes de ejemplo.</DemoCaption>
         </>
       );
+    case 'familia':
     case 'perfil':
-      return (
-        <Card>
-          <Copy>{data.member.name}</Copy>
-          <Copy>Socio {data.member.number}</Copy>
-          <Copy>{data.member.administrativeStatus}</Copy>
-        </Card>
-      );
+      return <Redirect href={accountHref(id)} />;
     case 'eventos':
       return (
         <>
@@ -218,18 +188,7 @@ export function ModuleContent({
         />
       );
     case 'preferencias':
-      return (
-        <StateView
-          title="Preferencias en un próximo bloque"
-          description="Por ahora usamos el tamaño de texto del dispositivo. No guardamos datos personales ni preferencias."
-        />
-      );
     case 'soporte':
-      return (
-        <StateView
-          title="Canales de atención pendientes"
-          description="El club todavía debe confirmar sus datos de contacto. Esta demo no envía consultas."
-        />
-      );
+      return <Redirect href={accountHref(id)} />;
   }
 }

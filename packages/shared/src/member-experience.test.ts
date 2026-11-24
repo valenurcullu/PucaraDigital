@@ -15,20 +15,21 @@ describe('member read model', () => {
   });
   it('includes only confirmed reservations and enrolled participant classes', () => {
     const data = createDemoExperience('2026-11-12');
-    expect(selectPersonalEvents(data).map((e) => e.id)).toEqual([
+    const snapshot = { ...data, scheduledEvents: [] };
+    expect(selectPersonalEvents(snapshot).map((e) => e.id)).toEqual([
       'reservation-padel-demo',
       'funcional-1',
       'funcional-2',
     ]);
     expect(
       selectPersonalEvents({
-        ...data,
+        ...snapshot,
         activities: data.activities.map((a) => ({ ...a, enrollment: 'none' })),
       }),
     ).toHaveLength(1);
     expect(
       selectPersonalEvents({
-        ...data,
+        ...snapshot,
         activities: data.activities.map((a) => ({
           ...a,
           participantId: 'another-member',
@@ -37,7 +38,7 @@ describe('member read model', () => {
     ).toHaveLength(1);
     expect(selectPersonalEvents(data, '2027-01-01T00:00:00Z')).toEqual([]);
     expect(
-      selectPersonalEvents({ ...data, reservations: [], activities: [] }),
+      selectPersonalEvents({ ...snapshot, reservations: [], activities: [] }),
     ).toEqual([]);
   });
   it('returns the next Primera of each sport without mutating source order', () => {

@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { memberTheme as theme } from '@pucara/design-tokens';
 import { dayLabels } from '../features/experience/calendar';
-import { controlColors } from './control-colors';
-const gap = theme.space.xs;
+import { clubDay } from '@pucara/shared';
+const gap = 0;
 
 export function DateStrip({
   days,
@@ -27,10 +27,10 @@ export function DateStrip({
   const { fontScale } = useWindowDimensions();
   const ref = useRef<ComponentRef<typeof ScrollView>>(null);
   const cell = Math.max(
-    44,
-    Math.ceil(38 * fontScale),
-    Math.floor((width - gap * (days.length - 1)) / days.length),
+    fontScale > 1.3 ? Math.ceil(38 * fontScale) : 32,
+    Math.floor(width / days.length),
   );
+  const today = clubDay(new Date());
   const index = days.indexOf(selected);
   useEffect(() => {
     if (width)
@@ -52,9 +52,7 @@ export function DateStrip({
         const labels = dayLabels(day);
         const checked = day === selected;
         const hasEvents = marked?.has(day);
-        const colors = checked
-          ? controlColors.selected
-          : controlColors.secondary;
+
         return (
           <Pressable
             key={day}
@@ -68,22 +66,51 @@ export function DateStrip({
               styles.cell,
               {
                 width: cell,
-                borderColor: colors.border,
-                backgroundColor: pressed ? colors.pressed : colors.fill,
+                opacity: pressed ? 0.7 : 1,
               },
             ]}
           >
-            <Text style={[styles.weekday, { color: colors.ink }]}>
-              {labels.weekday.replace('.', '')}
+            <Text
+              style={[styles.weekday, { color: theme.color.secondaryText }]}
+            >
+              {labels.weekday.slice(0, 1).toUpperCase()}
             </Text>
-            <Text style={[styles.number, { color: colors.ink }]}>
-              {labels.number}
-            </Text>
+            <View
+              style={{
+                minWidth: Math.min(cell, 38 * fontScale),
+                minHeight: 38 * fontScale,
+                borderRadius: 100,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: checked ? theme.color.navy : 'transparent',
+              }}
+            >
+              <Text
+                style={[
+                  styles.number,
+                  {
+                    color: checked
+                      ? 'white'
+                      : day === today
+                        ? theme.color.action
+                        : day < today
+                          ? theme.color.secondaryText
+                          : theme.color.text,
+                  },
+                ]}
+              >
+                {labels.number}
+              </Text>
+            </View>
             {marked && (
               <View
                 style={[
                   styles.dot,
-                  { backgroundColor: hasEvents ? colors.ink : 'transparent' },
+                  {
+                    backgroundColor: hasEvents
+                      ? theme.color.action
+                      : 'transparent',
+                  },
                 ]}
               />
             )}
@@ -99,10 +126,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 6,
     borderRadius: 12,
-    borderWidth: 1,
+
     minHeight: theme.touch.minimum,
   },
   weekday: { fontSize: 12, fontWeight: '600', textTransform: 'capitalize' },
-  number: { fontSize: 19, fontWeight: '700', fontVariant: ['tabular-nums'] },
+  number: { fontSize: 17, fontWeight: '700', fontVariant: ['tabular-nums'] },
   dot: { width: 5, height: 5, borderRadius: 3, marginTop: 2 },
 });

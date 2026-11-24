@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   createDemoExperience,
   selectPersonalEvents,
+  agendaItems,
   createDemoPadelReader,
   padelDayQuery,
   demoClub,
@@ -24,6 +25,12 @@ describe('Recibos de la sesión demo', () => {
         initial.padel.availableCredits - (method === 'credit' ? 1 : 0),
       );
       expect(previewPadel(booked, book)).toBeUndefined();
+      const agenda = (d: typeof initial, person = d.member.id) =>
+        agendaItems(d, person, d.referenceInstant).filter(
+          (e) => e.target.id === book.id,
+        );
+      expect(agenda(booked).map((e) => e.startsAt)).toEqual([slot.starts_at]);
+      expect(agenda(booked, 'sofia-demo')).toEqual([]);
       const moved = previewPadel(booked, {
         action: 'move',
         id: book.id,
@@ -37,6 +44,7 @@ describe('Recibos de la sesión demo', () => {
         moved.reservations.find((r) => r.id === book.id)?.demoPayment,
       ).toBe(method);
       expect(moved.padel.availableCredits).toBe(booked.padel.availableCredits);
+      expect(agenda(moved).map((e) => e.startsAt)).toEqual([other.starts_at]);
       const event = selectPersonalEvents(moved).find(
         (e) => e.target.id === book.id,
       );
@@ -55,6 +63,7 @@ describe('Recibos de la sesión demo', () => {
         exampleEligible: true,
       } as const;
       const cancelled = previewPadel(moved, cancel)!;
+      expect(agenda(cancelled, 'all')).toEqual([]);
       expect(cancelled.padel.availableCredits).toBe(
         moved.padel.availableCredits + 1,
       );

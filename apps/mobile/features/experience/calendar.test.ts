@@ -19,16 +19,18 @@ describe('calendario del socio', () => {
     expect(weekOf(next)[0]).toBe('2027-01-04');
     expect(weekOf(offsetClubDay(next, -7))).toEqual(days);
   });
-  it('muestra solo reservas confirmadas e inscripciones activas en su día', () => {
+  it('incluye turnos, solicitudes de quincho, clases inscriptas y compromisos del titular', () => {
     const week = personalWeek(data, weekOf('2027-01-01'));
-    expect(week.get('2026-12-31')).toEqual([]);
+    expect(week.get('2026-12-31')?.map((e) => e.id)).toEqual([
+      'plantel-practica',
+    ]);
     expect(week.get('2027-01-01')?.map((e) => e.target.id)).toEqual([
       'padel-demo',
     ]);
     expect(week.get('2027-01-02')?.map((e) => e.target.id)).toEqual([
       'funcional',
     ]);
-    expect(week.get('2027-01-03')).toEqual([]);
+    expect(week.get('2027-01-03')?.map((e) => e.status)).toEqual(['pending']);
     expect(
       personalWeek(data, weekOf('2027-01-05'))
         .get('2027-01-05')
@@ -49,7 +51,10 @@ describe('calendario del socio', () => {
       { ...data, scheduledEvents: [event] },
       weekOf('2027-01-01'),
     );
-    expect(week.get('2027-01-01')).toContainEqual(event);
+    expect(week.get('2027-01-01')).toContainEqual({
+      ...event,
+      personId: data.member.id,
+    });
     expect(week.get('2027-01-02')).not.toContainEqual(event);
   });
 });

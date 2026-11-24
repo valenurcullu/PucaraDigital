@@ -1,4 +1,8 @@
 import { SlotPicker, type SlotCalendar } from '../padel/slot-picker';
+import { CardView } from '../../app/(tabs)/carnet';
+import Cuenta from '../../app/(tabs)/cuenta';
+import { AccountDetail } from '../account/screens';
+import MemberTabs from '../../app/(tabs)/_layout';
 import { PadelPage } from '../padel/availability-screen';
 import { WeekCalendar } from './week-calendar';
 import React, { type ReactNode } from 'react';
@@ -81,6 +85,9 @@ vi.mock('react-native', () => {
   };
   return {
     View: Box,
+    Image: ({ accessibilityLabel }: { accessibilityLabel: string }) => (
+      <span>{accessibilityLabel}</span>
+    ),
     Text: Box,
     Modal: Box,
     ScrollView: Box,
@@ -183,7 +190,7 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
     expect(render(ModuleScreen)).toContain('Módulo no encontrado');
   });
   it('Agenda expone los controles semanales y conserva error, reintento y carga', () => {
-    expect(render(Agenda)).toContain('Mi agenda');
+    expect(render(Agenda)).toContain('Agenda');
     for (const name of ['Hoy', 'Semana siguiente', 'Semana anterior'])
       expect(harness.controls.get(name)?.press).toBeTypeOf('function');
     const retry = vi.fn();
@@ -219,7 +226,7 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
           />,
         );
       };
-      expect(show()).toContain('Sin compromisos');
+      expect(show()).toContain('Entrenamiento Plantel Superior');
       [...harness.controls.entries()]
         .find(([label]) => label.startsWith('viernes'))?.[1]
         .press?.();
@@ -227,7 +234,7 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
       expect(show()).toContain('Pádel');
       harness.controls.get('Semana siguiente')?.press?.();
       expect(day).toBe('2027-01-08');
-      expect(show()).toContain('Sin compromisos');
+      expect(show()).toContain('Día libre');
       harness.controls.get('Semana anterior')?.press?.();
       expect(day).toBe('2027-01-01');
       show();
@@ -331,4 +338,101 @@ describe('selector reutilizado dentro de Modificar reserva', () => {
     harness.controls.get('Reintentar')?.press?.();
     expect(onRetry).toHaveBeenCalledOnce();
   });
+});
+describe('Carnet y Cuenta familiares', () => {
+  it.each([
+    ['member-demo', 'Martín', '4821'],
+    ['sofia-demo', 'Sofía', '7316'],
+    ['tomas-demo', 'Tomás', '8042'],
+  ])('muestra el carnet del socio seleccionado %s', (id, name, number) => {
+    const html = renderToStaticMarkup(<CardView data={demo} initial={id} />);
+    expect(html).toContain(name + ' Ferreyra');
+    expect(html).toContain(number);
+    expect(html).toContain('QR demostrativo de ' + name);
+    expect(html).toContain('todavía no habilita el ingreso');
+    if (id !== demo.member.id) expect(html).toContain('sos responsable de');
+  });
+  it('descarta un acceso directo a un carnet fuera de los vínculos', () => {
+    const html = renderToStaticMarkup(
+      <CardView data={demo} initial="desconocido" />,
+    );
+    expect(html).toContain('Carnet no disponible');
+    expect(html).not.toContain('SOCIO N°');
+  });
+  it('abre movimientos y perfiles vinculados desde Cuenta', () => {
+    const html = render(Cuenta);
+    for (const label of [
+      'Martín Ferreyra',
+      'Al día',
+      'Grupo familiar',
+      'Sofía Ferreyra',
+      'Tomás Ferreyra',
+    ])
+      expect(html).toContain(label);
+    harness.controls.get('Perfil de Sofía')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith({
+      pathname: '/cuenta/[section]',
+      params: { section: 'integrante', id: 'sofia-demo' },
+    });
+    harness.controls.get('Ver movimientos')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith({
+      pathname: '/cuenta/[section]',
+      params: { section: 'cuenta-corriente' },
+    });
+    const ledger = renderToStaticMarkup(
+      <AccountDetail section="cuenta-corriente" data={demo} />,
+    );
+    for (const label of [
+      'Cuotas',
+      'A pagar',
+      'Pagada',
+      'Débito',
+      'Beca deportiva',
+      '50',
+    ])
+      expect(ledger).toContain(label);
+  });
+  it('abre la agenda y el carnet del menor preservando al titular', () => {
+    renderToStaticMarkup(
+      <AccountDetail section="integrante" id="tomas-demo" data={demo} />,
+    );
+    for (const [label, path] of [
+      ['Ver agenda', '/agenda'],
+      ['Ver carnet', '/carnet'],
+    ]) {
+      harness.controls.get(label!)?.press?.();
+      expect(harness.navigate).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          pathname: path,
+          params: expect.objectContaining({ person: 'tomas-demo' }),
+        }),
+      );
+    }
+    expect(demo.member.name).toBe('Martín Ferreyra');
+  });
+});
+vi.mock('expo-router/native-tabs', () => {
+  const Box = ({ children }: { children: ReactNode }) => <div>{children}</div>;
+  const Trigger = Object.assign(
+    ({ name, children }: { name: string; children: ReactNode }) => (
+      <section data-route={name}>{children}</section>
+    ),
+    { Label: Box, Icon: () => null },
+  );
+  return { NativeTabs: Object.assign(Box, { Trigger }) };
+});
+it('mantiene los cinco destinos nativos y sus etiquetas en orden', () => {
+  const html = render(MemberTabs);
+  expect(
+    Array.from(
+      html.matchAll(/data-route="([^"]+)"><div>([^<]+)<\/div>/g),
+      (m) => [m[1], m[2]],
+    ),
+  ).toEqual([
+    ['(inicio)', 'Inicio'],
+    ['agenda', 'Agenda'],
+    ['carnet', 'Carnet'],
+    ['club', 'Club'],
+    ['cuenta', 'Cuenta'],
+  ]);
 });

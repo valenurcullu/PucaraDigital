@@ -2,8 +2,8 @@ import {
   clubDay,
   clubTimeZone,
   offsetClubDay,
-  selectPersonalEvents,
-  type PersonalEvent,
+  agendaItems,
+  type AgendaItem,
   type MemberExperience,
 } from '@pucara/shared';
 const weekday = new Intl.DateTimeFormat('es-AR', {
@@ -31,7 +31,10 @@ const monthYear = new Intl.DateTimeFormat('es-AR', {
   year: 'numeric',
 });
 export function calendarMonth(day: string) {
-  return monthYear.format(new Date(day + 'T12:00:00Z'));
+  return monthYear
+    .format(new Date(day + 'T12:00:00Z'))
+    .replace(' de ', ' ')
+    .replace(/^./, (l) => l.toUpperCase());
 }
 export function mondayOf(day: string) {
   const weekday = new Date(day + 'T12:00:00Z').getUTCDay();
@@ -44,10 +47,11 @@ export function weekOf(day: string) {
 export function personalWeek(
   data: MemberExperience,
   days: readonly string[],
-): Map<string, PersonalEvent[]> {
+  person = data.member.id,
+): Map<string, AgendaItem[]> {
   const first = days[0];
   if (!first) return new Map();
-  const events = selectPersonalEvents(data, first + 'T00:00:00-03:00').map(
+  const events = agendaItems(data, person, first + 'T00:00:00-03:00').map(
     (event) => ({
       event,
       start: clubDay(new Date(event.startsAt)),

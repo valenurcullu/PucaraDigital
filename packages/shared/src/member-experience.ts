@@ -72,23 +72,42 @@ export interface MemberActivity {
 }
 export interface PersonalEvent {
   readonly id: string;
-  readonly kind: 'reservation' | 'activity' | 'training';
+  readonly kind: 'reservation' | 'activity' | 'training' | 'callup';
+  readonly status?: AgendaStatus;
   readonly title: string;
   readonly startsAt: string;
   readonly endsAt: string;
   readonly location: string;
   readonly target: ExperienceTarget;
 }
+export type AgendaStatus =
+  'confirmed' | 'pending' | 'enrolled' | 'training' | 'called' | 'cancelled';
+export interface MemberIdentity {
+  readonly id: string;
+  readonly name: string;
+  readonly firstName: string;
+  readonly number: string;
+  readonly administrativeStatus: string;
+  readonly category: string;
+  readonly card: {
+    enabled: boolean;
+    validThrough: string;
+    sample: 'A' | 'B' | 'C';
+  };
+}
+export type FamilyScope =
+  'profile' | 'card' | 'agenda' | 'fees' | 'activities' | 'reservations';
+export interface FamilyMember extends MemberIdentity {
+  readonly relationship: string;
+  readonly age: number;
+  readonly scopes: readonly FamilyScope[];
+  readonly otherGuardians: readonly string[];
+  readonly events: readonly PersonalEvent[];
+}
 export interface MemberExperience {
   readonly mode: 'demo';
   readonly referenceInstant: string;
-  readonly member: {
-    readonly id: string;
-    readonly name: string;
-    readonly firstName: string;
-    readonly number: string;
-    readonly administrativeStatus: string;
-  };
+  readonly member: MemberIdentity;
   readonly modules: readonly ClubModule[];
   readonly groups: readonly ClubGroup[];
   readonly matches: readonly ClubMatch[];
@@ -104,16 +123,21 @@ export interface MemberExperience {
   };
   readonly account: {
     readonly status: string;
-    readonly scholarship: string;
+    readonly scholarships: readonly {
+      memberId: string;
+      name: string;
+      percentage: number;
+    }[];
+    readonly dues: readonly {
+      period: string;
+      amountMinor: number;
+      dueOn: string;
+      payment?: { date: string; method: string };
+    }[];
     readonly amountDueMinor: number;
     readonly currency: 'ARS';
   };
-  readonly family: readonly {
-    readonly id: string;
-    readonly name: string;
-    readonly relationship: string;
-    readonly authorization: string;
-  }[];
+  readonly family: readonly FamilyMember[];
 }
 export interface MemberExperienceReader {
   read(signal: { readonly aborted: boolean }): Promise<MemberExperience>;
@@ -123,12 +147,18 @@ export interface MemberExperienceReader {
 export function selectPersonalEvents(
   data: MemberExperience,
   at = data.referenceInstant,
+  { pendingQuinchos = false }: { pendingQuinchos?: boolean } = {},
 ): PersonalEvent[] {
   const reservations: PersonalEvent[] = data.reservations
-    .filter((r) => r.status === 'confirmed')
+    .filter(
+      (r) =>
+        r.status === 'confirmed' ||
+        (pendingQuinchos && r.resource === 'quincho' && r.status === 'pending'),
+    )
     .map((r) => ({
       id: 'reservation-' + r.id,
       kind: 'reservation',
+      status: r.status,
       title: r.title,
       startsAt: r.startsAt,
       endsAt: r.endsAt,
@@ -143,6 +173,7 @@ export function selectPersonalEvents(
       a.sessions.map((s) => ({
         id: a.id + '-' + s.id,
         kind: 'activity' as const,
+        status: 'enrolled' as const,
         title: a.title,
         startsAt: s.startsAt,
         endsAt: s.endsAt,
