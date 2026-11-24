@@ -4,9 +4,9 @@ Actualizado el 24 de noviembre de 2026. El Hito 2 partió de `af9f5b7`, sincroni
 
 ## Aplicación
 
-La implementación del [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) parte de `30160b0`. Inicio 2a, Club, Reservas, Pádel 1c y la barra inferior están implementados en React Native. Agenda conserva su semana navegable y abre el día elegido desde el comprobante de Pádel. Carnet, Cuenta y los demás módulos conservan su alcance anterior. La navegación previa fue probada en iPhone. La aceptación de esta entrega en dispositivo sigue pendiente.
+La implementación del [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) parte de `30160b0`. Inicio 2a, Club, Reservas, Pádel 1c y la barra inferior están implementados en React Native. Agenda conserva su semana navegable y abre el día elegido desde el comprobante de Pádel. Carnet, Cuenta y los demás módulos conservan su alcance anterior. El socio probó el flujo anterior en iPhone y pidió mantener la modificación dentro de la hoja de gestión. La nueva interacción está pendiente de revisión en dispositivo.
 
-Pádel muestra 14 días, una sola cancha, turnos de 90 minutos y el precio del lector. El socio puede ensayar pago o uso de crédito, revisar su reserva, modificarla conservando el turno anterior hasta confirmar y probar una cancelación elegible de ejemplo. Mis reservas, Inicio y Agenda comparten la sesión en memoria. La elegibilidad real queda en PostgreSQL. [Verificaciones](verification.md).
+Pádel muestra 14 días, una sola cancha, turnos de 90 minutos y el precio del lector. El socio puede ensayar pago o uso de crédito, revisar su reserva, modificarla conservando el turno anterior hasta confirmar y probar una cancelación elegible de ejemplo. Modificar abre el selector de día y horario dentro de la misma hoja de detalle. Confirmar actualiza la reserva existente y vuelve a su detalle con el nuevo horario. Volver, cerrar o deslizar hacia abajo desde el tirador descarta el borrador. Mis reservas, Inicio y Agenda comparten la sesión en memoria. La elegibilidad real queda en PostgreSQL. [Verificaciones](verification.md).
 
 ## Antecedente del 20 de noviembre — revisión táctil y Agenda semanal
 

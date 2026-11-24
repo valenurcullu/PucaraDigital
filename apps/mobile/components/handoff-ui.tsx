@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import {
+  Animated,
   Modal,
   Pressable,
   ScrollView,
@@ -318,17 +319,126 @@ export function DateBlock({ instant }: { instant: string }) {
     </View>
   );
 }
+const grabber = {
+  width: 40,
+  height: 5,
+  alignSelf: 'center',
+  backgroundColor: color.border,
+  borderRadius: 4,
+} as const;
+
+// The drag starts on the handle. Horizontal dates and vertical content keep their own native responders.
+function DragSurface({
+  children,
+  onClose,
+}: {
+  children: (handle: ReactNode) => ReactNode;
+  onClose: () => void;
+}) {
+  const [offset] = useState(() => new Animated.Value(0));
+  const start = useRef(0);
+  const restore = () =>
+    Animated.spring(offset, {
+      toValue: 0,
+      useNativeDriver: true,
+      overshootClamping: true,
+    }).start();
+  const handle = (
+    <View
+      accessible={false}
+      style={{ minHeight: 44, alignItems: 'center', justifyContent: 'center' }}
+      onStartShouldSetResponder={() => true}
+      onResponderGrant={(e) => {
+        offset.stopAnimation();
+        start.current = e.nativeEvent.pageY;
+      }}
+      onResponderMove={(e) =>
+        offset.setValue(Math.max(0, e.nativeEvent.pageY - start.current))
+      }
+      onResponderRelease={(e) => {
+        if (e.nativeEvent.pageY - start.current >= 56) onClose();
+        else restore();
+      }}
+      onResponderTerminate={restore}
+    >
+      <View pointerEvents="none" style={grabber} />
+    </View>
+  );
+  return (
+    <Animated.View
+      pointerEvents="box-none"
+      style={{
+        flex: 1,
+        justifyContent: 'flex-end',
+        transform: [{ translateY: offset }],
+      }}
+    >
+      {children(handle)}
+    </Animated.View>
+  );
+}
 export function Sheet({
   title,
   showTitle = true,
   onClose,
   children,
+  dismissibleHandle = false,
+  footer,
+  scrollKey,
 }: {
-  showTitle?: boolean;
   title: string;
+  showTitle?: boolean;
   onClose: () => void;
   children: ReactNode;
+  dismissibleHandle?: boolean;
+  footer?: ReactNode;
+  scrollKey?: string;
 }) {
+  const content = (handle?: ReactNode) => (
+    <SafeAreaView
+      accessibilityLabel={title}
+      accessibilityViewIsModal
+      onAccessibilityEscape={onClose}
+      edges={['bottom', 'left', 'right']}
+      style={{
+        maxHeight: '88%',
+        backgroundColor: color.surface,
+        borderTopLeftRadius: 28,
+        borderTopRightRadius: 28,
+        overflow: 'hidden',
+      }}
+    >
+      {handle}
+      <ScrollView
+        key={scrollKey}
+        bounces={false}
+        style={{ flexShrink: 1 }}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingTop: handle ? 0 : 8,
+          paddingBottom: 20,
+          gap: 16,
+        }}
+      >
+        {!handle && <View style={grabber} />}
+        {showTitle && <Label role="sheet">{title}</Label>}
+        {children}
+      </ScrollView>
+      {footer && (
+        <View
+          style={{
+            flexShrink: 0,
+            borderTopWidth: 1,
+            borderColor: color.hairline,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+          }}
+        >
+          {footer}
+        </View>
+      )}
+    </SafeAreaView>
+  );
   return (
     <Modal transparent animationType="slide" visible onRequestClose={onClose}>
       <View
@@ -344,41 +454,11 @@ export function Sheet({
           style={StyleSheet.absoluteFill}
           onPress={onClose}
         />
-        <SafeAreaView
-          accessibilityLabel={title}
-          accessibilityViewIsModal
-          onAccessibilityEscape={onClose}
-          edges={['bottom', 'left', 'right']}
-          style={{
-            maxHeight: '88%',
-            backgroundColor: color.surface,
-            borderTopLeftRadius: 28,
-            borderTopRightRadius: 28,
-            overflow: 'hidden',
-          }}
-        >
-          <ScrollView
-            bounces={false}
-            contentContainerStyle={{
-              paddingHorizontal: 20,
-              paddingTop: 8,
-              paddingBottom: 20,
-              gap: 16,
-            }}
-          >
-            <View
-              style={{
-                width: 40,
-                height: 5,
-                alignSelf: 'center',
-                backgroundColor: color.border,
-                borderRadius: 4,
-              }}
-            />
-            {showTitle && <Label role="sheet">{title}</Label>}
-            {children}
-          </ScrollView>
-        </SafeAreaView>
+        {dismissibleHandle ? (
+          <DragSurface onClose={onClose}>{content}</DragSurface>
+        ) : (
+          content()
+        )}
       </View>
     </Modal>
   );

@@ -1,3 +1,4 @@
+import { SlotPicker, type SlotCalendar } from '../padel/slot-picker';
 import { PadelPage } from '../padel/availability-screen';
 import { WeekCalendar } from './week-calendar';
 import React, { type ReactNode } from 'react';
@@ -271,5 +272,63 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
       disabled: true,
       busy: false,
     });
+  });
+});
+describe('selector reutilizado dentro de Modificar reserva', () => {
+  const day = '2027-01-01';
+  const row = {
+    court_id: 'unica',
+    starts_at: day + 'T11:00:00-03:00',
+    ends_at: day + 'T12:30:00-03:00',
+    price_minor: 4000000,
+  };
+  const renderEditor = (
+    status: SlotCalendar['status'],
+    selectedStart?: string,
+  ) => {
+    const changeDay = vi.fn(),
+      pick = vi.fn(),
+      onRetry = vi.fn();
+    const markup = renderToStaticMarkup(
+      <SlotPicker
+        calendar={{
+          first: day,
+          status,
+          byDay: new Map([[day, [row]]]),
+          onRetry,
+        }}
+        day={day}
+        selectedStart={selectedStart}
+        editing
+        changeDay={changeDay}
+        pick={pick}
+      />,
+    );
+    return { markup, changeDay, pick, onRetry };
+  };
+  it('ofrece solo los horarios recibidos y comunica el día elegido', () => {
+    const { markup, pick, changeDay } = renderEditor('ready');
+    expect(markup).toContain('Elegí el nuevo día');
+    expect(markup).toContain('Elegí el nuevo horario');
+    expect(
+      [...harness.controls.keys()].filter((key) => key.startsWith('Elegir ')),
+    ).toEqual(['Elegir 11:00']);
+    harness.controls.get('Elegir 11:00')?.press?.();
+    expect(pick).toHaveBeenCalledWith(row);
+    const saturday = [...harness.controls.keys()].find((key) =>
+      key.startsWith('sábado'),
+    )!;
+    harness.controls.get(saturday)?.press?.();
+    expect(changeDay).toHaveBeenCalledWith('2027-01-02');
+    const selected = renderEditor('ready', row.starts_at);
+    harness.controls.get('Elegir 11:00')?.press?.();
+    expect(selected.pick).toHaveBeenCalledWith(undefined);
+  });
+  it('permite reintentar una lectura fallida sin ofrecer horarios', () => {
+    const { onRetry, markup } = renderEditor('error');
+    expect(markup).toContain('No pudimos cargar los horarios');
+    expect(harness.controls.has('Elegir 11:00')).toBe(false);
+    harness.controls.get('Reintentar')?.press?.();
+    expect(onRetry).toHaveBeenCalledOnce();
   });
 });

@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import type { MemberReservation, PadelSlot } from '@pucara/shared';
+import type { PadelSlot } from '@pucara/shared';
 import { AppIcon } from '../../components/app-icon';
 import {
   Command,
@@ -24,7 +24,6 @@ function Detail({ label, value }: { label: string; value: string }) {
 
 export function TurnReview({
   slot,
-  original,
   credits,
   method,
   pay,
@@ -32,37 +31,23 @@ export function TurnReview({
   changeTime,
 }: {
   slot: PadelSlot;
-  original: MemberReservation | undefined;
   credits: number;
   method: 'credit' | 'pay';
   pay: (method: 'credit' | 'pay') => void;
   confirm: () => void;
   changeTime: () => void;
 }) {
-  const editing = !!original;
   return (
     <>
-      {original && (
-        <View style={[layout.card, { backgroundColor: color.subtle }]}>
-          <Label role="label">Antes</Label>
-          <Label style={{ textDecorationLine: 'line-through' }}>
-            {longDate.format(new Date(original.startsAt))} ·{' '}
-            {formatTime(original.startsAt) +
-              ' – ' +
-              formatTime(original.endsAt)}
-          </Label>
-        </View>
-      )}
       <View
         style={[
           layout.card,
           layout.group,
           {
-            backgroundColor: editing ? color.navySoft : color.background,
+            backgroundColor: color.background,
           },
         ]}
       >
-        {editing && <Label role="label">Nuevo</Label>}
         <Detail label="Día" value={longDate.format(new Date(slot.starts_at))} />
         <Detail
           label="Horario"
@@ -72,16 +57,9 @@ export function TurnReview({
           label="Duración"
           value={slotLabels(slot).duration.replace(' min', ' minutos')}
         />
-        {!editing && (
-          <Detail label="Precio del turno" value={slotLabels(slot).price} />
-        )}
+        <Detail label="Precio del turno" value={slotLabels(slot).price} />
       </View>
-      {editing ? (
-        <Label role="meta">
-          Conservás tu reserva hasta confirmar. Sin cobro adicional ni cambios
-          en tus créditos.
-        </Label>
-      ) : !credits ? (
+      {!credits ? (
         <Label>No tenés créditos de turno disponibles.</Label>
       ) : (
         <View style={layout.group}>
@@ -122,16 +100,14 @@ export function TurnReview({
       )}
       <Command
         title={
-          editing
-            ? 'Confirmar modificación'
-            : method === 'credit'
-              ? 'Confirmar con 1 crédito'
-              : 'Confirmar y pagar ' + slotLabels(slot).price
+          method === 'credit'
+            ? 'Confirmar con 1 crédito'
+            : 'Confirmar y pagar ' + slotLabels(slot).price
         }
         onPress={confirm}
       />
       <Command
-        title={editing ? 'Elegir otro horario' : 'Cambiar horario'}
+        title="Cambiar horario"
         variant="secondary"
         onPress={changeTime}
       />

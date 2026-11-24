@@ -29,6 +29,13 @@ describe('Recibos de la sesión demo', () => {
         id: book.id,
         slot: other,
       })!;
+      expect(moved.reservations).toHaveLength(booked.reservations.length);
+      expect(booked.reservations.find((r) => r.id === book.id)?.startsAt).toBe(
+        slot.starts_at,
+      );
+      expect(
+        moved.reservations.find((r) => r.id === book.id)?.demoPayment,
+      ).toBe(method);
       expect(moved.padel.availableCredits).toBe(booked.padel.availableCredits);
       const event = selectPersonalEvents(moved).find(
         (e) => e.target.id === book.id,
