@@ -1,11 +1,4 @@
-import { useMemo } from 'react';
-import {
-  clubDay,
-  createDemoPadelReader,
-  demoClub,
-  offsetClubDay,
-} from '@pucara/shared';
-import { PadelAvailabilityScreen } from '../padel/availability-screen';
+import { Redirect } from 'expo-router';
 import type {
   MemberActivity,
   MemberExperience,
@@ -13,7 +6,6 @@ import type {
 } from '@pucara/shared';
 import {
   Action,
-  ButtonLink,
   Badge,
   Card,
   Copy,
@@ -68,25 +60,6 @@ function ReservationList({
     </Section>
   );
 }
-function DemoPadel({ data }: { data: MemberExperience }) {
-  const firstDay = offsetClubDay(clubDay(new Date(data.referenceInstant)), 1);
-  const reader = useMemo(
-    () =>
-      createDemoPadelReader(
-        firstDay,
-        data.padel.priceMinor,
-        process.env.EXPO_PUBLIC_DATA_MODE,
-      ),
-    [firstDay, data.padel.priceMinor],
-  );
-  return (
-    <PadelAvailabilityScreen
-      firstDay={firstDay}
-      clubId={demoClub.id}
-      reader={reader}
-    />
-  );
-}
 function ActivityContent({ activity }: { activity: MemberActivity }) {
   return (
     <>
@@ -132,31 +105,9 @@ export function ModuleContent({
 }) {
   switch (id) {
     case 'reservas':
-      return (
-        <>
-          <ButtonLink
-            title="Ver disponibilidad de pádel"
-            href={moduleHref('padel')}
-            icon="padel"
-          />
-          <ButtonLink
-            title="Reservar quincho"
-            href={moduleHref('quinchos')}
-            variant="secondary"
-            icon="quincho"
-          />
-          <Badge>
-            {data.padel.availableCredits}{' '}
-            {data.padel.availableCredits === 1
-              ? 'crédito de turno'
-              : 'créditos de turno'}{' '}
-            · demo
-          </Badge>
-          <ReservationList data={data} />
-        </>
-      );
+      return <Redirect href="/club/reservas" />;
     case 'padel':
-      return <DemoPadel data={data} />;
+      return <Redirect href="/club/padel" />;
     case 'quinchos':
       return (
         <>

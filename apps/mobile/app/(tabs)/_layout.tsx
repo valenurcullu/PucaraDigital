@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { NativeTabs } from 'expo-router/native-tabs';
 import { memberTheme as theme } from '@pucara/design-tokens';
 
@@ -5,24 +6,30 @@ export default function TabsLayout() {
   return (
     <NativeTabs
       tintColor={theme.color.action}
-      backgroundColor={theme.color.surface}
+      blurEffect="systemChromeMaterialLight"
+      backgroundColor={
+        Platform.OS === 'android'
+          ? theme.color.androidNavBg
+          : 'rgba(255,255,255,0.9)'
+      }
       iconColor={{
-        default: theme.color.secondaryText,
-        selected: theme.color.action,
+        default: theme.color.tabInactive,
+        selected:
+          Platform.OS === 'android' ? theme.color.navy : theme.color.action,
       }}
       labelStyle={{
         default: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: '500',
-          color: theme.color.secondaryText,
+          color: theme.color.tabInactive,
         },
         selected: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: '700',
           color: theme.color.action,
         },
       }}
-      indicatorColor={theme.color.actionSoft}
+      indicatorColor={theme.color.androidTabPill}
       rippleColor={theme.color.actionSoft}
       shadowColor={theme.color.border}
       minimizeBehavior="never"
@@ -30,7 +37,7 @@ export default function TabsLayout() {
       disableTransparentOnScrollEdge
       labelVisibilityMode="labeled"
     >
-      <NativeTabs.Trigger disableAutomaticContentInsets name="index">
+      <NativeTabs.Trigger disableAutomaticContentInsets name="(inicio)">
         <NativeTabs.Trigger.Label>Inicio</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           sf={{ default: 'house', selected: 'house.fill' }}
@@ -48,8 +55,8 @@ export default function TabsLayout() {
         <NativeTabs.Trigger.Label>Carnet</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           sf={{
-            default: 'person.crop.rectangle',
-            selected: 'person.crop.rectangle.fill',
+            default: 'person.text.rectangle',
+            selected: 'person.text.rectangle.fill',
           }}
           md="badge"
         />
@@ -57,8 +64,8 @@ export default function TabsLayout() {
       <NativeTabs.Trigger disableAutomaticContentInsets name="club">
         <NativeTabs.Trigger.Label>Club</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{ default: 'building.2', selected: 'building.2.fill' }}
-          md="sports_tennis"
+          sf={{ default: 'sportscourt', selected: 'sportscourt.fill' }}
+          md="stadium"
         />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger disableAutomaticContentInsets name="cuenta">

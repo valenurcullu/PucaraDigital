@@ -6,47 +6,70 @@ import {
 } from './padel-availability';
 import { requireDemoMode } from './services';
 
-const courts = [
-  { id: '00000000-0000-4000-8000-000000000031', name: 'Cancha 1' },
-  { id: '00000000-0000-4000-8000-000000000032', name: 'Cancha 2' },
+export const demoPadelCourt = {
+  id: '00000000-0000-4000-8000-000000000031',
+  name: 'Cancha de pádel',
+};
+// Published sample availability for the fourteen demo days. No production scheduling logic.
+const times = [
+  ['08:00', '09:30'],
+  ['09:30', '11:00'],
+  ['11:00', '12:30'],
+  ['12:30', '14:00'],
+  ['14:00', '15:30'],
+  ['15:30', '17:00'],
+  ['17:00', '18:30'],
+  ['18:30', '20:00'],
+  ['20:00', '21:30'],
+  ['21:30', '23:00'],
 ] as const;
-
-// Canned RPC results. Day two intentionally has an empty response.
-const examples = [
-  { day: 0, court: 0, start: '09:00', end: '10:30' },
-  { day: 0, court: 1, start: '10:30', end: '12:00' },
-  { day: 0, court: 0, start: '15:00', end: '16:30' },
-  { day: 0, court: 1, start: '19:30', end: '21:00' },
-  { day: 2, court: 1, start: '12:00', end: '13:30' },
-  { day: 3, court: 0, start: '18:00', end: '19:30' },
-] as const;
-
+const published = [
+  [3, 5, 6, 8, 9],
+  [0, 2, 3, 4, 5, 7, 8, 9],
+  [2, 8],
+  [1, 3, 4, 5, 6, 7, 9],
+  [0, 1, 2, 3, 5, 6, 7],
+  [],
+  [0, 4, 7],
+  [3, 4, 5],
+  [0, 1, 6],
+  [1, 4, 5, 7],
+  [3, 5, 9],
+  [1, 7],
+  [],
+  [2, 3, 4, 6, 9],
+];
 export function createDemoPadelReader(
   firstDay: string,
   priceMinor: number,
   mode?: string,
+  occupied: readonly string[] = [],
 ): PadelAvailabilityReader {
   requireDemoMode(mode);
-  const rows: PadelSlot[] = examples.map(({ day, court, start, end }) => {
-    const date = offsetClubDay(firstDay, day);
-    return {
-      court_id: courts[court].id,
-      starts_at: date + 'T' + start + ':00-03:00',
-      ends_at: date + 'T' + end + ':00-03:00',
-      price_minor: priceMinor,
-    };
+  const held = new Set(occupied.map((value) => Date.parse(value)));
+  const slots: PadelSlot[] = published.flatMap((indices, offset) => {
+    const date = offsetClubDay(firstDay, offset);
+    return indices.map((index) => {
+      const [start, end] = times[index]!;
+      return {
+        court_id: demoPadelCourt.id,
+        starts_at: date + 'T' + start + ':00-03:00',
+        ends_at: date + 'T' + end + ':00-03:00',
+        price_minor: priceMinor,
+      };
+    });
   });
   return {
     async read({ p_club, p_from, p_until }, signal) {
       if (signal.aborted) throw new Error('Lectura cancelada');
       if (p_club !== demoClub.id) throw new Error('Club demo desconocido');
-      const from = Date.parse(p_from);
-      const until = Date.parse(p_until);
+      const from = Date.parse(p_from),
+        until = Date.parse(p_until);
       return {
-        courts,
-        slots: rows.filter((row) => {
-          const start = Date.parse(row.starts_at);
-          return start >= from && start < until;
+        courts: [demoPadelCourt],
+        slots: slots.filter((row) => {
+          const at = Date.parse(row.starts_at);
+          return at >= from && at < until && !held.has(at);
         }),
       };
     },

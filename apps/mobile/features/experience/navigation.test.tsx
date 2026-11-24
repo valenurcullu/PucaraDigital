@@ -1,23 +1,18 @@
-import { CourtSlots, SlotSummary } from '../padel/availability-screen';
+import { PadelPage } from '../padel/availability-screen';
 import { WeekCalendar } from './week-calendar';
 import React, { type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Slot } from '@radix-ui/react-slot';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import {
-  createDemoExperience,
-  createDemoPadelReader,
-  demoClub,
-  padelDayQuery,
-  type PadelSlot,
-} from '@pucara/shared';
-import Home from '../../app/(tabs)/index';
+import { createDemoExperience } from '@pucara/shared';
+import Fixture from '../../app/(tabs)/(inicio)/fixture';
+import Home from '../../app/(tabs)/(inicio)/index';
 import Club from '../../app/(tabs)/club';
 import Agenda from '../../app/(tabs)/agenda';
 import ModuleScreen from '../../app/modulos/[id]';
 import Match from '../../app/partidos/[id]';
 import Notice from '../../app/novedades/[id]';
-import Reservation from '../../app/reservas/[id]';
+import { ReservationsPage } from '../padel/reservations-page';
 import { Action } from '../../components/member-ui';
 import { DateStrip } from '../../components/date-strip';
 import { weekOf } from './calendar';
@@ -33,7 +28,7 @@ const harness = vi.hoisted(() => ({
       disabled?: boolean;
       busy?: boolean;
       checked?: boolean;
-      background?: string;
+      background: string | undefined;
       pressed?: string;
     }
   >(),
@@ -52,6 +47,8 @@ vi.mock('expo-router', () => ({
     </Slot>
   ),
   useLocalSearchParams: () => ({ id: harness.id }),
+  useRouter: () => ({ navigate: harness.navigate }),
+  Redirect: () => null,
   Stack: { Screen: () => null },
 }));
 vi.mock('../../components/app-icon', () => ({ AppIcon: () => null }));
@@ -67,7 +64,7 @@ vi.mock('react-native-screens/experimental', () => ({
 }));
 vi.mock('react-native', () => {
   const Box = ({ children }: { children: ReactNode }) => <div>{children}</div>;
-  type Style = { backgroundColor?: string };
+  type Style = { backgroundColor?: string; opacity?: number };
   type Props = {
     children: ReactNode;
     accessibilityLabel?: string;
@@ -91,10 +88,10 @@ vi.mock('react-native', () => {
     StyleSheet: { create: <T,>(x: T) => x },
     useWindowDimensions: () => ({ width: 390, fontScale: 1 }),
     Pressable: (p: Props) => {
-      const background = (pressed: boolean) =>
+      const computed = (pressed: boolean): Style =>
         typeof p.style === 'function'
-          ? Object.assign({}, ...p.style({ pressed })).backgroundColor
-          : p.style?.backgroundColor;
+          ? Object.assign({}, ...p.style({ pressed }).flat(Infinity))
+          : (p.style ?? {});
       if (p.accessibilityLabel)
         harness.controls.set(p.accessibilityLabel, {
           ...p.accessibilityState,
@@ -102,8 +99,8 @@ vi.mock('react-native', () => {
           ...(p.onPress || p.onClick
             ? { press: (p.onPress ?? p.onClick)! }
             : {}),
-          background: background(false),
-          pressed: background(true),
+          background: computed(false).backgroundColor,
+          pressed: String(computed(true).opacity ?? 1),
         });
       return <div>{p.children}</div>;
     },
@@ -132,6 +129,7 @@ beforeEach(() => {
   harness.controls.clear();
   vi.mocked(useExperience).mockReturnValue({
     state: { status: 'ready', data: demo },
+    preview: vi.fn(),
     reload: vi.fn(),
   });
 });
@@ -140,71 +138,31 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
     ['Inicio', Home],
     ['Club', Club],
   ] as const)('%s abre la pantalla de disponibilidad', (_, Screen) => {
-    expect(render(Screen)).toContain('Reservas');
-    const button = harness.controls.get('Ver turnos de pádel');
-    expect(button?.background).toBeTruthy();
-    expect(button?.pressed).not.toEqual(button?.background);
-    follow('Ver turnos de pádel', moduleRoute, 'padel');
-    expect(render(ModuleScreen)).toContain('Elegí un día');
-    expect(harness.controls.size).toBe(4);
-  });
-  it('Club → Mis reservas → Ver disponibilidad de pádel', () => {
-    render(Club);
-    follow('Mis reservas', moduleRoute, 'reservas');
-    render(ModuleScreen);
-    follow('Ver disponibilidad de pádel', moduleRoute, 'padel');
-    expect(render(ModuleScreen)).toContain('Turnos de ejemplo');
-  });
-  it('abre el resumen del horario elegido y permite volver a la misma consulta', async () => {
-    const day = '2027-01-01';
-    const reader = createDemoPadelReader(day, 4000000);
-    const data = await reader.read(padelDayQuery(demoClub.id, day), {
-      aborted: false,
-    });
-    const court = data.courts[0]!;
-    const slots = data.slots.filter((slot) => slot.court_id === court.id);
-    let picked: PadelSlot | undefined;
-    const list = () =>
-      renderToStaticMarkup(
-        <CourtSlots
-          court={{ ...court, slots }}
-          onSelect={(slot) => {
-            picked = slot;
-          }}
-        />,
-      );
-    const initial = list();
-    const key = [...harness.controls.keys()].find(
-      (k) => k.includes('09:00') && k.includes(court.name),
-    )!;
-    harness.controls.get(key)?.press?.();
-    expect(picked).toEqual(slots[0]);
-    const summary = renderToStaticMarkup(
-      <SlotSummary
-        court={court.name}
-        slot={picked!}
-        day={day}
-        onClose={() => {
-          picked = undefined;
-        }}
-      />,
+    render(Screen);
+    const booking = harness.controls.get('Reservar pádel');
+    expect(booking?.background).toBe('#BC2438');
+    expect(Number(booking?.pressed)).toBeLessThan(1);
+    booking?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith(
+      Screen === Home ? '/turnos' : '/club/padel',
     );
-    for (const label of [
-      'Resumen del turno',
-      '09:00',
-      '10:30',
-      '90 min',
-      '40.000',
-      court.name,
-    ])
-      expect(summary).toContain(label);
-    harness.controls.get('Volver a los horarios')?.press?.();
-    expect(picked).toBeUndefined();
-    expect(list()).toBe(initial);
+    expect(render(PadelPage)).toContain('Elegí el día');
+  });
+  it('Club abre Mis reservas con acceso a la cancha', () => {
+    render(Club);
+    harness.controls.get('Mis reservas')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith('/club/reservas');
+    expect(render(ReservationsPage)).toContain('Mis reservas');
+    harness.controls.get('Reservar pádel')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith('/club/padel');
   });
   it('conserva los destinos de partido, fixture, novedad y reserva', () => {
     render(Home);
-    follow('Ver partido', '/partidos/[id]', 'hockey-primera');
+    harness.controls.get('Fixture y resultados')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith('/fixture');
+    expect(render(Fixture)).toContain('Hockey');
+    render(Home);
+    follow('Ver partido de hockey', '/partidos/[id]', 'hockey-primera');
     expect(render(Match)).toContain('Club del Parque');
     follow('Ver fixture del deporte', moduleRoute, 'hockey');
     expect(render(ModuleScreen)).toContain('Fixture');
@@ -214,13 +172,12 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
     )!;
     follow(news, '/novedades/[id]', 'jornada-familia');
     expect(render(Notice)).toContain('Un club para compartir');
-    harness.id = 'reservas';
-    render(ModuleScreen);
-    const booking = [...harness.controls.keys()].find((k) =>
-      k.startsWith('Pádel · Cancha 1'),
-    )!;
-    follow(booking, '/reservas/[id]', 'padel-demo');
-    expect(render(Reservation)).toContain('Gestionar reserva');
+    render(ReservationsPage);
+    harness.controls.get('Gestionar Pádel 18:30')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith({
+      pathname: '/club/padel',
+      params: { manage: 'padel-demo' },
+    });
     harness.id = 'no-existe';
     expect(render(ModuleScreen)).toContain('Módulo no encontrado');
   });
@@ -231,6 +188,7 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
     const retry = vi.fn();
     vi.mocked(useExperience).mockReturnValue({
       state: { status: 'error', message: 'Error de prueba' },
+      preview: vi.fn(),
       reload: retry,
     });
     expect(render(Agenda)).toContain('Error de prueba');
@@ -238,6 +196,7 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
     expect(retry).toHaveBeenCalledOnce();
     vi.mocked(useExperience).mockReturnValue({
       state: { status: 'loading' },
+      preview: vi.fn(),
       reload: retry,
     });
     expect(render(Agenda)).toContain('Preparando tu club');
@@ -264,7 +223,7 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
         .find(([label]) => label.startsWith('viernes'))?.[1]
         .press?.();
       expect(day).toBe('2027-01-01');
-      expect(show()).toContain('Pádel · Cancha 1');
+      expect(show()).toContain('Pádel');
       harness.controls.get('Semana siguiente')?.press?.();
       expect(day).toBe('2027-01-08');
       expect(show()).toContain('Sin compromisos');

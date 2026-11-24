@@ -17,11 +17,12 @@ describe('padel availability reader', () => {
   });
   it('returns configured prices and raw RPC columns separately from the court directory', async () => {
     const { slots, courts } = await reader.read(query, { aborted: false });
-    expect(slots).toHaveLength(4);
+    expect(slots).toHaveLength(5);
+    expect(courts).toHaveLength(1);
     expect(slots[0]).toEqual({
       court_id: courts[0]?.id,
-      starts_at: firstDay + 'T09:00:00-03:00',
-      ends_at: firstDay + 'T10:30:00-03:00',
+      starts_at: firstDay + 'T12:30:00-03:00',
+      ends_at: firstDay + 'T14:00:00-03:00',
       price_minor: 3925050,
     });
   });
@@ -30,8 +31,8 @@ describe('padel availability reader', () => {
     const subset = await reader.read(
       {
         ...query,
-        p_from: firstDay + 'T12:00:00Z',
-        p_until: firstDay + 'T13:30:00Z',
+        p_from: firstDay + 'T15:30:00Z',
+        p_until: firstDay + 'T18:30:00Z',
       },
       signal,
     );
@@ -39,7 +40,7 @@ describe('padel availability reader', () => {
     expect(
       (
         await reader.read(
-          padelDayQuery(demoClub.id, offsetClubDay(firstDay, 1)),
+          padelDayQuery(demoClub.id, offsetClubDay(firstDay, 5)),
           signal,
         )
       ).slots,

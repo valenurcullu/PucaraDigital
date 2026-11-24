@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Redirect, useLocalSearchParams } from 'expo-router';
 import {
   Action,
   Badge,
@@ -32,7 +32,18 @@ export default function ReservationScreen() {
               <NavRow title="Mis reservas" href={moduleHref('reservas')} />
             </>
           );
-        const padel = reservation.resource === 'padel';
+        if (
+          reservation.resource === 'padel' &&
+          reservation.status === 'confirmed'
+        )
+          return (
+            <Redirect
+              href={{
+                pathname: '/club/padel',
+                params: { manage: reservation.id },
+              }}
+            />
+          );
         return (
           <>
             <Heading
@@ -54,14 +65,6 @@ export default function ReservationScreen() {
               <Copy>{reservation.location}</Copy>
               <Copy>Titular: {data.member.name}</Copy>
             </Card>
-            {padel ? (
-              <Card>
-                <Copy>
-                  {data.padel.availableCredits} crédito de turno disponible ·
-                  demo
-                </Copy>
-              </Card>
-            ) : null}
             <Section title="Gestionar reserva">
               <TileGrid>
                 <Action title="Modificar" disabled />

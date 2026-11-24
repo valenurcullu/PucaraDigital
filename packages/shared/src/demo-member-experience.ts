@@ -40,9 +40,9 @@ export function createDemoExperience(
     referenceInstant: when(0, '00:00'),
     member: {
       id: 'member-demo',
-      name: 'Alex Modelo',
-      firstName: 'Alex',
-      number: '0000',
+      name: 'Martín Ferreyra',
+      firstName: 'Martín',
+      number: '4821',
       administrativeStatus: 'Activo · ejemplo',
     },
     modules: [
@@ -166,10 +166,11 @@ export function createDemoExperience(
       {
         id: 'padel-demo',
         resource: 'padel',
-        title: 'Pádel · Cancha 1',
-        startsAt: when(1, '18:00'),
-        endsAt: when(1, '19:30'),
-        location: 'Cancha 1',
+        title: 'Pádel',
+        startsAt: when(1, '18:30'),
+        endsAt: when(1, '20:00'),
+        location: 'Cancha de pádel',
+        demoPayment: 'pay',
         status: 'confirmed',
       },
       {

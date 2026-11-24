@@ -47,6 +47,7 @@ export interface ClubNotice {
 export interface MemberReservation {
   readonly id: string;
   readonly resource: 'padel' | 'quincho';
+  readonly demoPayment?: 'credit' | 'pay';
   readonly title: string;
   readonly startsAt: string;
   readonly endsAt: string;
@@ -167,13 +168,14 @@ export function selectFirstTeamMatches(data: MemberExperience): ClubMatch[] {
   });
 }
 export const clubTimeZone = 'America/Argentina/Buenos_Aires';
+const clubDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: clubTimeZone,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
 export function clubDay(date: Date): string {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: clubTimeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).formatToParts(date);
+  const parts = clubDateFormatter.formatToParts(date);
   return ['year', 'month', 'day']
     .map((key) => parts.find((p) => p.type === key)?.value)
     .join('-');
