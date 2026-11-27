@@ -35,6 +35,7 @@ export interface ClubMatch {
   readonly sport: 'rugby' | 'hockey';
   readonly division: string;
   readonly divisionId: string;
+  readonly teamId?: string;
   readonly roundId: string;
   readonly venueId: string;
   readonly status: 'scheduled' | 'played';

@@ -486,49 +486,65 @@ describe('presentación del fixture único', () => {
       });
     }
   });
-  it('presenta fechas y resultado anterior en la selección competitiva', () => {
-    const html = renderToStaticMarkup(
-      <FixtureContent
-        data={demo}
-        initial={{ sport: 'rugby', division: 'rugby-superior-0' }}
-      />,
-    );
-    for (const text of [
+  it('presenta todas las divisiones juntas sin selector individual ni modal', () => {
+    const html = renderToStaticMarkup(<FixtureContent data={demo} />);
+    for (const title of [
+      'Primera',
+      'Intermedia',
+      'Pre A',
+      'Pre B',
+      'Pre C',
+      'Pre D',
+      'Pre E',
       'Próxima fecha',
-      'Resultado anterior',
-      'Club del Sur',
-      'Ver fixture completo',
+      'Resultados',
       'Datos deportivos ficticios',
     ])
-      expect(html).toContain(text);
+      expect(html).toContain(title);
+    expect(harness.controls.has('Jornada siguiente')).toBe(true);
+    expect(html).not.toContain('Elegir división');
+    expect(html).not.toContain('Ver toda la jornada');
   });
-  it('presenta infantiles sin resultados ni marcadores competitivos', () => {
-    const html = renderToStaticMarkup(
-      <FixtureContent
-        data={demo}
-        initial={{ sport: 'rugby', division: 'rugby-infantiles-4' }}
-      />,
+  it('presenta equipos juveniles A/B/C y encuentros infantiles completos sin resultados', () => {
+    const youth = renderToStaticMarkup(
+      <FixtureContent data={demo} initial={{ group: 'rugby-juveniles' }} />,
     );
-    expect(html).toContain('M9');
-    expect(html).toContain('Próximos encuentros');
-    expect(html).not.toContain('Resultado anterior');
+    for (const title of ['M15 A', 'M15 B', 'M17 C', 'M19 B'])
+      expect(youth).toContain(title);
+    const html = renderToStaticMarkup(
+      <FixtureContent data={demo} initial={{ group: 'rugby-infantiles' }} />,
+    );
+    for (const title of [
+      'Preescuelita',
+      'M9',
+      'M14',
+      'Puca Mix',
+      'Próximos encuentros',
+    ])
+      expect(html).toContain(title);
+    expect(html).not.toContain('Resultados');
     expect(html).not.toContain('Pucará / rival');
   });
-  it('presenta la sede de Línea B y una división sin encuentros', () => {
-    const hockey = renderToStaticMarkup(
+  it('presenta todas las categorías de Línea B y el vacío sin partidos', () => {
+    const html = renderToStaticMarkup(
       <FixtureContent
         data={demo}
         initial={{ sport: 'hockey', line: 'hockey-B' }}
       />,
     );
-    expect(hockey).toContain('Cancha sintética');
-    expect(harness.controls.has('Ver toda la jornada')).toBe(true);
-    const empty = renderToStaticMarkup(
-      <FixtureContent
-        data={demo}
-        initial={{ sport: 'rugby', division: 'rugby-superior-6' }}
-      />,
-    );
-    expect(empty).toContain('Sin encuentros publicados');
+    for (const title of [
+      'Cancha sintética',
+      'Primera',
+      'Intermedia',
+      'Quinta',
+      'Sexta',
+      'Séptima',
+      'Octava',
+      'Novena',
+    ])
+      expect(html).toContain(title);
+    expect(
+      renderToStaticMarkup(<FixtureContent data={{ ...demo, matches: [] }} />),
+    ).toContain('Sin partidos publicados para esta jornada');
   });
 });

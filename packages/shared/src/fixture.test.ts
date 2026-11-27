@@ -4,6 +4,8 @@ import {
   resolveFixture,
   fixturesForDivision,
   fixtureResult,
+  fixtureJornadas,
+  fixtureTeamTitle,
   hockeyRound,
   selectFirstTeamMatches,
   selectPersonalEvents,
@@ -54,20 +56,12 @@ describe('catálogo y selección deportiva', () => {
       'Línea C',
       'Línea D',
     ]);
-    for (const line of data.fixture.lines)
-      expect(
-        data.fixture.divisions
-          .filter((d) => d.lineId === line.id)
-          .map((d) => d.title),
-      ).toEqual([
-        'Primera',
-        'Intermedia',
-        'Quinta',
-        'Sexta',
-        'Séptima',
-        'Octava',
-        'Novena',
-      ]);
+    expect(
+      data.fixture.lines.map(
+        (line) =>
+          data.fixture.divisions.filter((d) => d.lineId === line.id).length,
+      ),
+    ).toEqual([7, 7, 6, 5]);
     expect(
       select({ sport: 'hockey', group: 'hockey-otras' }).divisions.map(
         (d) => d.title,
@@ -148,7 +142,9 @@ describe('catálogo y selección deportiva', () => {
     expect(
       select({ sport: 'rugby', division: 'rugby-superior-6' }).division?.title,
     ).toBe('Pre E');
-    expect(fixturesForDivision(data, 'rugby-superior-6').upcoming).toEqual([]);
+    expect(fixturesForDivision(data, 'rugby-superior-6').upcoming).toHaveLength(
+      2,
+    );
   });
 });
 describe('fechas, sedes y marcadores', () => {
@@ -156,7 +152,7 @@ describe('fechas, sedes y marcadores', () => {
     const before = data.matches.map((m) => m.id);
     const rows = fixturesForDivision(data, 'rugby-superior-0');
     expect(rows.upcoming).toHaveLength(2);
-    expect(rows.previous).toHaveLength(1);
+    expect(rows.previous).toHaveLength(2);
     expect(rows.upcoming[0]?.id).toBe('rugby-primera');
     expect(
       rows.upcoming.every(
@@ -276,4 +272,217 @@ describe('fechas, sedes y marcadores', () => {
       selectPersonalEvents(data).some((e) => e.target.kind === 'match'),
     ).toBe(false);
   });
+});
+describe('jornadas completas por grupo o línea', () => {
+  it('muestra todas las divisiones superiores sin filtrar por una división heredada', () => {
+    const scope = {
+      sport: 'rugby',
+      group: 'rugby-superior',
+      division: 'rugby-superior-2',
+    };
+    const rounds = fixtureJornadas(data, scope, 'upcoming');
+    expect(rounds).toHaveLength(3);
+    expect(rounds[0]!.matches.map((m) => m.division)).toEqual([
+      'Primera',
+      'Intermedia',
+      'Pre A',
+      'Pre B',
+      'Pre C',
+      'Pre D',
+      'Pre E',
+    ]);
+    expect(new Set(rounds[0]!.matches.map((m) => m.division))).toEqual(
+      new Set([
+        'Primera',
+        'Intermedia',
+        'Pre A',
+        'Pre B',
+        'Pre C',
+        'Pre D',
+        'Pre E',
+      ]),
+    );
+    expect(rounds[2]!.matches).toEqual([]);
+    expect(
+      new Set(rounds[0]!.matches.map((m) => m.venueId)).size,
+    ).toBeGreaterThan(1);
+    expect(
+      new Set(rounds[0]!.matches.map((m) => m.opponent)).size,
+    ).toBeGreaterThan(1);
+  });
+  it('incluye equipos juveniles A/B/C, rivales, sedes y días diferentes', () => {
+    const rows = fixtureJornadas(
+      data,
+      { group: 'rugby-juveniles' },
+      'upcoming',
+    )[0]!.matches;
+    expect(rows).toHaveLength(10);
+    expect(rows.map((m) => fixtureTeamTitle(data, m))).toEqual(
+      expect.arrayContaining([
+        'M15 A',
+        'M15 B',
+        'M17 A',
+        'M17 B',
+        'M17 C',
+        'M19 B',
+      ]),
+    );
+    expect(new Set(rows.map((m) => m.startsAt.slice(0, 10))).size).toBe(2);
+    expect(new Set(rows.map((m) => m.venueId)).size).toBe(3);
+    expect(new Set(rows.map((m) => m.opponent)).size).toBe(3);
+  });
+  it('incluye todas las categorías infantiles y nunca devuelve resultados', () => {
+    const filter = { group: 'rugby-infantiles' };
+    expect(fixtureJornadas(data, filter, 'upcoming')[0]!.matches).toHaveLength(
+      11,
+    );
+    expect(fixtureJornadas(data, filter, 'results')).toEqual([]);
+    const invalid = {
+      ...data,
+      matches: data.matches.map((m) => ({
+        ...m,
+        status: 'played' as const,
+        startsAt: '2026-11-01T10:00:00-03:00',
+      })),
+    };
+    expect(fixtureJornadas(invalid, filter, 'results')).toEqual([]);
+  });
+  it('configura todas las líneas de hockey con sus propias categorías y sedes por partido', () => {
+    for (const line of data.fixture.lines) {
+      const round = fixtureJornadas(
+        data,
+        { sport: 'hockey', line: line.id },
+        'upcoming',
+      )[0]!;
+      expect(round.matches).toHaveLength(
+        data.fixture.divisions.filter((d) => d.lineId === line.id).length,
+      );
+      expect(
+        round.matches.every(
+          (m) =>
+            data.fixture.divisions.find((d) => d.id === m.divisionId)
+              ?.lineId === line.id,
+        ),
+      ).toBe(true);
+    }
+    const a = fixtureJornadas(
+      data,
+      { sport: 'hockey', line: 'hockey-A' },
+      'upcoming',
+    )[0]!;
+    const b = fixtureJornadas(
+      data,
+      { sport: 'hockey', line: 'hockey-B' },
+      'upcoming',
+    )[0]!;
+    expect(a.matches[0]!.venueId).not.toBe(b.matches[0]!.venueId);
+    const d = fixtureJornadas(
+      data,
+      { sport: 'hockey', line: 'hockey-D' },
+      'upcoming',
+    )[0]!;
+    expect(new Set(d.matches.map((m) => m.venueId)).size).toBe(2);
+    const special = fixtureJornadas(
+      data,
+      { sport: 'hockey', group: 'hockey-otras' },
+      'upcoming',
+    )[0]!;
+    expect(special.matches.map((m) => m.division)).toEqual([
+      'Cuarta',
+      'Décima',
+      'Escuelita',
+    ]);
+    expect(
+      new Set(special.matches.map((m) => m.startsAt.slice(0, 10))).size,
+    ).toBe(2);
+  });
+  it('navega jornadas cronológicas, resultados previos y vacíos sin mutar la fuente', () => {
+    const before = data.matches.slice();
+    const rounds = fixtureJornadas(
+      data,
+      { group: 'rugby-superior' },
+      'results',
+    );
+    expect(rounds).toHaveLength(2);
+    expect(rounds[0]!.round.on < rounds[1]!.round.on).toBe(true);
+    expect(
+      rounds.every(
+        (r) =>
+          r.matches.length === 7 &&
+          r.matches.every((m) => fixtureResult(data, m)),
+      ),
+    ).toBe(true);
+    expect(
+      fixtureJornadas({ ...data, matches: [] }, { sport: 'rugby' }, 'results'),
+    ).toEqual([]);
+    expect(
+      fixtureJornadas(
+        { ...data, matches: [] },
+        { sport: 'rugby' },
+        'upcoming',
+      ).every((r) => !r.matches.length),
+    ).toBe(true);
+    expect(data.matches).toEqual(before);
+  });
+  it('conserva el mismo partido de Primera destacado en Inicio dentro de la jornada', () => {
+    for (const match of selectFirstTeamMatches(data)) {
+      const rounds = fixtureJornadas(
+        data,
+        { sport: match.sport, division: match.divisionId },
+        'upcoming',
+      );
+      expect(rounds[0]!.matches.find((m) => m.id === match.id)).toBe(match);
+    }
+  });
+});
+it('incluye categorías nuevas sin rutas ni filtros individuales y mantiene el ámbito', () => {
+  const first = fixtureJornadas(
+    data,
+    { sport: 'hockey', line: 'hockey-D' },
+    'upcoming',
+  )[0]!;
+  const division = {
+    id: 'hockey-D-extra',
+    sport: 'hockey' as const,
+    groupId: 'hockey-lineas',
+    lineId: 'hockey-D',
+    title: 'Nueva',
+  };
+  const match = {
+    ...first.matches[0]!,
+    id: 'extra',
+    divisionId: division.id,
+    division: division.title,
+  };
+  const changed = {
+    ...data,
+    fixture: {
+      ...data.fixture,
+      divisions: [...data.fixture.divisions, division],
+    },
+    matches: [...data.matches, match],
+  };
+  expect(
+    fixtureJornadas(
+      changed,
+      { sport: 'hockey', line: 'hockey-D' },
+      'upcoming',
+    )[0]!.matches,
+  ).toContain(match);
+  expect(fixtureTeamTitle(changed, match)).toBe('Nueva');
+  const mixed = {
+    ...changed,
+    matches: changed.matches.map((m) =>
+      m.divisionId.startsWith('hockey-A-')
+        ? { ...m, roundId: first.round.id }
+        : m,
+    ),
+  };
+  expect(
+    fixtureJornadas(
+      mixed,
+      { sport: 'hockey', line: 'hockey-D' },
+      'upcoming',
+    )[0]!.matches,
+  ).toHaveLength(6);
 });

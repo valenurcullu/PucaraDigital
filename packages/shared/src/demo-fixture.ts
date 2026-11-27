@@ -86,15 +86,19 @@ export function createDemoFixture(day: string): {
     add(
       'hockey',
       'hockey-lineas',
-      [
-        'Primera',
-        'Intermedia',
-        'Quinta',
-        'Sexta',
-        'Séptima',
-        'Octava',
-        'Novena',
-      ],
+      line.id === 'hockey-D'
+        ? ['Primera', 'Intermedia', 'Quinta', 'Sexta', 'Séptima']
+        : line.id === 'hockey-C'
+          ? ['Primera', 'Intermedia', 'Quinta', 'Sexta', 'Séptima', 'Octava']
+          : [
+              'Primera',
+              'Intermedia',
+              'Quinta',
+              'Sexta',
+              'Séptima',
+              'Octava',
+              'Novena',
+            ],
       line.id,
     ),
   );
@@ -126,114 +130,162 @@ export function createDemoFixture(day: string): {
       address: 'Predio oeste · sede de ejemplo',
     },
   ];
+  const teams: NonNullable<FixtureCatalog['teams']>[number][] = [];
+  for (const division of divisions) {
+    const labels =
+      division.groupId === 'rugby-juveniles'
+        ? division.title === 'M17'
+          ? ['A', 'B', 'C']
+          : division.title === 'M18'
+            ? ['A']
+            : ['A', 'B']
+        : [''];
+    labels.forEach((label) =>
+      teams.push({
+        id: division.id + (label ? '-' + label : ''),
+        divisionId: division.id,
+        title: division.title + (label ? ' ' + label : ''),
+      }),
+    );
+  }
   const matches: ClubMatch[] = [],
     rounds: FixtureCatalog['rounds'][number][] = [],
     results: FixtureCatalog['results'][number][] = [];
-  divisions.forEach((d, index) => {
-    // Some divisions intentionally have no published examples.
-    if (
-      d.title === 'Pre E' ||
-      d.title === 'Puca Mix' ||
-      d.lineId === 'hockey-C' ||
-      d.title === 'Escuelita'
-    )
-      return;
-    const infant = d.groupId === 'rugby-infantiles';
-    const hockeyLine = d.lineId
-      ? lines.findIndex((l) => l.id === d.lineId)
-      : -1;
-    const baseOffset =
-      d.sport === 'rugby' ? 2 : d.lineId === 'hockey-B' ? 1 : 3;
-    const venueId =
-      d.sport === 'rugby'
-        ? index % 2
-          ? 'norte'
-          : 'pucara'
-        : d.lineId === 'hockey-A'
-          ? 'parque'
-          : d.lineId === 'hockey-B'
-            ? 'sintetica'
-            : d.lineId === 'hockey-D'
-              ? 'oeste'
-              : 'norte';
-    const venue = venues.find((v) => v.id === venueId)!;
-    const divisionIndex =
-      d.sport === 'hockey' && d.lineId
-        ? divisions
-            .filter((v) => v.lineId === d.lineId)
-            .findIndex((v) => v.id === d.id)
-        : 0;
-    const hockeyTimes = [
-      '16:00',
-      '14:30',
-      '13:00',
-      '11:30',
-      '10:00',
-      '09:00',
-      '08:00',
-    ];
-    for (const occurrence of [0, -1, 1]) {
-      if (infant && occurrence === -1) continue;
-      const date = offsetClubDay(day, baseOffset + occurrence * 7);
-      const roundId = (d.lineId ?? d.groupId) + '-round-' + occurrence;
-      if (!rounds.some((r) => r.id === roundId))
-        rounds.push({
-          id: roundId,
-          sport: d.sport,
-          title:
-            (infant
-              ? 'Encuentro '
-              : d.sport === 'hockey'
-                ? 'Jornada '
-                : 'Fecha ') +
-            (8 + occurrence),
-          on: date,
-          ...(d.lineId ? { lineId: d.lineId } : {}),
-        });
-      const time =
-        d.sport === 'hockey' && divisionIndex >= 0
-          ? hockeyTimes[divisionIndex]!
-          : infant
-            ? '10:00'
-            : d.title === 'Primera'
-              ? '15:30'
-              : '13:30';
-      const firstId =
-        d.id === 'rugby-superior-0'
-          ? 'rugby-primera'
-          : d.id === 'hockey-A-0'
-            ? 'hockey-primera'
-            : d.id;
-      const match: ClubMatch = {
-        id: occurrence === 0 ? firstId : firstId + '-round-' + occurrence,
-        sport: d.sport,
-        division: d.title,
-        divisionId: d.id,
-        roundId,
-        venueId,
-        opponent:
-          d.sport === 'rugby'
-            ? 'Club del Sur'
-            : hockeyLine === 0
-              ? 'Club del Parque'
-              : hockeyLine === 1
-                ? 'Club del Norte'
-                : 'Club del Oeste',
-        venue:
-          venueId === 'pucara' || venueId === 'sintetica' ? 'home' : 'away',
-        startsAt: date + 'T' + time + ':00-03:00',
-        location: venue.title + ' · ' + venue.address,
-        status: occurrence === -1 ? 'played' : 'scheduled',
-      };
-      matches.push(match);
-      if (occurrence === -1 && !infant)
-        results.push({
-          matchId: match.id,
-          home: d.sport === 'hockey' ? 3 : 27,
-          away: d.sport === 'hockey' ? 1 : 18,
-        });
-    }
+  const scopes = groups.flatMap<{
+    group: FixtureCatalog['groups'][number];
+    line: FixtureCatalog['lines'][number] | undefined;
+  }>((group) => {
+    const groupLines = lines.filter((l) => l.groupId === group.id);
+    return groupLines.length
+      ? groupLines.map((line) => ({ group, line }))
+      : [{ group, line: undefined }];
   });
+  const superiorTimes = [
+    '15:30',
+    '13:45',
+    '12:00',
+    '13:45',
+    '10:00',
+    '12:00',
+    '11:00',
+  ];
+  const hockeyTimes = [
+    '16:00',
+    '14:30',
+    '13:00',
+    '11:30',
+    '10:00',
+    '09:00',
+    '08:00',
+  ];
+  for (const { group, line } of scopes) {
+    const scopedDivisions = divisions.filter(
+      (d) => d.groupId === group.id && d.lineId === line?.id,
+    );
+    const ids = new Set(scopedDivisions.map((d) => d.id));
+    const entries = teams.filter((t) => ids.has(t.divisionId));
+    const infant = group.scorePolicy === 'encounters';
+    const baseOffset =
+      group.sport === 'rugby' ? 2 : line?.id === 'hockey-B' ? 1 : 3;
+    for (const occurrence of [-2, -1, 0, 1, 2]) {
+      if (infant && occurrence < 0) continue;
+      const date = offsetClubDay(day, baseOffset + occurrence * 7),
+        roundId = (line?.id ?? group.id) + '-round-' + occurrence;
+      rounds.push({
+        id: roundId,
+        sport: group.sport,
+        groupId: group.id,
+        title: (infant ? 'Encuentro ' : 'Jornada ') + (8 + occurrence),
+        on: date,
+        ...(line ? { lineId: line.id } : {}),
+      });
+      // The last upcoming round deliberately has no published programme.
+      if (occurrence === 2) continue;
+      entries.forEach((team, index) => {
+        const division = scopedDivisions.find((d) => d.id === team.divisionId)!;
+        const divisionIndex = scopedDivisions.indexOf(division);
+        const multiDay =
+          (group.id === 'rugby-juveniles' &&
+            (team.title.endsWith(' C') || team.title === 'M19 B')) ||
+          (group.id === 'rugby-infantiles' && division.title === 'Puca Mix') ||
+          (group.id === 'hockey-otras' && division.title === 'Escuelita');
+        const on = offsetClubDay(date, multiDay ? 1 : 0);
+        const venueId =
+          group.id === 'rugby-superior'
+            ? divisionIndex < 4
+              ? 'pucara'
+              : 'norte'
+            : group.sport === 'rugby'
+              ? ['pucara', 'norte', 'oeste'][index % 3]!
+              : line?.id === 'hockey-A'
+                ? 'parque'
+                : line?.id === 'hockey-B'
+                  ? 'sintetica'
+                  : line?.id === 'hockey-C'
+                    ? 'norte'
+                    : line?.id === 'hockey-D' && division.title !== 'Séptima'
+                      ? 'oeste'
+                      : division.title === 'Cuarta'
+                        ? 'pucara'
+                        : 'parque';
+        const venue = venues.find((v) => v.id === venueId)!;
+        const opponent =
+          group.id === 'rugby-superior'
+            ? divisionIndex < 4
+              ? 'Club del Sur'
+              : 'Club del Norte'
+            : group.sport === 'rugby'
+              ? ['Club del Sur', 'Club del Norte', 'Club del Oeste'][index % 3]!
+              : line?.id === 'hockey-A'
+                ? 'Club del Parque'
+                : line?.id === 'hockey-B'
+                  ? 'Club del Norte'
+                  : line?.id === 'hockey-C'
+                    ? 'Club del Oeste'
+                    : division.title === 'Séptima'
+                      ? 'Club del Parque'
+                      : 'Club del Oeste';
+        const time =
+          group.id === 'rugby-superior'
+            ? superiorTimes[divisionIndex]!
+            : group.id === 'rugby-juveniles'
+              ? ['09:00', '10:15', '11:30', '12:45'][index % 4]!
+              : group.id === 'rugby-infantiles'
+                ? index % 2
+                  ? '10:30'
+                  : '10:00'
+                : (hockeyTimes[divisionIndex] ?? '09:00');
+        const firstId =
+          division.id === 'rugby-superior-0'
+            ? 'rugby-primera'
+            : division.id === 'hockey-A-0'
+              ? 'hockey-primera'
+              : team.id;
+        const match: ClubMatch = {
+          id: occurrence === 0 ? firstId : firstId + '-round-' + occurrence,
+          sport: group.sport,
+          division: division.title,
+          divisionId: division.id,
+          teamId: team.id,
+          roundId,
+          venueId,
+          opponent,
+          venue:
+            venueId === 'pucara' || venueId === 'sintetica' ? 'home' : 'away',
+          startsAt: on + 'T' + time + ':00-03:00',
+          location: venue.title + ' · ' + venue.address,
+          status: occurrence < 0 ? 'played' : 'scheduled',
+        };
+        matches.push(match);
+        if (occurrence < 0 && !infant)
+          results.push({
+            matchId: match.id,
+            home: group.sport === 'rugby' ? 27 + index : 3,
+            away: group.sport === 'rugby' ? 18 + index : 1 + (index % 2),
+          });
+      });
+    }
+  }
   return {
     fixture: {
       sports: [
@@ -241,6 +293,7 @@ export function createDemoFixture(day: string): {
         { id: 'hockey', title: 'Hockey', featuredDivisionId: 'hockey-A-0' },
       ],
       groups,
+      teams,
       lines,
       divisions,
       rounds,

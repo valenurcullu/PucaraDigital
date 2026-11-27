@@ -1,4 +1,8 @@
-import type { ClubMatch, MemberExperience } from './member-experience';
+import {
+  clubDay,
+  type ClubMatch,
+  type MemberExperience,
+} from './member-experience';
 export type SportId = 'rugby' | 'hockey';
 export interface FixtureCatalog {
   readonly sports: readonly {
@@ -20,7 +24,9 @@ export interface FixtureCatalog {
     lineId?: string;
     title: string;
   }[];
+  readonly teams?: readonly { id: string; divisionId: string; title: string }[];
   readonly rounds: readonly {
+    groupId?: string;
     id: string;
     sport: SportId;
     lineId?: string;
@@ -130,4 +136,82 @@ export function featuredMatches(data: MemberExperience): ClubMatch[] {
       .upcoming[0];
     return next ? [next] : [];
   });
+}
+export type FixtureView = 'upcoming' | 'results';
+export function fixtureTeamTitle(data: MemberExperience, match: ClubMatch) {
+  return (
+    data.fixture.teams?.find(
+      (t) => t.id === match.teamId && t.divisionId === match.divisionId,
+    )?.title ??
+    data.fixture.divisions.find((d) => d.id === match.divisionId)?.title ??
+    match.division
+  );
+}
+/** A round can span days, opponents and venues. The selected scope never implies one venue. */
+export function fixtureJornadas(
+  data: MemberExperience,
+  filter: FixtureFilter,
+  view: FixtureView,
+) {
+  const scope = resolveFixture(data.fixture, filter);
+  if (
+    !scope ||
+    (view === 'results' && scope.group.scorePolicy === 'encounters')
+  )
+    return [];
+  const divisions = new Set(scope.divisions.map((d) => d.id));
+  const rows = data.matches.filter(
+    (m) => m.sport === scope.sport.id && divisions.has(m.divisionId),
+  );
+  return data.fixture.rounds
+    .filter(
+      (r) =>
+        r.sport === scope.sport.id &&
+        r.lineId === scope.line?.id &&
+        (r.groupId === scope.group.id ||
+          (!r.groupId && rows.some((m) => m.roundId === r.id))),
+    )
+    .map((round) => {
+      const matches = rows
+        .filter(
+          (m) =>
+            m.roundId === round.id &&
+            (view === 'upcoming'
+              ? m.status === 'scheduled' &&
+                Date.parse(m.startsAt) >= Date.parse(data.referenceInstant)
+              : m.status === 'played' &&
+                Date.parse(m.startsAt) < Date.parse(data.referenceInstant)),
+        )
+        .slice()
+        .sort((a, b) => {
+          const date = clubDay(new Date(a.startsAt)).localeCompare(
+            clubDay(new Date(b.startsAt)),
+          );
+          const division =
+            scope.divisions.findIndex((d) => d.id === a.divisionId) -
+            scope.divisions.findIndex((d) => d.id === b.divisionId);
+          const teams = data.fixture.teams ?? [];
+          const team =
+            teams.findIndex((t) => t.id === a.teamId) -
+            teams.findIndex((t) => t.id === b.teamId);
+          return (
+            date ||
+            division ||
+            team ||
+            Date.parse(a.startsAt) - Date.parse(b.startsAt)
+          );
+        });
+      return { round, matches };
+    })
+    .filter(({ round, matches }) =>
+      view === 'results'
+        ? matches.length > 0
+        : matches.length > 0 ||
+          round.on >= clubDay(new Date(data.referenceInstant)),
+    )
+    .sort(
+      (a, b) =>
+        a.round.on.localeCompare(b.round.on) ||
+        a.round.id.localeCompare(b.round.id),
+    );
 }
