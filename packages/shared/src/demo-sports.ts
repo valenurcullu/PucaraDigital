@@ -10,7 +10,6 @@ export function createDemoSports(): SportsState {
         title: 'Semana 3 · Fuerza',
         coach: 'Prof. Diego Ramos',
         frequency: '3 días por semana',
-        progress: [85, 90, 95, 100],
         days: [
           {
             id: 'A',

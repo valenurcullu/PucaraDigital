@@ -244,3 +244,259 @@ describe('entrenamiento de la sesión', () => {
     ).toHaveLength(1);
   });
 });
+describe('cierre comercial de series', () => {
+  const start = {
+    action: 'start',
+    personId: 'member-demo',
+    routineId: 'fuerza-semana3',
+    dayId: 'A',
+    id: 'w-demo',
+    at: '2026-11-27T12:00:00-03:00',
+  } as const;
+  const base = () => apply(fixture(), start);
+  const work = (data: MemberExperience) => data.sports.workouts[0]!;
+  const series = (data: MemberExperience) => work(data).exercises[0]!.sets;
+  const target = {
+    personId: 'member-demo',
+    id: 'w-demo',
+    exerciseId: 'sentadilla',
+  } as const;
+  it('elimina solo una serie, ajusta el progreso y permite restaurarla una sola vez con sus valores', () => {
+    let data = base();
+    const prescribed = data.sports.routines;
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 1,
+      field: 'kg',
+      value: '87,5',
+    });
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 1,
+      field: 'done',
+      value: true,
+    });
+    const original = series(data);
+    data = apply(data, { ...target, action: 'remove-set', index: 1 });
+    expect(series(data)).toEqual([original[0], original[2], original[3]]);
+    expect(workoutMetrics(work(data))).toMatchObject({ total: 13, done: 0 });
+    expect(data.sports.routines).toBe(prescribed);
+    expect(work(data).exercises).toHaveLength(4);
+    data = apply(data, {
+      action: 'restore-set',
+      personId: 'member-demo',
+      id: 'w-demo',
+    });
+    expect(series(data)).toEqual(original);
+    expect(workoutMetrics(work(data))).toMatchObject({ total: 14, done: 1 });
+    expect(
+      previewSports(data, {
+        action: 'restore-set',
+        personId: 'member-demo',
+        id: 'w-demo',
+      }),
+    ).toBeUndefined();
+  });
+  it('conserva Deshacer tras agregar series y recupera un ejercicio que quedó sin series', () => {
+    let data = base();
+    for (let n = 0; n < 4; n++)
+      data = apply(data, { ...target, action: 'remove-set', index: 0 });
+    expect(series(data)).toEqual([]);
+    data = apply(data, { ...target, action: 'add-set' });
+    expect(series(data)).toHaveLength(1);
+    data = apply(data, {
+      action: 'restore-set',
+      personId: 'member-demo',
+      id: 'w-demo',
+    });
+    expect(series(data)).toHaveLength(2);
+    expect(new Set(series(data).map((s) => s.id)).size).toBe(2);
+  });
+  it('recupera kilos al reactivar el registro y permite completar sin kilos con el interruptor apagado', () => {
+    let data = base();
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 0,
+      field: 'kg',
+      value: '92,5',
+    });
+    const loaded = series(data)[0]!;
+    data = apply(data, {
+      action: 'track-weights',
+      personId: 'member-demo',
+      id: 'w-demo',
+      value: false,
+    });
+    expect(series(data)[0]).toEqual(loaded);
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 1,
+      field: 'kg',
+      value: '',
+    });
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 1,
+      field: 'done',
+      value: true,
+    });
+    expect(series(data)[1]?.done).toBe(true);
+    expect(series(data)[1]?.kg).toBe('');
+    data = apply(data, {
+      action: 'track-weights',
+      personId: 'member-demo',
+      id: 'w-demo',
+      value: true,
+    });
+    expect(series(data)[0]?.kg).toBe('92,5');
+    expect(series(data)[1]?.kg).toBe('');
+    expect(
+      previewSports(data, {
+        ...target,
+        action: 'set',
+        index: 1,
+        field: 'done',
+        value: true,
+      }),
+    ).toBeUndefined();
+  });
+  it('marca las series existentes sin inventar registros y permite desmarcar una serie', () => {
+    let data = base();
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 0,
+      field: 'kg',
+      value: '',
+    });
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 0,
+      field: 'reps',
+      value: '',
+    });
+    data = apply(data, { ...target, action: 'add-set' });
+    const before = work(data).exercises;
+    data = apply(data, {
+      action: 'complete-all',
+      personId: 'member-demo',
+      id: 'w-demo',
+    });
+    expect(work(data).exercises).toEqual(
+      before.map((e) => ({
+        ...e,
+        sets: e.sets.map((s) => ({ ...s, done: true })),
+      })),
+    );
+    expect(workoutMetrics(work(data))).toMatchObject({
+      total: 15,
+      done: 15,
+      volume: 0,
+    });
+    data = apply(data, {
+      ...target,
+      action: 'set',
+      index: 1,
+      field: 'done',
+      value: false,
+    });
+    expect(workoutMetrics(work(data)).done).toBe(14);
+    const completed = apply(data, {
+      action: 'finish',
+      personId: 'member-demo',
+      id: 'w-demo',
+      at: '2026-11-27T12:30:00-03:00',
+    });
+    expect(
+      lastSet(
+        completed,
+        'member-demo',
+        completed.sports.routines[0]!.days[0]!.exercises[0]!,
+      ),
+    ).toEqual({ kg: '100', reps: '6' });
+  });
+  it('rechaza cambios en sesiones finalizadas y de otro integrante', () => {
+    const data = base();
+    const intents: SportsIntent[] = [
+      { ...target, action: 'add-set' },
+      { ...target, action: 'remove-set', index: 0 },
+      { action: 'restore-set', personId: 'member-demo', id: 'w-demo' },
+      {
+        action: 'track-weights',
+        personId: 'member-demo',
+        id: 'w-demo',
+        value: false,
+      },
+      { action: 'complete-all', personId: 'member-demo', id: 'w-demo' },
+    ];
+    const complete = apply(data, {
+      action: 'complete-all',
+      personId: 'member-demo',
+      id: 'w-demo',
+    });
+    const finished = apply(complete, {
+      action: 'finish',
+      personId: 'member-demo',
+      id: 'w-demo',
+      at: start.at,
+    });
+    for (const intent of intents) {
+      expect(
+        previewSports(data, { ...intent, personId: 'sofia-demo' }),
+      ).toBeUndefined();
+      expect(previewSports(finished, intent)).toBeUndefined();
+    }
+  });
+});
+it('recupera un peso explícito sin inventar repeticiones en el historial al completar todas', () => {
+  const seed = fixture(),
+    personId = seed.member.id;
+  let data = apply(seed, {
+    action: 'start',
+    personId,
+    id: 'recorded',
+    routineId: 'fuerza-semana3',
+    dayId: 'A',
+    at: seed.referenceInstant,
+  });
+  data = apply(data, {
+    action: 'set',
+    personId,
+    id: 'recorded',
+    exerciseId: 'sentadilla',
+    index: 0,
+    field: 'kg',
+    value: '92,5',
+  });
+  data = apply(data, { action: 'complete-all', personId, id: 'recorded' });
+  data = apply(data, {
+    action: 'finish',
+    personId,
+    id: 'recorded',
+    at: seed.referenceInstant,
+  });
+  const exercise = data.sports.routines[0]!.days[0]!.exercises[0]!;
+  expect(lastSet(data, personId, exercise)).toEqual({ kg: '92,5', reps: '' });
+  data = apply(data, {
+    action: 'start',
+    personId,
+    id: 'next',
+    routineId: 'fuerza-semana3',
+    dayId: 'A',
+    at: seed.referenceInstant,
+  });
+  const next = data.sports.workouts[1]!.exercises[0]!.sets[0]!;
+  expect(next).toMatchObject({
+    kg: '92,5',
+    reps: '6',
+    done: false,
+    kgRecorded: false,
+    repsRecorded: false,
+  });
+});

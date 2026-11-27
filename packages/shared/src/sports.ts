@@ -17,9 +17,11 @@ export interface Routine {
   coach: string;
   frequency: string;
   days: readonly { id: string; name: string; exercises: readonly Exercise[] }[];
-  progress: readonly number[];
 }
 export interface SetRecord {
+  id?: string;
+  kgRecorded?: boolean;
+  repsRecorded?: boolean;
   kg: string;
   reps: string;
   done: boolean;
@@ -31,6 +33,10 @@ export interface Workout {
   dayId: string;
   startedAt: string;
   finishedAt?: string;
+  trackWeights?: boolean;
+  nextSetId?: number;
+  removedSet?:
+    { exerciseId: string; index: number; set: SetRecord } | undefined;
   exercises: readonly { id: string; sets: readonly SetRecord[] }[];
 }
 export interface Enrollment {
@@ -75,6 +81,16 @@ export type SportsIntent =
       value: string | boolean;
     }
   | { action: 'add-set'; personId: string; id: string; exerciseId: string }
+  | {
+      action: 'remove-set';
+      personId: string;
+      id: string;
+      exerciseId: string;
+      index: number;
+    }
+  | { action: 'restore-set'; personId: string; id: string }
+  | { action: 'track-weights'; personId: string; id: string; value: boolean }
+  | { action: 'complete-all'; personId: string; id: string }
   | { action: 'finish'; personId: string; id: string; at: string };
 export function sportsPersonAllowed(data: MemberExperience, personId: string) {
   return (
@@ -121,7 +137,11 @@ export function workoutMetrics(workout: Workout) {
     total: sets.length,
     done: done.length,
     volume: done.reduce(
-      (sum, s) => sum + (numberValue(s.kg) ?? 0) * (numberValue(s.reps) ?? 0),
+      (sum, s) =>
+        sum +
+        (s.kgRecorded === false || s.repsRecorded === false
+          ? 0
+          : (numberValue(s.kg) ?? 0) * (numberValue(s.reps) ?? 0)),
       0,
     ),
   };
@@ -140,13 +160,18 @@ export function lastSet(
         .filter((e) => e.id === exercise.id)
         .flatMap((e) =>
           e.sets
-            .filter((s) => s.done)
+            .filter(
+              (s) =>
+                s.done &&
+                s.kgRecorded !== false &&
+                numberValue(s.kg) !== undefined,
+            )
             .slice()
             .reverse(),
         ),
     )[0];
   return record
-    ? { kg: record.kg, reps: record.reps }
+    ? { kg: record.kg, reps: record.repsRecorded === false ? '' : record.reps }
     : { kg: String(exercise.previousKg), reps: String(exercise.reps) };
 }
 export function previewSports(
@@ -227,10 +252,16 @@ export function previewSports(
       routineId: intent.routineId,
       dayId: intent.dayId,
       startedAt: intent.at,
+      trackWeights: true,
+      nextSetId: 1,
       exercises: day.exercises.map((e) => ({
         id: e.id,
-        sets: Array.from({ length: e.sets }, () => ({
-          ...lastSet(data, intent.personId, e),
+        sets: Array.from({ length: e.sets }, (_, index) => ({
+          id: e.id + '-prescribed-' + index,
+          kgRecorded: false,
+          repsRecorded: false,
+          kg: lastSet(data, intent.personId, e).kg,
+          reps: lastSet(data, intent.personId, e).reps || String(e.reps),
           done: false,
         })),
       })),
@@ -246,7 +277,36 @@ export function previewSports(
   );
   if (!old) return;
   let updated: Workout;
-  if (intent.action === 'finish') {
+  if (intent.action === 'track-weights')
+    updated = { ...old, trackWeights: intent.value };
+  else if (intent.action === 'complete-all') {
+    if (!workoutMetrics(old).total) return;
+    updated = {
+      ...old,
+      exercises: old.exercises.map((e) => ({
+        ...e,
+        sets: e.sets.map((set) => ({ ...set, done: true })),
+      })),
+    };
+  } else if (intent.action === 'restore-set') {
+    const removed = old.removedSet;
+    if (!removed) return;
+    const exercise = old.exercises.find((e) => e.id === removed.exerciseId);
+    if (
+      !exercise ||
+      (removed.set.id && exercise.sets.some((s) => s.id === removed.set.id))
+    )
+      return;
+    const sets = [...exercise.sets];
+    sets.splice(Math.min(removed.index, sets.length), 0, removed.set);
+    updated = {
+      ...old,
+      removedSet: undefined,
+      exercises: old.exercises.map((e) =>
+        e === exercise ? { ...e, sets } : e,
+      ),
+    };
+  } else if (intent.action === 'finish') {
     if (
       !workoutMetrics(old).done ||
       !Number.isFinite(Date.parse(intent.at)) ||
@@ -258,10 +318,55 @@ export function previewSports(
     const exercise = old.exercises.find((e) => e.id === intent.exerciseId);
     if (!exercise) return;
     let sets: readonly SetRecord[];
-    if (intent.action === 'add-set') {
-      const last = exercise.sets.at(-1);
-      if (!last) return;
-      sets = [...exercise.sets, { ...last, done: false }];
+    if (intent.action === 'remove-set') {
+      const removed = exercise.sets[intent.index];
+      if (!removed) return;
+      return {
+        ...data,
+        sports: {
+          ...sports,
+          workouts: sports.workouts.map((w) =>
+            w === old
+              ? {
+                  ...old,
+                  removedSet: {
+                    exerciseId: exercise.id,
+                    index: intent.index,
+                    set: removed,
+                  },
+                  exercises: old.exercises.map((e) =>
+                    e === exercise
+                      ? {
+                          ...e,
+                          sets: e.sets.filter((_, i) => i !== intent.index),
+                        }
+                      : e,
+                  ),
+                }
+              : w,
+          ),
+        },
+      };
+    } else if (intent.action === 'add-set') {
+      const prescribed = sports.routines
+        .find((r) => r.id === old.routineId && r.personId === old.personId)
+        ?.days.find((d) => d.id === old.dayId)
+        ?.exercises.find((e) => e.id === exercise.id);
+      const previous =
+        exercise.sets.at(-1) ??
+        (prescribed ? lastSet(data, old.personId, prescribed) : undefined);
+      if (!previous) return;
+      sets = [
+        ...exercise.sets,
+        {
+          kg: previous.kg,
+          reps: previous.reps,
+          done: false,
+          id: 'added-' + (old.nextSetId ?? 1),
+          kgRecorded: false,
+          repsRecorded: false,
+        },
+      ];
     } else {
       const set = exercise.sets[intent.index];
       if (!set) return;
@@ -270,7 +375,8 @@ export function previewSports(
         if (
           typeof value !== 'boolean' ||
           (value &&
-            (numberValue(set.kg) === undefined ||
+            ((old.trackWeights !== false &&
+              numberValue(set.kg) === undefined) ||
               !/^\d+$/.test(set.reps) ||
               Number(set.reps) < 1))
         )
@@ -287,13 +393,30 @@ export function previewSports(
           ? {
               ...s,
               [intent.field]: value,
-              ...(intent.field !== 'done' ? { done: false } : {}),
+              ...(intent.field === 'done'
+                ? value
+                  ? {
+                      repsRecorded: true,
+                      kgRecorded:
+                        old.trackWeights !== false
+                          ? true
+                          : (s.kgRecorded ?? false),
+                    }
+                  : {}
+                : {
+                    done: false,
+                    [intent.field === 'kg' ? 'kgRecorded' : 'repsRecorded']:
+                      true,
+                  }),
             }
           : s,
       );
     }
     updated = {
       ...old,
+      ...(intent.action === 'add-set'
+        ? { nextSetId: (old.nextSetId ?? 1) + 1 }
+        : {}),
       exercises: old.exercises.map((e) =>
         e === exercise ? { ...e, sets } : e,
       ),
