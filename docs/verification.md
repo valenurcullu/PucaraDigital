@@ -250,3 +250,17 @@ Base `9b6dff3`. Se conservan las referencias 11, 11b y 12 con los ajustes de int
 - Se comprobó scroll y acceso a campos en 320 px con texto ampliado simulado al 180 %. El teclado, el gesto de iPhone, VoiceOver y Safari físico quedan pendientes. Los datos son de sesión y se reinician al recargar.
 
 - Metro reiniciado y manifiesto y bundle iOS verificados en LAN, con HTTP 200. El QR de Expo Go sigue siendo local. expo install --check mantiene seis recomendaciones del stack anterior. La publicación pública queda pendiente de autorización.
+
+## 2026-11-27 — Fixture deportivo por divisiones
+
+Base local `9465886`. Revisión de las reglas del repositorio, estado, arquitectura y referencia 14 del handoff de Claude. Se conservaron el segmentado, las tarjetas y las hojas existentes.
+
+- Catálogo tipado con 23 divisiones de Rugby y 31 de Hockey, jornadas, sedes y resultados ficticios. Los partidos son la única fuente de fechas y rivales para Inicio y fixture. Las divisiones destacadas se configuran mediante `featuredDivisionId`; Hockey usa inicialmente Primera de Línea A.
+- Prettier, ESLint, TypeScript y 77 pruebas de Vitest (41 móviles y 36 compartidas). Los casos nuevos cubren catálogo, cambios de deporte/grupo/línea/división, ampliación del catálogo sin rutas nuevas, próximas fechas, resultados con perspectiva local/visitante, exclusión de marcadores infantiles y consistencia de los destacados.
+- Pruebas específicas de jornadas de Hockey con sedes diferentes entre líneas y con un partido trasladado dentro de la misma jornada. La consulta mantiene la sede de cada partido y no mezcla líneas aunque compartan un identificador de jornada mal configurado.
+- Build de Next.js y exportaciones de Expo para iOS, Android y web. Se mantuvieron las dependencias y el módulo de Pádel.
+- Prueba interactiva del artefacto real de Expo web en Chromium. Inicio y Club abrieron el mismo fixture, los filtros y las divisiones vacías funcionaron, Ver fixture completo amplió el calendario y las hojas reunieron los siete horarios de las líneas A y B con sus respectivas sedes. Cerrar mantuvo el filtro anterior. El regreso del navegador volvió a Inicio o Club según el acceso. También se probó un enlace directo a Línea C/Novena y el ancho de 320 px.
+- Los filtros usan el catálogo; agregar o quitar divisiones cambia las opciones disponibles sin crear pantallas. La estructura de Hockey, rivales, fechas y marcadores son datos de ejemplo pendientes de información oficial. No hay nombres ni registros personales de menores en el fixture.
+- La prueba física de navegación, gestos, VoiceOver/TalkBack y Safari queda pendiente.
+
+- La instalación con lockfile congelado pasó. Metro sirvió el bundle iOS por LAN con HTTP 200. expo install --check sigue informando seis versiones recomendadas del stack previo, sin cambios de dependencias en este bloque.

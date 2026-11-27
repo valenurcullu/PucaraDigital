@@ -10,6 +10,14 @@ Agenda permite ver la semana de toda la familia o de una sola persona. Combina l
 
 Pádel muestra 14 días, una sola cancha, turnos de 90 minutos y el precio del lector. El socio puede ensayar pago o uso de crédito, revisar su reserva, modificarla conservando el turno anterior hasta confirmar y probar una cancelación elegible de ejemplo. Modificar abre el selector de día y horario dentro de la misma hoja de detalle. Confirmar actualiza la reserva existente y vuelve a su detalle con el nuevo horario. Volver, cerrar o deslizar hacia abajo desde el tirador descarta el borrador. Mis reservas, Inicio y Agenda comparten la sesión en memoria. La elegibilidad real queda en PostgreSQL. [Verificaciones](verification.md).
 
+## Fixture de Rugby y Hockey
+
+La pantalla única `/fixture` sigue la referencia 14 de Claude y reutiliza el segmentado de actividades. Rugby permite seleccionar Plantel Superior, Juveniles e Infantiles. Hockey permite elegir Línea A/B/C/D y sus categorías, o Cuarta, Décima y Escuelita como categorías independientes. La selección de división y la consulta de toda la jornada usan hojas, con regreso al filtro anterior. Ver fixture completo amplía el calendario de esa división dentro de la misma pantalla.
+
+El catálogo de `packages/shared/src/demo-fixture.ts` centraliza deportes, grupos, líneas, divisiones, jornadas, sedes y resultados. Los partidos viven en `MemberExperience.matches` y abastecen también a Inicio. La Primera de Rugby y la Primera de Línea A de Hockey son las destacadas de esta demo. Se cambian mediante `featuredDivisionId`. La estructura de Hockey requiere validación del club. Cada partido conserva su sede, incluso si comparte jornada con otras categorías. Rugby infantil presenta próximos encuentros y estados vacíos, sin marcadores ni tablas.
+
+Se consolidó la ruta en el stack principal para regresar a Inicio o Club según el origen. Las entradas anteriores de módulos deportivos conservan redirección al fixture. No se agregan estos partidos públicos a Agenda personal. Los datos deportivos son íntegramente ficticios.
+
 ## Gimnasio y actividades — 27 de noviembre
 
 Se implementaron las referencias 11, 11b y 12 del handoff. Gimnasio muestra una rutina semanal del titular con dos entrenamientos, pesos anteriores, series, repeticiones, registro de cargas, finalización e historial. El entrenamiento en curso se recupera al volver a navegar. Los familiares sin asignación muestran el estado vacío. Yoga y Funcional permiten inscripción y baja por perfil autorizado en la demo, ajustan cupos y proyectan sus clases en Agenda. La baja conserva las clases pasadas. Una reinscripción conserva su historial y evita duplicar clases.

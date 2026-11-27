@@ -16,6 +16,10 @@ Se implementan 11, 11b y 12 usando los tokens, botones y hojas existentes. La ru
 
 La indicación más reciente del usuario agrega deslizamiento para eliminar una serie, menú accesible, Deshacer, interruptor nativo de pesos y acción para marcar todas como hechas. Estas acciones afectan el entrenamiento de la sesión. Se retira el gráfico de progreso del jugador. El registro conserva tiempo y series hechas y permite guardar al finalizar. Los componentes usan React Native y React Native Web. La apariencia de la barra del SDK en web requiere revisión para el QR público.
 
+## Fixture por divisiones
+
+La referencia 14 se amplía con filtros de grupo, línea y división. Se conserva el segmentado Rugby/Hockey, las tarjetas blancas, la tipografía numérica y los indicadores Local/Visitante y G/P/E. La selección de división y la jornada completa usan las hojas reutilizables. La ruta es única y el calendario completo reemplaza al resumen en el mismo contenido. Los marcadores se presentan como Pucará/rival y las categorías infantiles de Rugby muestran sólo encuentros.
+
 ## Antecedente · 13 de noviembre de 2026
 
 Actualizado 2026-11-13. Concepto A permanece como base provisional: fondo cálido, rojo y marino, acento editorial en títulos. El usuario probó el bloque anterior en iPhone: navegación funcional, **UX/UI no aprobada**. Esta implementación responde a su pedido de más jerarquía y acciones visibles. La nueva estética aún requiere su revisión en Expo Go.
