@@ -51,7 +51,7 @@ describe('member read model', () => {
     expect(
       selectFirstTeamMatches({ ...data, matches }).map((m) => m.id),
     ).toEqual(['rugby-primera', 'hockey-primera']);
-    expect(matches[2]?.id).toBe('old');
+    expect(matches.at(-2)?.id).toBe('old');
     expect(selectFirstTeamMatches({ ...data, matches: [] })).toEqual([]);
   });
   it('keeps module destinations valid and the padel fixture at exactly 90 minutes', () => {

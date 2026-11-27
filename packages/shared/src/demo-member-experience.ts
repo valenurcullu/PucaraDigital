@@ -1,3 +1,4 @@
+import { createDemoFixture } from './demo-fixture';
 import { createDemoSports } from './demo-sports';
 import { requireDemoMode } from './services';
 import {
@@ -141,26 +142,7 @@ export function createDemoExperience(
         modules: ['buffet', 'beneficios', 'novedades', 'eventos'],
       },
     ],
-    matches: [
-      {
-        id: 'rugby-primera',
-        sport: 'rugby',
-        division: 'Primera',
-        opponent: 'Club del Sur',
-        venue: 'home',
-        startsAt: when(2, '15:30'),
-        location: 'Cancha principal · ejemplo',
-      },
-      {
-        id: 'hockey-primera',
-        sport: 'hockey',
-        division: 'Primera',
-        opponent: 'Club del Parque',
-        venue: 'away',
-        startsAt: when(3, '16:00'),
-        location: 'Club del Parque · ejemplo',
-      },
-    ],
+    ...createDemoFixture(day),
     notices: [
       {
         id: 'jornada-familia',

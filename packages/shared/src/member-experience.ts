@@ -1,4 +1,5 @@
 import { activityClasses, type SportsState } from './sports';
+import { featuredMatches, type FixtureCatalog } from './fixture';
 export type ModuleId =
   | 'reservas'
   | 'padel'
@@ -33,6 +34,10 @@ export interface ClubMatch {
   readonly id: string;
   readonly sport: 'rugby' | 'hockey';
   readonly division: string;
+  readonly divisionId: string;
+  readonly roundId: string;
+  readonly venueId: string;
+  readonly status: 'scheduled' | 'played';
   readonly opponent: string;
   readonly venue: 'home' | 'away';
   readonly startsAt: string;
@@ -113,6 +118,7 @@ export interface MemberExperience {
   readonly modules: readonly ClubModule[];
   readonly groups: readonly ClubGroup[];
   readonly matches: readonly ClubMatch[];
+  readonly fixture: FixtureCatalog;
   readonly notices: readonly ClubNotice[];
   readonly reservations: readonly MemberReservation[];
   readonly activities: readonly MemberActivity[];
@@ -173,17 +179,7 @@ export function selectPersonalEvents(
     .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt));
 }
 export function selectFirstTeamMatches(data: MemberExperience): ClubMatch[] {
-  return (['rugby', 'hockey'] as const).flatMap((sport) => {
-    const next = data.matches
-      .filter(
-        (m) =>
-          m.sport === sport &&
-          m.division === 'Primera' &&
-          Date.parse(m.startsAt) >= Date.parse(data.referenceInstant),
-      )
-      .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt))[0];
-    return next ? [next] : [];
-  });
+  return featuredMatches(data);
 }
 export const clubTimeZone = 'America/Argentina/Buenos_Aires';
 const clubDateFormatter = new Intl.DateTimeFormat('en-CA', {
