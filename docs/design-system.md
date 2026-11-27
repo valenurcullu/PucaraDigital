@@ -8,6 +8,10 @@ La primera entrega aplica los tokens de `memberTheme`, fuente del sistema para t
 
 Inicio muestra la cabecera marina, accesos rápidos, próximos compromisos, Primera y novedades. Club agrupa Reservas, Deportes, Actividades y Vida en el club. Pádel presenta el selector de 14 días, la grilla de tres columnas, la barra de acción inferior y las hojas de confirmación y gestión. El tamaño de texto del dispositivo adapta el número de columnas. La barra y el encabezado final los dibuja cada sistema operativo.
 
+## Gimnasio y actividades · 27 de noviembre
+
+Se implementan 11, 11b y 12 usando los tokens, botones y hojas existentes. La rutina conserva su cabecera marina, segmentado de entrenamientos y filas de ejercicios. El registro usa barra de métricas fija y campos de KG/REPS por serie. En pantallas angostas o texto ampliado, los datos de serie se apilan para conservar las áreas táctiles. Las actividades usan el marcador rayado de 150, resumen de datos, estado y confirmaciones de inscripción o baja. El selector familiar reutiliza las identidades de Cuenta.
+
 ## Antecedente · 13 de noviembre de 2026
 
 Actualizado 2026-11-13. Concepto A permanece como base provisional: fondo cálido, rojo y marino, acento editorial en títulos. El usuario probó el bloque anterior en iPhone: navegación funcional, **UX/UI no aprobada**. Esta implementación responde a su pedido de más jerarquía y acciones visibles. La nueva estética aún requiere su revisión en Expo Go.

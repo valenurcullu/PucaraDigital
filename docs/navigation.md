@@ -8,6 +8,10 @@ Actualizado el 24 de noviembre de 2026. Expo Router conserva cinco pestañas nat
 | -------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | /                    | Inicio: saludo, Reservas/Gimnasio/Cuenta corriente, Primera rugby/hockey, resumen personal y comunicaciones         |
 | /turnos, /club/padel | Misma pantalla de una cancha en los stacks de Inicio y Club; parámetro opcional `manage` para abrir una reserva     |
+| /club/gimnasio       | Rutina y entrenamiento en curso del perfil seleccionado                                                             |
+| /club/entrenamiento  | Cargas, repeticiones y series; parámetro `id` y `person`                                                            |
+| /club/historial      | Entrenamientos finalizados por persona                                                                              |
+| /club/actividades    | Yoga/Funcional; `activity` y `person` seleccionan la vista                                                          |
 | /club/reservas       | Directorio de reservas, créditos y reservas personales                                                              |
 | /fixture             | Partidos de Primera de ambos deportes y resultados disponibles                                                      |
 | /agenda              | Variante 1f con semana, Hoy y filtro Todos/Yo/Sofía/Tomás                                                           |
@@ -27,7 +31,7 @@ Las cinco pestañas son Inicio, Agenda, Carnet, Club y Cuenta. Los detalles se a
 
 Reservas accesible a un toque desde Inicio; pádel/quinchos visibles al entrar a Club. Un detalle único de reserva se alcanza desde Inicio, Agenda o Mis reservas. Partidos públicos no se agregan automáticamente a Agenda personal.
 
-Gimnasio libre no genera eventos. La fuente demo incluye Funcional inscripto y Yoga sin inscripción; Agenda refleja esa diferencia sin guardar cambios. Las inscripciones de actividades siguen en consulta. Pádel permite ensayar Modificar o Cancelar en la sesión.
+Gimnasio libre no genera eventos. La fuente demo incluye Funcional inscripto y Yoga sin inscripción; Agenda refleja esa diferencia sin guardar cambios. Yoga y Funcional permiten inscripción/baja demo por persona, con clases futuras en Agenda y conservación del historial. Pádel permite ensayar Modificar o Cancelar en la sesión.
 
 La vista semanal permite cambiar de día y semana. La vista mensual secundaria queda pendiente. Los campos de familia no acreditan permisos. Cuenta, Carnet y módulos secundarios son demo, no funcionalidades terminadas.
 

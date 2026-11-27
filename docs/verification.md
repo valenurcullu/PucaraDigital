@@ -227,3 +227,13 @@ Se compararon las referencias iOS 08, 09, 10, 10b y 10c y las variantes Android 
 - Build de Next.js y exportación Hermes del cliente para iOS y Android. Expo SDK 58 continúa recomendando seis parches en `expo install --check`. Se conservaron las versiones del monorepo.
 - React Native Web y Chromium con los componentes reales y un adaptador temporal de navegación. Se probaron los siete días a 390 px, Hoy, cambio de semana, detalle de evento, filtros de persona, tres carnets, perfil de menor → Carnet / Agenda, cuotas, movimiento de pago y preferencias. La creación, modificación y cancelación de Pádel se reflejaron en Agenda en la misma sesión.
 - A 320 px y con una simulación de texto al 180 %, se comprobó el acceso al último contenido de las tres pestañas y al carnet del menor. Las capturas omiten la barra de pestañas y el encabezado del stack que dibuja el sistema. Safe areas físicas, VoiceOver/TalkBack, gesto de regreso y transiciones nativas quedan para la prueba en dispositivo.
+
+## 2026-11-27 — Gimnasio, Yoga y Funcional
+
+Base local `a230ff5` en `main`. Se revisaron AGENTS, CLAUDE, estado, arquitectura, README del handoff, prototipos y capturas 11, 11b y 12. Se aplicaron las referencias con componentes nativos y datos tipados de sesión.
+
+- Instalación offline con lockfile congelado. ESLint, TypeScript y 59 pruebas (37 móviles, 22 compartidas), build de Next.js y exportación Hermes iOS/Android correctos.
+- Pruebas unitarias de cargas y repeticiones, series completas, métricas, guardado, último peso, registros de solo lectura, historial por persona y exclusión de gimnasio en Agenda. Inscripción/baja de Yoga y Funcional con cupos, rechazo de duplicados, persona ajena o vínculo revocado, conservación de clases pasadas y reinscripción sin clases duplicadas.
+- Prueba interactiva con React Native Web y Chromium, componentes y proveedor reales, navegación temporal de prueba. Se recorrieron ambos días, registro y cambio de peso, serie completa, salida/reanudación, guardado e historial. Para Sofía, se verificó inscripción a Yoga → Agenda propia → baja. Para el titular, baja y reinscripción de Funcional. Se comprobó la ausencia de registros del titular en el historial de un familiar.
+- A 320 px y texto ampliado simulado al 180 %, los campos de la tabla y el contenido final fueron accesibles mediante scroll, sin desborde horizontal del documento. Safe areas físicas, teclado de iPhone, VoiceOver/TalkBack y transiciones quedan para el dispositivo. [Comparación de componentes](design/verification/2026-11-27-gimnasio-actividades.jpg).
+- `expo install --check` informa seis versiones recomendadas por el catálogo SDK 58, incluida Expo ~58.1.0 y Router ~58.0.33. Se conservaron las dependencias fijadas.

@@ -1,6 +1,6 @@
 # Estado actual de Pucará Digital
 
-Actualizado el 24 de noviembre de 2026. El Hito 2 partió de `af9f5b7`, sincronizado con la rama principal de GitHub al inicio. El desarrollo activo usa el clon del escritorio de Windows.
+Actualizado el 27 de noviembre de 2026. El Hito 2 partió de `af9f5b7`, sincronizado con la rama principal de GitHub al inicio. El desarrollo activo usa el clon del escritorio de Windows.
 
 ## Aplicación
 
@@ -9,6 +9,12 @@ La implementación del [handoff de Claude Design](../design/Mobile%20app%20desig
 Agenda permite ver la semana de toda la familia o de una sola persona. Combina las reservas e inscripciones de la sesión del titular con los compromisos ficticios asociados al vínculo seleccionado. Carnet y Cuenta consultan los mismos números de socio y categorías. Los QR de muestra contienen texto público de demostración. Las preferencias de notificación se conservan en memoria durante la sesión de la pestaña. [Comparación con el handoff](design/verification/2026-11-24-agenda-carnet-cuenta.jpg).
 
 Pádel muestra 14 días, una sola cancha, turnos de 90 minutos y el precio del lector. El socio puede ensayar pago o uso de crédito, revisar su reserva, modificarla conservando el turno anterior hasta confirmar y probar una cancelación elegible de ejemplo. Modificar abre el selector de día y horario dentro de la misma hoja de detalle. Confirmar actualiza la reserva existente y vuelve a su detalle con el nuevo horario. Volver, cerrar o deslizar hacia abajo desde el tirador descarta el borrador. Mis reservas, Inicio y Agenda comparten la sesión en memoria. La elegibilidad real queda en PostgreSQL. [Verificaciones](verification.md).
+
+## Gimnasio y actividades — 27 de noviembre
+
+Se implementaron las referencias 11, 11b y 12 del handoff. Gimnasio muestra una rutina semanal del titular con dos entrenamientos, pesos anteriores, series, repeticiones, registro de cargas, finalización e historial. El entrenamiento en curso se recupera al volver a navegar. Los familiares sin asignación muestran el estado vacío. Yoga y Funcional permiten inscripción y baja por perfil autorizado en la demo, ajustan cupos y proyectan sus clases en Agenda. La baja conserva las clases pasadas. Una reinscripción conserva su historial y evita duplicar clases.
+
+El estado vive en el proveedor compartido de la sesión. El progreso inicial y la rutina son ejemplos tipados; el gimnasio libre queda fuera de Agenda. La asignación administrativa y la persistencia quedan para un bloque posterior. Las actividades cuentan con ocho clases de ejemplo, dos por semana, desde la fecha de la sesión. [Comparación visual](design/verification/2026-11-27-gimnasio-actividades.jpg).
 
 ## Antecedente del 20 de noviembre — revisión táctil y Agenda semanal
 
@@ -32,7 +38,7 @@ En Windows se aplicaron migraciones y seed y se probaron autorización, integrid
 
 ## Para retomar
 
-1. Revisar Agenda, Carnet y Cuenta en iPhone con VoiceOver, texto ampliado y gesto de regreso. Probar Perfil de Sofía → Ver carnet / Ver agenda y Pádel → Ver en Agenda. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
+1. Probar en iPhone Gimnasio → registrar → salir → retomar → guardar → historial. Probar Yoga/Funcional para el titular y un menor, inscripción → Agenda → baja. Revisar teclado, VoiceOver, texto ampliado y gesto de regreso. Probar Perfil de Sofía → Ver carnet / Ver agenda y Pádel → Ver en Agenda. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
 2. Validar la API con sesiones Auth reales de ambos clubes, incluidos vínculos revocados. Implementar el lector autenticado de disponibilidad para esta pantalla y verificar los rangos de fechas con turnos publicados en esa base.
 3. Acordar con el club verificación del padrón, permisos de menores, cancelación y reintegros. El pago real requiere además proveedor, retención y conciliación. Gimnasio con asignación de rutinas y registro de cargas sigue entre las prioridades deportivas tempranas.
 

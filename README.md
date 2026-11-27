@@ -8,6 +8,8 @@ Inicio, Club, la barra de cinco pestañas y Pádel implementan el diseño aproba
 
 Agenda 1f, Carnet y Cuenta comparten los perfiles ficticios de Martín, Sofía y Tomás. Desde el perfil de un menor se puede abrir su agenda o presentar su carnet de ejemplo. Cuenta reúne cuotas, movimientos de pago, becas y preferencias de esta sesión. Los QR contienen únicamente texto demo.
 
+Gimnasio permite seguir una rutina asignada, registrar series y consultar el historial por persona. Yoga y Funcional permiten inscribirse o cancelar con actualización de cupos y Agenda. Los borradores y registros se conservan durante la sesión demo.
+
 El backend de desarrollo conserva identidad, autorización y comandos de pádel en PostgreSQL. La app móvil usa datos ficticios. [Guía del backend local](supabase/README.md).
 
 Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
