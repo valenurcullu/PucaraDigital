@@ -14,3 +14,4 @@ export {
 export * from './padel-availability';
 export { createDemoPadelReader } from './demo-padel-availability';
 export * from './member-views';
+export * from './sports';

@@ -1,3 +1,4 @@
+import { activityClasses } from './sports';
 import {
   selectPersonalEvents,
   type MemberExperience,
@@ -28,7 +29,10 @@ export function agendaItems(
       const events =
         person.id === data.member.id
           ? selectPersonalEvents(data, from, { pendingQuinchos: true })
-          : (data.family.find((f) => f.id === person.id)?.events ?? []);
+          : [
+              ...(data.family.find((f) => f.id === person.id)?.events ?? []),
+              ...activityClasses(data, person.id),
+            ];
       return events
         .filter((e) => Date.parse(e.endsAt) > Date.parse(from))
         .map((e) => ({ ...e, personId: person.id }));

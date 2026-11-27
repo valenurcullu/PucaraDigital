@@ -18,8 +18,7 @@ describe('member read model', () => {
     const snapshot = { ...data, scheduledEvents: [] };
     expect(selectPersonalEvents(snapshot).map((e) => e.id)).toEqual([
       'reservation-padel-demo',
-      'funcional-1',
-      'funcional-2',
+      ...Array.from({ length: 8 }, (_, i) => 'funcional-' + (i + 1)),
     ]);
     expect(
       selectPersonalEvents({

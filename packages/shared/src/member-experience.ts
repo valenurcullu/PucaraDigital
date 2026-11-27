@@ -1,3 +1,4 @@
+import { activityClasses, type SportsState } from './sports';
 export type ModuleId =
   | 'reservas'
   | 'padel'
@@ -106,6 +107,7 @@ export interface FamilyMember extends MemberIdentity {
 }
 export interface MemberExperience {
   readonly mode: 'demo';
+  readonly sports: SportsState;
   readonly referenceInstant: string;
   readonly member: MemberIdentity;
   readonly modules: readonly ClubModule[];
@@ -165,22 +167,7 @@ export function selectPersonalEvents(
       location: r.location,
       target: { kind: 'reservation', id: r.id },
     }));
-  const classes: PersonalEvent[] = data.activities
-    .filter(
-      (a) => a.enrollment === 'active' && a.participantId === data.member.id,
-    )
-    .flatMap((a) =>
-      a.sessions.map((s) => ({
-        id: a.id + '-' + s.id,
-        kind: 'activity' as const,
-        status: 'enrolled' as const,
-        title: a.title,
-        startsAt: s.startsAt,
-        endsAt: s.endsAt,
-        location: a.location,
-        target: { kind: 'module' as const, id: a.id },
-      })),
-    );
+  const classes = activityClasses(data, data.member.id);
   return [...reservations, ...classes, ...data.scheduledEvents]
     .filter((e) => Date.parse(e.endsAt) > Date.parse(at))
     .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt));

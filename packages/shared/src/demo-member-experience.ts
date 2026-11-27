@@ -1,3 +1,4 @@
+import { createDemoSports } from './demo-sports';
 import { requireDemoMode } from './services';
 import {
   clubDay,
@@ -48,6 +49,7 @@ export function createDemoExperience(
       .slice(0, 10);
   return {
     mode: 'demo',
+    sports: createDemoSports(),
     referenceInstant: when(0, '00:00'),
     member: {
       id: 'member-demo',
@@ -206,10 +208,11 @@ export function createDemoExperience(
         availablePlaces: 4,
         enrollment: 'none',
         participantId: 'member-demo',
-        sessions: [
-          { id: '1', startsAt: when(1, '18:00'), endsAt: when(1, '19:00') },
-          { id: '2', startsAt: when(4, '18:00'), endsAt: when(4, '19:00') },
-        ],
+        sessions: Array.from({ length: 8 }, (_, i) => ({
+          id: String(i + 1),
+          startsAt: when((i % 2 ? 4 : 1) + Math.floor(i / 2) * 7, '18:00'),
+          endsAt: when((i % 2 ? 4 : 1) + Math.floor(i / 2) * 7, '19:00'),
+        })),
       },
       {
         id: 'funcional',
@@ -220,10 +223,11 @@ export function createDemoExperience(
         availablePlaces: 3,
         enrollment: 'active',
         participantId: 'member-demo',
-        sessions: [
-          { id: '1', startsAt: when(2, '19:00'), endsAt: when(2, '20:00') },
-          { id: '2', startsAt: when(5, '19:00'), endsAt: when(5, '20:00') },
-        ],
+        sessions: Array.from({ length: 8 }, (_, i) => ({
+          id: String(i + 1),
+          startsAt: when((i % 2 ? 5 : 2) + Math.floor(i / 2) * 7, '19:00'),
+          endsAt: when((i % 2 ? 5 : 2) + Math.floor(i / 2) * 7, '20:00'),
+        })),
       },
     ],
     scheduledEvents: [
