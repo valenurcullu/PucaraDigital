@@ -1,8 +1,10 @@
+import { SwipeSeries } from './swipe-series';
 import { useState, useEffect } from 'react';
 import {
   ScrollView,
   View,
   TextInput,
+  Switch,
   KeyboardAvoidingView,
   Platform,
   useWindowDimensions,
@@ -178,34 +180,6 @@ export function GymContent({
               });
             }}
           />
-          <View style={[layout.card, layout.group]}>
-            <View style={layout.between}>
-              <Label role="card">Progreso · Sentadilla</Label>
-              <Label role="meta" ink={color.success}>
-                +{routine.progress.at(-1)! - routine.progress[0]!} kg
-              </Label>
-            </View>
-            <View style={[layout.row, { alignItems: 'flex-end' }]}>
-              {routine.progress.map((v, i) => (
-                <View key={i} style={{ flex: 1, gap: 4, alignItems: 'center' }}>
-                  <Label role="smallNumber">{v}</Label>
-                  <View
-                    style={{
-                      width: '100%',
-                      height: v * 0.6,
-                      borderTopLeftRadius: 9,
-                      borderTopRightRadius: 9,
-                      backgroundColor:
-                        i === routine.progress.length - 1
-                          ? color.action
-                          : '#D6DEE8',
-                    }}
-                  />
-                </View>
-              ))}
-            </View>
-            <DemoCaption>Progreso de ejemplo</DemoCaption>
-          </View>
         </>
       ) : (
         <View style={[layout.card, layout.group]}>
@@ -275,7 +249,14 @@ export function TrainingContent({
         <Label>Entrenamiento no disponible.</Label>
       </View>
     );
-  return <WorkoutEditor data={data} workout={workout} routine={routine} />;
+  return (
+    <WorkoutEditor
+      key={workout.id}
+      data={data}
+      workout={workout}
+      routine={routine}
+    />
+  );
 }
 function WorkoutEditor({
   data,
@@ -292,7 +273,11 @@ function WorkoutEditor({
   const narrow = width < 355 || fontScale > 1.35;
   const [now, tick] = useState(() => Date.now()),
     [error, tell] = useState(''),
-    [finish, show] = useState(false);
+    [finish, show] = useState(false),
+    [menu, setMenu] = useState<{ exerciseId: string; index: number } | null>(
+      null,
+    ),
+    [focused, setFocused] = useState<string | null>(null);
   useEffect(() => {
     if (!workout.finishedAt) {
       const timer = setInterval(() => tick(Date.now()), 1000);
@@ -303,9 +288,7 @@ function WorkoutEditor({
   const metrics = workoutMetrics(workout);
   function change(intent: SportsIntent) {
     if (!preview(intent, data))
-      tell(
-        'Revisá los valores: peso válido y repeticiones enteras mayores que cero.',
-      );
+      tell('No pudimos actualizar. Revisá los campos y reintentá.');
     else tell('');
   }
   const heading = (
@@ -331,7 +314,6 @@ function WorkoutEditor({
           ),
         ],
         ['Series', metrics.done + '/' + metrics.total],
-        ['Volumen', metrics.volume.toLocaleString('es-AR') + ' kg'],
       ].map(([label, value]) => (
         <View
           key={label}
@@ -372,6 +354,35 @@ function WorkoutEditor({
       style={{ flex: 1 }}
     >
       {heading}
+      {workout.removedSet && !workout.finishedAt && (
+        <View
+          accessibilityLiveRegion="polite"
+          style={[layout.row, { padding: 12, backgroundColor: color.navySoft }]}
+        >
+          <Label role="meta" style={layout.grow}>
+            Serie eliminada
+          </Label>
+          <Tap
+            label="Deshacer eliminación"
+            onPress={() =>
+              change({
+                action: 'restore-set',
+                personId: workout.personId,
+                id: workout.id,
+              })
+            }
+            style={{
+              minHeight: 44,
+              paddingHorizontal: 14,
+              justifyContent: 'center',
+              borderRadius: 12,
+              backgroundColor: color.surface,
+            }}
+          >
+            <Label role="card">Deshacer</Label>
+          </Tap>
+        </View>
+      )}
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={layout.page}
@@ -379,6 +390,42 @@ function WorkoutEditor({
         {!!error && <Notice>{error}</Notice>}
         {workout.finishedAt && <Notice>Entrenamiento guardado · demo</Notice>}
         <Label role="section">{day.name} · Fuerza</Label>
+        {!workout.finishedAt && (
+          <View style={layout.group}>
+            <View style={[layout.row, { minHeight: 48 }]}>
+              <Label role="card" style={layout.grow}>
+                Registrar pesos
+              </Label>
+              <Switch
+                accessibilityLabel="Registrar pesos"
+                value={workout.trackWeights !== false}
+                onValueChange={(value) => {
+                  setFocused(null);
+                  change({
+                    action: 'track-weights',
+                    personId: workout.personId,
+                    id: workout.id,
+                    value,
+                  });
+                }}
+                trackColor={{ true: color.navy }}
+              />
+            </View>
+            {metrics.total > 0 && (
+              <Command
+                title="Marcar todas como hechas"
+                variant="secondary"
+                onPress={() =>
+                  change({
+                    action: 'complete-all',
+                    personId: workout.personId,
+                    id: workout.id,
+                  })
+                }
+              />
+            )}
+          </View>
+        )}
         {workout.exercises.map((e) => {
           const exercise = day.exercises.find((x) => x.id === e.id)!;
           const previous = lastSet(data, workout.personId, exercise);
@@ -399,150 +446,201 @@ function WorkoutEditor({
                   <Label role="label" style={layout.grow}>
                     ANTERIOR
                   </Label>
-                  <Label
-                    role="label"
-                    style={{ width: 58, textAlign: 'center' }}
-                  >
-                    KG
-                  </Label>
+                  {workout.trackWeights !== false && (
+                    <Label
+                      role="label"
+                      style={{ width: 58, textAlign: 'center' }}
+                    >
+                      KG
+                    </Label>
+                  )}
                   <Label
                     role="label"
                     style={{ width: 46, textAlign: 'center' }}
                   >
                     REPS
                   </Label>
-                  <View style={{ width: 44 }} />
+                  <View style={{ width: workout.finishedAt ? 44 : 88 }} />
                 </View>
               )}
               {e.sets.map((set, index) => (
-                <View
-                  key={index}
-                  style={{
-                    padding: 4,
-                    borderRadius: 12,
-                    gap: 6,
-                    backgroundColor: set.done
-                      ? color.successBackground
-                      : 'transparent',
-                  }}
+                <SwipeSeries
+                  key={set.id ?? index}
+                  disabled={
+                    !!workout.finishedAt || focused === (set.id ?? e.id + index)
+                  }
+                  label={'Eliminar ' + exercise.name + ' serie ' + (index + 1)}
+                  onDelete={() =>
+                    change({
+                      action: 'remove-set',
+                      personId: workout.personId,
+                      id: workout.id,
+                      exerciseId: e.id,
+                      index,
+                    })
+                  }
                 >
-                  {narrow && (
-                    <Label role="meta">
-                      Serie {index + 1} · anterior {previous.kg} ×{' '}
-                      {previous.reps}
-                    </Label>
-                  )}
-                  <View style={[layout.row, { gap: 6 }]}>
-                    {!narrow && (
-                      <>
-                        <Label
-                          role="smallNumber"
-                          style={{ width: 26, textAlign: 'center' }}
-                        >
-                          {index + 1}
-                        </Label>
-                        <Label
-                          role="meta"
-                          ink={color.secondaryText}
-                          style={layout.grow}
-                        >
-                          {previous.kg} × {previous.reps}
-                        </Label>
-                      </>
+                  <View
+                    style={{
+                      padding: 4,
+                      borderRadius: 12,
+                      gap: 6,
+                      backgroundColor: set.done
+                        ? color.successBackground
+                        : 'transparent',
+                    }}
+                  >
+                    {narrow && (
+                      <Label role="meta">
+                        Serie {index + 1} · anterior {previous.kg} ×{' '}
+                        {previous.reps || '—'}
+                      </Label>
                     )}
-                    {(['kg', 'reps'] as const).map((field) => (
-                      <View
-                        key={field}
-                        style={
-                          narrow
-                            ? { flex: 1 }
-                            : { width: field === 'kg' ? 58 : 46 }
-                        }
-                      >
-                        {narrow && (
-                          <Label role="label">
-                            {field === 'kg' ? 'KG' : 'REPS'}
+                    <View style={[layout.row, { gap: 6 }]}>
+                      {!narrow && (
+                        <>
+                          <Label
+                            role="smallNumber"
+                            style={{ width: 26, textAlign: 'center' }}
+                          >
+                            {index + 1}
                           </Label>
-                        )}
-                        <TextInput
-                          accessibilityLabel={
+                          <Label
+                            role="meta"
+                            ink={color.secondaryText}
+                            style={layout.grow}
+                          >
+                            {previous.kg} × {previous.reps}
+                          </Label>
+                        </>
+                      )}
+                      {(workout.trackWeights === false
+                        ? (['reps'] as const)
+                        : (['kg', 'reps'] as const)
+                      ).map((field) => (
+                        <View
+                          key={field}
+                          style={
+                            narrow
+                              ? { flex: 1 }
+                              : { width: field === 'kg' ? 58 : 46 }
+                          }
+                        >
+                          {narrow && (
+                            <Label role="label">
+                              {field === 'kg' ? 'KG' : 'REPS'}
+                            </Label>
+                          )}
+                          <TextInput
+                            accessibilityLabel={
+                              exercise.name +
+                              ' serie ' +
+                              (index + 1) +
+                              ' ' +
+                              (field === 'kg' ? 'peso' : 'repeticiones')
+                            }
+                            value={
+                              (workout.finishedAt || set.done) &&
+                              (field === 'kg'
+                                ? set.kgRecorded
+                                : set.repsRecorded) === false
+                                ? ''
+                                : set[field]
+                            }
+                            placeholder="—"
+                            onFocus={() => setFocused(set.id ?? e.id + index)}
+                            onBlur={() => setFocused(null)}
+                            editable={!workout.finishedAt}
+                            selectTextOnFocus
+                            keyboardType={
+                              field === 'kg' ? 'decimal-pad' : 'number-pad'
+                            }
+                            returnKeyType="done"
+                            style={{
+                              minHeight: 44,
+                              backgroundColor: set.done ? '#D2E8DA' : '#F1F0EC',
+                              borderRadius: 10,
+                              textAlign: 'center',
+                              fontFamily: memberTheme.font.semibold,
+                              fontSize: 18,
+                              color: color.text,
+                              padding: 4,
+                            }}
+                            onChangeText={(value) =>
+                              change({
+                                action: 'set',
+                                personId: workout.personId,
+                                id: workout.id,
+                                exerciseId: e.id,
+                                index,
+                                field,
+                                value,
+                              })
+                            }
+                          />
+                        </View>
+                      ))}
+                      <Tap
+                        label={
+                          exercise.name +
+                          ' serie ' +
+                          (index + 1) +
+                          (set.done ? ' completada' : ' completar')
+                        }
+                        selected={set.done}
+                        disabled={!!workout.finishedAt}
+                        onPress={() =>
+                          change({
+                            action: 'set',
+                            personId: workout.personId,
+                            id: workout.id,
+                            exerciseId: e.id,
+                            index,
+                            field: 'done',
+                            value: !set.done,
+                          })
+                        }
+                        style={{
+                          width: 44,
+                          minHeight: 44,
+                          borderRadius: 10,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: set.done
+                            ? color.successSolid
+                            : color.subtle,
+                          alignSelf: 'flex-end',
+                        }}
+                      >
+                        <AppIcon
+                          name="check"
+                          size={25}
+                          color={set.done ? 'white' : color.secondaryText}
+                        />
+                      </Tap>
+                      {!workout.finishedAt && (
+                        <Tap
+                          label={
+                            'Opciones de ' +
                             exercise.name +
                             ' serie ' +
-                            (index + 1) +
-                            ' ' +
-                            (field === 'kg' ? 'peso' : 'repeticiones')
+                            (index + 1)
                           }
-                          value={set[field]}
-                          editable={!workout.finishedAt}
-                          selectTextOnFocus
-                          keyboardType={
-                            field === 'kg' ? 'decimal-pad' : 'number-pad'
-                          }
-                          returnKeyType="done"
+                          onPress={() => setMenu({ exerciseId: e.id, index })}
                           style={{
+                            width: 44,
                             minHeight: 44,
-                            backgroundColor: set.done ? '#D2E8DA' : '#F1F0EC',
-                            borderRadius: 10,
-                            textAlign: 'center',
-                            fontFamily: memberTheme.font.semibold,
-                            fontSize: 18,
-                            color: color.text,
-                            padding: 4,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            alignSelf: 'flex-end',
                           }}
-                          onChangeText={(value) =>
-                            change({
-                              action: 'set',
-                              personId: workout.personId,
-                              id: workout.id,
-                              exerciseId: e.id,
-                              index,
-                              field,
-                              value,
-                            })
-                          }
-                        />
-                      </View>
-                    ))}
-                    <Tap
-                      label={
-                        exercise.name +
-                        ' serie ' +
-                        (index + 1) +
-                        (set.done ? ' completada' : ' completar')
-                      }
-                      selected={set.done}
-                      disabled={!!workout.finishedAt}
-                      onPress={() =>
-                        change({
-                          action: 'set',
-                          personId: workout.personId,
-                          id: workout.id,
-                          exerciseId: e.id,
-                          index,
-                          field: 'done',
-                          value: !set.done,
-                        })
-                      }
-                      style={{
-                        width: 44,
-                        minHeight: 44,
-                        borderRadius: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: set.done
-                          ? color.successSolid
-                          : color.subtle,
-                        alignSelf: 'flex-end',
-                      }}
-                    >
-                      <AppIcon
-                        name="check"
-                        size={25}
-                        color={set.done ? 'white' : color.secondaryText}
-                      />
-                    </Tap>
+                        >
+                          <Label role="section">···</Label>
+                        </Tap>
+                      )}
+                    </View>
                   </View>
-                </View>
+                </SwipeSeries>
               ))}
               {!workout.finishedAt && (
                 <Tap
@@ -571,12 +669,35 @@ function WorkoutEditor({
           Registros de ejemplo · se conservan durante esta sesión
         </DemoCaption>
       </ScrollView>
+      {menu && (
+        <Sheet
+          title={'Serie ' + (menu.index + 1)}
+          onClose={() => setMenu(null)}
+        >
+          <Command
+            title="Eliminar"
+            variant="danger"
+            onPress={() => {
+              change({
+                action: 'remove-set',
+                personId: workout.personId,
+                id: workout.id,
+                exerciseId: menu.exerciseId,
+                index: menu.index,
+              });
+              setMenu(null);
+            }}
+          />
+          <Command
+            title="Volver"
+            variant="secondary"
+            onPress={() => setMenu(null)}
+          />
+        </Sheet>
+      )}
       {finish && (
         <Sheet title="Finalizar entrenamiento" onClose={() => show(false)}>
-          <Label>
-            {metrics.done} series completadas ·{' '}
-            {metrics.volume.toLocaleString('es-AR')} kg de volumen.
-          </Label>
+          <Label>{metrics.done} series completadas.</Label>
           <Label role="meta">
             Las series pendientes se conservan en el registro.
           </Label>
@@ -672,10 +793,7 @@ export function HistoryContent({
                 {new Date(w.startedAt).toLocaleDateString('es-AR')} · Día{' '}
                 {w.dayId}
               </Label>
-              <Label role="number">
-                {metrics.done} series · {metrics.volume.toLocaleString('es-AR')}{' '}
-                kg
-              </Label>
+              <Label role="number">{metrics.done} series completadas</Label>
               <Label role="meta" ink={color.action}>
                 Ver registro ›
               </Label>
