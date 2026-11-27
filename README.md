@@ -8,11 +8,17 @@ Inicio, Club, la barra de cinco pestañas y Pádel implementan el diseño aproba
 
 Agenda 1f, Carnet y Cuenta comparten los perfiles ficticios de Martín, Sofía y Tomás. Desde el perfil de un menor se puede abrir su agenda o presentar su carnet de ejemplo. Cuenta reúne cuotas, movimientos de pago, becas y preferencias de esta sesión. Los QR contienen únicamente texto demo.
 
-Gimnasio permite seguir una rutina asignada, registrar series y consultar el historial por persona. Yoga y Funcional permiten inscribirse o cancelar con actualización de cupos y Agenda. Los borradores y registros se conservan durante la sesión demo.
+Gimnasio permite seguir una rutina asignada, registrar series con pesos opcionales, eliminar con Deshacer y consultar el historial por persona. Yoga y Funcional permiten inscribirse o cancelar con actualización de cupos y Agenda. Los borradores y registros se conservan durante la sesión demo.
 
 El backend de desarrollo conserva identidad, autorización y comandos de pádel en PostgreSQL. La app móvil usa datos ficticios. [Guía del backend local](supabase/README.md).
 
 Para retomar el trabajo, leer [AGENTS.md](AGENTS.md) (Codex), [CLAUDE.md](CLAUDE.md) y [estado actual](docs/current-status.md). Ver [roadmap](docs/roadmap.md) y [verificaciones](docs/verification.md).
+
+## Preparación de la demo de navegador
+
+Expo incluye `react-native-web` 0.21.4 y `react-dom` 19.3.0 como dependencias de la app móvil. La exportación local se genera con `pnpm --filter @pucara/mobile exec expo export --platform web --output-dir dist/web`. Para las plataformas nativas, usar `pnpm --filter @pucara/mobile exec expo export --platform android --platform ios --output-dir dist/native`.
+
+El artefacto web es una SPA y requiere que el hosting resuelva las rutas hacia `index.html`. Antes de publicar el QR público, falta adaptar la barra web de NativeTabs al navegador móvil y validar Safari en iPhone. La barra web del SDK actual se ubica arriba y puede superponerse con la cabecera. Los datos se reinician al recargar. La publicación queda pendiente.
 
 ## Requisitos
 

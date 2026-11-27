@@ -12,6 +12,10 @@ Inicio muestra la cabecera marina, accesos rápidos, próximos compromisos, Prim
 
 Se implementan 11, 11b y 12 usando los tokens, botones y hojas existentes. La rutina conserva su cabecera marina, segmentado de entrenamientos y filas de ejercicios. El registro usa barra de métricas fija y campos de KG/REPS por serie. En pantallas angostas o texto ampliado, los datos de serie se apilan para conservar las áreas táctiles. Las actividades usan el marcador rayado de 150, resumen de datos, estado y confirmaciones de inscripción o baja. El selector familiar reutiliza las identidades de Cuenta.
 
+## Cierre de la demo comercial
+
+La indicación más reciente del usuario agrega deslizamiento para eliminar una serie, menú accesible, Deshacer, interruptor nativo de pesos y acción para marcar todas como hechas. Estas acciones afectan el entrenamiento de la sesión. Se retira el gráfico de progreso del jugador. El registro conserva tiempo y series hechas y permite guardar al finalizar. Los componentes usan React Native y React Native Web. La apariencia de la barra del SDK en web requiere revisión para el QR público.
+
 ## Antecedente · 13 de noviembre de 2026
 
 Actualizado 2026-11-13. Concepto A permanece como base provisional: fondo cálido, rojo y marino, acento editorial en títulos. El usuario probó el bloque anterior en iPhone: navegación funcional, **UX/UI no aprobada**. Esta implementación responde a su pedido de más jerarquía y acciones visibles. La nueva estética aún requiere su revisión en Expo Go.

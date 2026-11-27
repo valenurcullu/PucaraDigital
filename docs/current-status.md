@@ -14,7 +14,13 @@ Pádel muestra 14 días, una sola cancha, turnos de 90 minutos y el precio del l
 
 Se implementaron las referencias 11, 11b y 12 del handoff. Gimnasio muestra una rutina semanal del titular con dos entrenamientos, pesos anteriores, series, repeticiones, registro de cargas, finalización e historial. El entrenamiento en curso se recupera al volver a navegar. Los familiares sin asignación muestran el estado vacío. Yoga y Funcional permiten inscripción y baja por perfil autorizado en la demo, ajustan cupos y proyectan sus clases en Agenda. La baja conserva las clases pasadas. Una reinscripción conserva su historial y evita duplicar clases.
 
-El estado vive en el proveedor compartido de la sesión. El progreso inicial y la rutina son ejemplos tipados; el gimnasio libre queda fuera de Agenda. La asignación administrativa y la persistencia quedan para un bloque posterior. Las actividades cuentan con ocho clases de ejemplo, dos por semana, desde la fecha de la sesión. [Comparación visual](design/verification/2026-11-27-gimnasio-actividades.jpg).
+El estado vive en el proveedor compartido de la sesión. La rutina es un ejemplo tipado; el gimnasio libre queda fuera de Agenda. La asignación administrativa y la persistencia quedan para un bloque posterior. Las actividades cuentan con ocho clases de ejemplo, dos por semana, desde la fecha de la sesión. [Comparación visual](design/verification/2026-11-27-gimnasio-actividades.jpg).
+
+## Cierre comercial de Gimnasio y actividades
+
+El registro de series permite revelar Eliminar con un deslizamiento horizontal, o usar el menú accesible de cada serie. Deshacer restaura la última eliminación con sus cargas y su estado. Registrar pesos es una preferencia por entrenamiento que conserva los valores al apagarse. Marcar todas como hechas actualiza el progreso sin registrar las sugerencias como cargas o repeticiones realizadas. Finalizar permanece separado. Las filas sin valores confirmados muestran un guion en el registro. La rutina prescrita conserva sus ejercicios, series y repeticiones.
+
+Se retiraron el gráfico de progreso y el volumen de la vista del jugador. La demo incluye las dependencias de navegador compatibles con Expo y genera un artefacto web real en `apps/mobile/dist/web`. Los recorridos de Gimnasio y las inscripciones se probaron en Chromium. La barra web de NativeTabs requiere una adaptación de presentación antes de compartir la demo desde un QR público. Safari y los gestos físicos de iOS siguen pendientes de revisión.
 
 ## Antecedente del 20 de noviembre — revisión táctil y Agenda semanal
 
@@ -38,7 +44,7 @@ En Windows se aplicaron migraciones y seed y se probaron autorización, integrid
 
 ## Para retomar
 
-1. Probar en iPhone Gimnasio → registrar → salir → retomar → guardar → historial. Probar Yoga/Funcional para el titular y un menor, inscripción → Agenda → baja. Revisar teclado, VoiceOver, texto ampliado y gesto de regreso. Probar Perfil de Sofía → Ver carnet / Ver agenda y Pádel → Ver en Agenda. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
+1. Probar en iPhone Gimnasio → eliminar → Deshacer → apagar/encender Registrar pesos → marcar todas → desmarcar una → finalizar. Validar la barra web en móvil y completar el despliegue HTTPS antes del QR público. Probar Yoga/Funcional para el titular y un menor, inscripción → Agenda → baja. Revisar teclado, VoiceOver, texto ampliado y gesto de regreso. Probar Perfil de Sofía → Ver carnet / Ver agenda y Pádel → Ver en Agenda. En otro equipo con contenedores, arrancar Supabase con PostgreSQL 17 y correr la batería sobre la base ficticia.
 2. Validar la API con sesiones Auth reales de ambos clubes, incluidos vínculos revocados. Implementar el lector autenticado de disponibilidad para esta pantalla y verificar los rangos de fechas con turnos publicados en esa base.
 3. Acordar con el club verificación del padrón, permisos de menores, cancelación y reintegros. El pago real requiere además proveedor, retención y conciliación. Gimnasio con asignación de rutinas y registro de cargas sigue entre las prioridades deportivas tempranas.
 
