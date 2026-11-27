@@ -1,3 +1,5 @@
+import { GymContent, HistoryContent } from '../sports/gym-screen';
+import { ActivityContent } from '../sports/activity-screen';
 import { SlotPicker, type SlotCalendar } from '../padel/slot-picker';
 import { CardView } from '../../app/(tabs)/carnet';
 import Cuenta from '../../app/(tabs)/cuenta';
@@ -52,7 +54,11 @@ vi.mock('expo-router', () => ({
     </Slot>
   ),
   useLocalSearchParams: () => ({ id: harness.id }),
-  useRouter: () => ({ navigate: harness.navigate }),
+  useRouter: () => ({
+    navigate: harness.navigate,
+    push: harness.navigate,
+    replace: harness.navigate,
+  }),
   Redirect: () => null,
   Stack: { Screen: () => null },
 }));
@@ -435,4 +441,34 @@ it('mantiene los cinco destinos nativos y sus etiquetas en orden', () => {
     ['club', 'Club'],
     ['cuenta', 'Cuenta'],
   ]);
+});
+describe('destinos de gimnasio y actividades', () => {
+  it('Inicio abre una rutina con historial y entrenamiento', () => {
+    render(Home);
+    harness.controls.get('Ver rutina')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith('/club/gimnasio');
+    const html = renderToStaticMarkup(<GymContent data={demo} />);
+    expect(html).toContain('Semana 3');
+    expect(html).toContain('Sentadilla trasera');
+    expect(harness.controls.has('Empezar entrenamiento')).toBe(true);
+    harness.controls.get('Historial de entrenamientos · 0')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith({
+      pathname: '/club/historial',
+      params: { person: demo.member.id },
+    });
+  });
+  it('Yoga y Funcional ofrecen la acción según la inscripción del titular', () => {
+    expect(
+      renderToStaticMarkup(<ActivityContent data={demo} initial="yoga" />),
+    ).toContain('Inscribirme');
+    expect(
+      renderToStaticMarkup(<ActivityContent data={demo} initial="funcional" />),
+    ).toContain('Cancelar inscripción');
+    expect(
+      renderToStaticMarkup(<GymContent data={demo} initial="sofia-demo" />),
+    ).toContain('Todavía no hay una rutina asignada');
+    expect(
+      renderToStaticMarkup(<HistoryContent data={demo} person="sofia-demo" />),
+    ).toContain('Todavía no hay entrenamientos guardados');
+  });
 });

@@ -1,21 +1,9 @@
 import { Ledger, accountHref } from '../account/account-ui';
 import { DemoCaption } from './identity-ui';
 import { Redirect } from 'expo-router';
-import type {
-  MemberActivity,
-  MemberExperience,
-  ModuleId,
-} from '@pucara/shared';
-import {
-  Action,
-  Badge,
-  Card,
-  Copy,
-  NavRow,
-  Section,
-  StateView,
-} from '../../components/member-ui';
-import { formatDate, formatTime, moduleHref, targetHref } from './navigation';
+import type { MemberExperience, ModuleId } from '@pucara/shared';
+import { NavRow, Section, StateView } from '../../components/member-ui';
+import { formatDate, moduleHref, targetHref } from './navigation';
 import { MatchRows, NoticeRows } from './rows';
 
 function ReservationList({
@@ -56,42 +44,6 @@ function ReservationList({
     </Section>
   );
 }
-function ActivityContent({ activity }: { activity: MemberActivity }) {
-  return (
-    <>
-      <Card>
-        <Badge>
-          {activity.enrollment === 'active'
-            ? 'INSCRIPCIÓN ACTIVA · DEMO'
-            : 'SIN INSCRIPCIÓN · DEMO'}
-        </Badge>
-        <Copy>{activity.description}</Copy>
-        <Copy>{activity.schedule}</Copy>
-        <Copy>{activity.location}</Copy>
-        <Copy>{activity.availablePlaces} lugares disponibles · ejemplo</Copy>
-      </Card>
-      <Section title="Próximas clases">
-        {activity.sessions.map((session) => (
-          <Card key={session.id}>
-            <Copy>
-              {formatDate(session.startsAt)} a {formatTime(session.endsAt)}
-            </Copy>
-          </Card>
-        ))}
-      </Section>
-      <Action
-        title={
-          activity.enrollment === 'active'
-            ? 'Cancelar inscripción'
-            : 'Inscribirme'
-        }
-        disabled
-      />
-      <Copy muted>Inscripciones en modo de consulta.</Copy>
-      <NavRow title="Ver mi agenda" href="/agenda" />
-    </>
-  );
-}
 export function ModuleContent({
   id,
   data,
@@ -115,17 +67,12 @@ export function ModuleContent({
         </>
       );
     case 'yoga':
-    case 'funcional': {
-      const activity = data.activities.find((item) => item.id === id);
-      return activity ? (
-        <ActivityContent activity={activity} />
-      ) : (
-        <StateView
-          title="Actividad no publicada"
-          description="El club todavía no publicó horarios para esta actividad."
+    case 'funcional':
+      return (
+        <Redirect
+          href={{ pathname: '/club/actividades', params: { activity: id } }}
         />
       );
-    }
     case 'rugby':
     case 'hockey':
       return (
@@ -143,14 +90,7 @@ export function ModuleContent({
         </>
       );
     case 'gimnasio':
-      return (
-        <>
-          <StateView
-            title="Todavía no hay una rutina asignada"
-            description="Cuando tengas una rutina asignada, la vas a encontrar acá."
-          />
-        </>
-      );
+      return <Redirect href="/club/gimnasio" />;
     case 'novedades':
       return <NoticeRows data={data} />;
     case 'cuenta-corriente':

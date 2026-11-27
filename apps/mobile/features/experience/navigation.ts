@@ -5,6 +5,9 @@ import {
   type ModuleId,
 } from '@pucara/shared';
 export function moduleHref(id: ModuleId): Href {
+  if (id === 'gimnasio') return '/club/gimnasio';
+  if (id === 'yoga' || id === 'funcional')
+    return { pathname: '/club/actividades', params: { activity: id } };
   return { pathname: '/modulos/[id]', params: { id } };
 }
 export function targetHref(target: ExperienceTarget): Href {

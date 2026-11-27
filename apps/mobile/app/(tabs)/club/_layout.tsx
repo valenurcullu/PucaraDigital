@@ -23,6 +23,13 @@ export default function MemberStack() {
       />
       <Stack.Screen name="padel" options={{ title: 'Pádel' }} />
       <Stack.Screen name="reservas" options={{ title: 'Reservas' }} />
+      <Stack.Screen name="gimnasio" options={{ title: 'Gimnasio' }} />
+      <Stack.Screen name="entrenamiento" options={{ title: 'Entrenamiento' }} />
+      <Stack.Screen name="historial" options={{ title: 'Historial' }} />
+      <Stack.Screen
+        name="actividades"
+        options={{ title: 'Yoga y Funcional' }}
+      />
     </Stack>
   );
 }

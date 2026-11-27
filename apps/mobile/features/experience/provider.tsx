@@ -10,6 +10,8 @@ import {
 } from 'react';
 import {
   createDemoExperienceReader,
+  previewSports,
+  type SportsIntent,
   type MemberExperience,
 } from '@pucara/shared';
 
@@ -21,7 +23,10 @@ type LoadState =
 interface ExperienceContextValue {
   state: LoadState;
   reload: () => void;
-  preview: (intent: DemoPadelIntent, expected: MemberExperience) => boolean;
+  preview: (
+    intent: DemoPadelIntent | SportsIntent,
+    expected: MemberExperience,
+  ) => boolean;
 }
 const ExperienceContext = createContext<ExperienceContextValue | null>(null);
 
@@ -29,9 +34,14 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<LoadState>({ status: 'loading' });
   const snapshot = useRef<MemberExperience | null>(null);
   const preview = useCallback(
-    (intent: DemoPadelIntent, expected: MemberExperience) => {
+    (intent: DemoPadelIntent | SportsIntent, expected: MemberExperience) => {
       if (snapshot.current !== expected) return false;
-      const next = previewPadel(expected, intent);
+      const next =
+        intent.action === 'book' ||
+        intent.action === 'move' ||
+        intent.action === 'cancel'
+          ? previewPadel(expected, intent)
+          : previewSports(expected, intent);
       if (!next) return false;
       snapshot.current = next;
       setState({ status: 'ready', data: next });
@@ -47,7 +57,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
   }, []);
   useEffect(() => {
     const controller = new AbortController();
-    // One read per session/retry, shared by all tabs. No fake network or writes.
+    // One initial demo snapshot shared by all tabs. Preview mutations remain in memory.
     Promise.resolve()
       .then(() =>
         createDemoExperienceReader(process.env.EXPO_PUBLIC_DATA_MODE).read(
