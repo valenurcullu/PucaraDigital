@@ -29,6 +29,13 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="fixture"
+          options={{
+            title: 'Fixture deportivo',
+            headerBackButtonDisplayMode: 'minimal',
+          }}
+        />
         <Stack.Screen name="modulos/[id]" options={{ title: 'Club' }} />
         <Stack.Screen name="partidos/[id]" options={{ title: 'Partido' }} />
         <Stack.Screen name="novedades/[id]" options={{ title: 'Novedades' }} />

@@ -4,7 +4,7 @@ import { Redirect } from 'expo-router';
 import type { MemberExperience, ModuleId } from '@pucara/shared';
 import { NavRow, Section, StateView } from '../../components/member-ui';
 import { formatDate, moduleHref, targetHref } from './navigation';
-import { MatchRows, NoticeRows } from './rows';
+import { NoticeRows } from './rows';
 
 function ReservationList({
   data,
@@ -75,20 +75,7 @@ export function ModuleContent({
       );
     case 'rugby':
     case 'hockey':
-      return (
-        <>
-          <Section title="Fixture">
-            <MatchRows
-              showFixture={false}
-              matches={data.matches.filter((match) => match.sport === id)}
-            />
-          </Section>
-          <StateView
-            title="Resultados y videos"
-            description="Todavía no hay resultados ni videos publicados en esta demostración."
-          />
-        </>
-      );
+      return <Redirect href={moduleHref(id)} />;
     case 'gimnasio':
       return <Redirect href="/club/gimnasio" />;
     case 'novedades':

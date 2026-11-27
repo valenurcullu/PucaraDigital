@@ -274,11 +274,7 @@ export function HomePage() {
                 )}
               </View>
             </Group>
-            <Group
-              title="Primera"
-              action="Fixture y resultados"
-              href="/fixture"
-            >
+            <Group title="Primera" action="Ver fixture" href="/fixture">
               <Grid columns={2}>
                 {selectFirstTeamMatches(data).map((m) => (
                   <Tap

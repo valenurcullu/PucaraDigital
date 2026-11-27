@@ -26,10 +26,6 @@ export default function MemberStack() {
         }}
       />
       <Stack.Screen name="turnos" options={{ title: 'Pádel' }} />
-      <Stack.Screen
-        name="fixture"
-        options={{ title: 'Fixture y resultados' }}
-      />
     </Stack>
   );
 }

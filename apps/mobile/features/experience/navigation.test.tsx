@@ -1,3 +1,4 @@
+import { FixtureContent } from '../fixture/fixture-screen';
 import { GymContent, HistoryContent } from '../sports/gym-screen';
 import { ActivityContent } from '../sports/activity-screen';
 import { SlotPicker, type SlotCalendar } from '../padel/slot-picker';
@@ -12,7 +13,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Slot } from '@radix-ui/react-slot';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { createDemoExperience } from '@pucara/shared';
-import Fixture from '../../app/(tabs)/(inicio)/fixture';
+import Fixture from '../../app/fixture';
 import Home from '../../app/(tabs)/(inicio)/index';
 import Club from '../../app/(tabs)/club';
 import Agenda from '../../app/(tabs)/agenda';
@@ -135,7 +136,6 @@ function follow(label: string, route: string, id: string) {
   });
   harness.id = id;
 }
-const moduleRoute = '/modulos/[id]';
 beforeEach(() => {
   vi.stubGlobal('React', React);
   harness.id = '';
@@ -172,14 +172,17 @@ describe('recorridos renderizados con las pantallas y el Slot de enlaces', () =>
   });
   it('conserva los destinos de partido, fixture, novedad y reserva', () => {
     render(Home);
-    harness.controls.get('Fixture y resultados')?.press?.();
+    harness.controls.get('Ver fixture')?.press?.();
     expect(harness.navigate).toHaveBeenLastCalledWith('/fixture');
     expect(render(Fixture)).toContain('Hockey');
     render(Home);
     follow('Ver partido de hockey', '/partidos/[id]', 'hockey-primera');
     expect(render(Match)).toContain('Club del Parque');
-    follow('Ver fixture del deporte', moduleRoute, 'hockey');
-    expect(render(ModuleScreen)).toContain('Fixture');
+    harness.controls.get('Ver fixture del deporte')?.press?.();
+    expect(harness.navigate).toHaveBeenLastCalledWith({
+      pathname: '/fixture',
+      params: { sport: 'hockey' },
+    });
     render(Home);
     const news = [...harness.controls.keys()].find((k) =>
       k.includes('Un club para compartir'),
@@ -470,5 +473,62 @@ describe('destinos de gimnasio y actividades', () => {
     expect(
       renderToStaticMarkup(<HistoryContent data={demo} person="sofia-demo" />),
     ).toContain('Todavía no hay entrenamientos guardados');
+  });
+});
+describe('presentación del fixture único', () => {
+  it('abre Rugby y Hockey en la misma ruta desde Club', () => {
+    render(Club);
+    for (const sport of ['Rugby', 'Hockey']) {
+      harness.controls.get(sport)?.press?.();
+      expect(harness.navigate).toHaveBeenLastCalledWith({
+        pathname: '/fixture',
+        params: { sport: sport.toLowerCase() },
+      });
+    }
+  });
+  it('presenta fechas y resultado anterior en la selección competitiva', () => {
+    const html = renderToStaticMarkup(
+      <FixtureContent
+        data={demo}
+        initial={{ sport: 'rugby', division: 'rugby-superior-0' }}
+      />,
+    );
+    for (const text of [
+      'Próxima fecha',
+      'Resultado anterior',
+      'Club del Sur',
+      'Ver fixture completo',
+      'Datos deportivos ficticios',
+    ])
+      expect(html).toContain(text);
+  });
+  it('presenta infantiles sin resultados ni marcadores competitivos', () => {
+    const html = renderToStaticMarkup(
+      <FixtureContent
+        data={demo}
+        initial={{ sport: 'rugby', division: 'rugby-infantiles-4' }}
+      />,
+    );
+    expect(html).toContain('M9');
+    expect(html).toContain('Próximos encuentros');
+    expect(html).not.toContain('Resultado anterior');
+    expect(html).not.toContain('Pucará / rival');
+  });
+  it('presenta la sede de Línea B y una división sin encuentros', () => {
+    const hockey = renderToStaticMarkup(
+      <FixtureContent
+        data={demo}
+        initial={{ sport: 'hockey', line: 'hockey-B' }}
+      />,
+    );
+    expect(hockey).toContain('Cancha sintética');
+    expect(harness.controls.has('Ver toda la jornada')).toBe(true);
+    const empty = renderToStaticMarkup(
+      <FixtureContent
+        data={demo}
+        initial={{ sport: 'rugby', division: 'rugby-superior-6' }}
+      />,
+    );
+    expect(empty).toContain('Sin encuentros publicados');
   });
 });
