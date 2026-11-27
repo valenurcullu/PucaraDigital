@@ -125,3 +125,11 @@ Hasta validar la política comercial, una aprobación administrativa privada hab
 ## ADR-022 — Diseño nativo aprobado y simulación por sesión (2026-11-24)
 
 El [handoff de Claude Design](../design/Mobile%20app%20design%20project/design_handoff_pucara_digital/README.md) reemplaza la elección estética provisional de ADR-018/020. Implementar Inicio 2a y Pádel 1c con NativeTabs, stacks y hojas nativas. La cancha de pádel es única. El mismo lector tipado conserva el contrato de la RPC. En esta etapa sólo se simula el resultado de las interacciones en el estado de demostración compartido. En producción, PostgreSQL sigue siendo la autoridad para disponibilidad, autorización y emisión de créditos.
+
+## ADR-023 — Fixture por jornadas completas (2026-11-27)
+
+El pedido más reciente reemplaza la selección individual de divisiones. Una única ruta permite elegir deporte y grupo/línea y ver toda la jornada. Próxima fecha/Resultados y navegación anterior/siguiente reemplazan la ampliación individual y las hojas de división/jornada.
+
+El catálogo conserva divisiones y agrega equipos opcionales (A/B/C) y ámbito de grupo en las jornadas. Los partidos preservan fecha/hora, rival y sede propios. La lista agrupa por día y mantiene el orden configurado. Inicio consume los mismos partidos de Primera. Hockey admite categorías diferentes entre líneas; la distribución demo no es información oficial. Rugby infantil excluye marcadores también desde el selector compartido.
+
+No cambia el modelo PostgreSQL ni se incorporan fuentes deportivas. La estructura oficial, publicación y mantenimiento administrativo siguen pendientes. Las nuevas imágenes mencionadas no estuvieron disponibles en esta sesión; se usó el handoff aprobado y la especificación funcional escrita.

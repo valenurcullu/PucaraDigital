@@ -10,7 +10,7 @@ Agenda 1f, Carnet y Cuenta comparten los perfiles ficticios de Martín, Sofía y
 
 Gimnasio permite seguir una rutina asignada, registrar series con pesos opcionales, eliminar con Deshacer y consultar el historial por persona. Yoga y Funcional permiten inscribirse o cancelar con actualización de cupos y Agenda. Los borradores y registros se conservan durante la sesión demo.
 
-El fixture deportivo reúne Rugby y Hockey en una sola pantalla, con grupos, líneas, divisiones y jornadas. Inicio destaca las Primeras desde la misma lista de partidos. Las sedes pertenecen a cada encuentro y los resultados infantiles de Rugby quedan excluidos. El catálogo y los marcadores son ficticios.
+El fixture deportivo reúne Rugby y Hockey en una sola pantalla: elegir grupo o línea muestra todas sus divisiones/equipos juntos. Próxima fecha/Resultados y las flechas permiten recorrer jornadas completas, agrupadas por día. Inicio destaca las Primeras desde la misma lista de partidos. Las sedes pertenecen a cada encuentro y los resultados infantiles de Rugby quedan excluidos. El catálogo y los marcadores son ficticios.
 
 El backend de desarrollo conserva identidad, autorización y comandos de pádel en PostgreSQL. La app móvil usa datos ficticios. [Guía del backend local](supabase/README.md).
 

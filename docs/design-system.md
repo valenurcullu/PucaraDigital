@@ -16,9 +16,11 @@ Se implementan 11, 11b y 12 usando los tokens, botones y hojas existentes. La ru
 
 La indicación más reciente del usuario agrega deslizamiento para eliminar una serie, menú accesible, Deshacer, interruptor nativo de pesos y acción para marcar todas como hechas. Estas acciones afectan el entrenamiento de la sesión. Se retira el gráfico de progreso del jugador. El registro conserva tiempo y series hechas y permite guardar al finalizar. Los componentes usan React Native y React Native Web. La apariencia de la barra del SDK en web requiere revisión para el QR público.
 
-## Fixture por divisiones
+## Fixture por jornadas
 
-La referencia 14 se amplía con filtros de grupo, línea y división. Se conserva el segmentado Rugby/Hockey, las tarjetas blancas, la tipografía numérica y los indicadores Local/Visitante y G/P/E. La selección de división y la jornada completa usan las hojas reutilizables. La ruta es única y el calendario completo reemplaza al resumen en el mismo contenido. Los marcadores se presentan como Pucará/rival y las categorías infantiles de Rugby muestran sólo encuentros.
+La referencia 14 mantiene fondo cálido, superficies blancas, marino y tipografía numérica Barlow. El segmentado de Yoga/Funcional se reutiliza para Rugby/Hockey y Próxima fecha/Resultados. Un nivel de chips elige grupo o línea; no hay selector de división ni hojas adicionales. Las flechas tienen áreas de 44 puntos y glifos visibles también en web.
+
+Las jornadas se presentan como listas compactas, agrupadas por día, con división/equipo, hora, rival y localía/sede por fila. Se conserva el orden del catálogo, no se supone un rival ni una sede común. En 320 puntos o con texto ampliado, rival y sede pasan debajo para evitar recortes. Los marcadores indican Pucará/rival. Rugby infantil sólo tiene encuentros. Los datos demo se identifican junto al selector.
 
 ## Antecedente · 13 de noviembre de 2026
 

@@ -264,3 +264,17 @@ Base local `9465886`. Revisión de las reglas del repositorio, estado, arquitect
 - La prueba física de navegación, gestos, VoiceOver/TalkBack y Safari queda pendiente.
 
 - La instalación con lockfile congelado pasó. Metro sirvió el bundle iOS por LAN con HTTP 200. expo install --check sigue informando seis versiones recomendadas del stack previo, sin cambios de dependencias en este bloque.
+
+## 2026-11-27 — Fixture agrupado por jornadas completas
+
+Base local `016eda9`, rama `main`. Se reemplazó la selección individual: elegir deporte y grupo/línea muestra todas las divisiones y equipos de la jornada. Referencias: pantalla 14 y segmentado de actividades del handoff de Claude. Las imágenes de publicaciones mencionadas no estuvieron adjuntas; no se asumieron categorías oficiales.
+
+- Instalación offline con lockfile congelado, sin cambios de dependencias. Prettier, ESLint y TypeScript pasaron. Vitest: 84 pruebas (43 compartidas y 41 móviles), incluyendo 15 del catálogo/fixture. Cubren grupos, líneas, configuración variable, divisiones juntas, equipos A/B/C, distintas sedes/rivales y días, fechas previas, marcadores local/visitante, exclusión infantil, catálogo ampliable, vacío y consistencia con Inicio.
+- Build de Next.js y exportaciones de Expo para web, Android e iOS completados. Salidas: `apps/mobile/dist/web` y `apps/mobile/dist/native`. No se compiló un binario con Xcode/Gradle.
+- Se sirvió la exportación real de Expo web desde un servidor temporal y se recorrió con Playwright/Chromium. Se probaron Rugby/Hockey, los tres grupos de Rugby y todas las líneas y categorías especiales de Hockey: Superior 7 filas, Juveniles 10 equipos, Infantiles 11 categorías, Hockey A/B/C/D 7/7/6/5 categorías ficticias. Se conservaron sedes diferentes incluso dentro de Línea D.
+- Recorridos: Próxima fecha/Resultados, jornadas anteriores/siguientes, reinicio de selección al cambiar grupo/línea, Infantil sin resultados, jornada futura sin partidos, regreso a la anterior y regreso del navegador a Inicio o Club. Sin errores JavaScript. Capturas en 320/390/430/768 px, incluidos resultados en pantalla angosta, sin desborde horizontal. Se corrigieron las flechas para que sean visibles en web.
+- [Evidencia visual de la app](design/verification/2026-11-27-fixture-jornadas.jpg). La lista agrupa por día y respeta el orden configurado de divisiones/equipos. Horarios, rivales y marcadores ficticios, sin datos personales de menores.
+- `expo install --check` mantiene seis recomendaciones del stack previo: Expo ~58.1.0, Constants ~58.0.16, Font ~58.0.12, Linking ~58.0.17, Router ~58.0.33, Status Bar ~58.0.5. El comando devuelve error de compatibilidad; no se actualizaron dependencias en este bloque.
+- Sin cambios en Pádel, SQL, migraciones, permisos, pagos ni fuentes externas. iPhone/Android físicos, gestos, VoiceOver/TalkBack y Safari quedan pendientes. Las pruebas web y la exportación no verifican esos comportamientos nativos. No hubo push.
+
+Metro continúa en el puerto 8082. Se verificaron el manifiesto y el bundle iOS por LAN con HTTP 200. Esto permite abrir la revisión en Expo Go; no constituye una prueba física en iPhone.
